@@ -25,7 +25,7 @@ namespace Jp.Infra.Data.MySql.Configuration
                         b.UseMySql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
 
                     // this enables automatic token cleanup. this is optional.
-                    //options.EnableTokenCleanup = true;
+                    options.EnableTokenCleanup = true;
                     //options.TokenCleanupInterval = 15; // frequency in seconds to cleanup stale grants. 15 is useful during debugging
                 });
 

@@ -20,7 +20,6 @@ namespace Jp.Infra.Data.MySql.Configuration
             services.AddSingleton(storeOptions);
 
             services.AddEntityFrameworkMySql().AddDbContext<ApplicationIdentityContext>(options => options.UseMySql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
-            services.AddDbContext<JpContext>(options => options.UseMySql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
             services.AddDbContext<EventStoreContext>(options => options.UseMySql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             return services;

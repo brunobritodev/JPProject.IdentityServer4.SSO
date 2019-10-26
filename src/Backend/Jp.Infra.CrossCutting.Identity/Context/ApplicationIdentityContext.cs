@@ -33,13 +33,6 @@ namespace Jp.Infra.CrossCutting.Identity.Context
             return base.SaveChangesAsync();
         }
 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development"))
-                optionsBuilder.UseLoggerFactory(this.loggerFactory).EnableSensitiveDataLogging();
-        }
-
         private void ConfigureIdentityContext(ModelBuilder builder)
         {
             builder.Entity<UserIdentityRole>().ToTable(TableConsts.IdentityRoles);

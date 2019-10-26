@@ -1,4 +1,5 @@
-﻿using IdentityServer4.EntityFramework.Mappers;
+﻿using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Mappers;
 using Jp.Infra.CrossCutting.Identity.Context;
 using Jp.Infra.CrossCutting.Identity.Entities.Identity;
 using Jp.Infra.Data.Context;
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -37,11 +37,13 @@ namespace Jp.UI.SSO.Util
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<UserIdentityRole>>();
 
-            var id4Context = scope.ServiceProvider.GetRequiredService<JpContext>();
+            scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+
+            var id4Context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             var storeDb = scope.ServiceProvider.GetRequiredService<EventStoreContext>();
 
             await WaitForDb(id4Context);
-            await id4Context.Database.GetPendingMigrationsAsync();
+
             await id4Context.Database.MigrateAsync();
             await userContext.Database.MigrateAsync();
             await storeDb.Database.MigrateAsync();
@@ -58,7 +60,7 @@ namespace Jp.UI.SSO.Util
             RoleManager<UserIdentityRole> roleManager,
             IConfiguration configuration)
         {
-            
+
             // Create admin role
             if (!await roleManager.RoleExistsAsync("Administrator"))
             {
@@ -80,7 +82,7 @@ namespace Jp.UI.SSO.Util
 
             var result = await userManager.CreateAsync(user, Users.GetPassword(configuration));
 
-            if (result.Succeeded)   
+            if (result.Succeeded)
             {
                 await userManager.AddClaimAsync(user, new Claim("is4-rights", "manager"));
                 await userManager.AddClaimAsync(user, new Claim("username", Users.GetUser(configuration)));
@@ -92,7 +94,7 @@ namespace Jp.UI.SSO.Util
         /// <summary>
         /// Generate default clients, identity and api resources
         /// </summary>
-        private static async Task EnsureSeedIdentityServerData(JpContext context, IConfiguration configuration)
+        private static async Task EnsureSeedIdentityServerData(ConfigurationDbContext context, IConfiguration configuration)
         {
             if (!context.Clients.Any())
             {

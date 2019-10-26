@@ -1,6 +1,6 @@
 ﻿using Hellang.Middleware.ProblemDetails;
+using Jp.Application.Configuration;
 using Jp.Infra.CrossCutting.Database;
-using Jp.Infra.CrossCutting.IoC;
 using Jp.Management.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

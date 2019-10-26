@@ -5,9 +5,9 @@ namespace Jp.Infra.Data.UoW
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly JpContext _context;
+        private readonly EventStoreContext _context;
 
-        public UnitOfWork(JpContext context)
+        public UnitOfWork(EventStoreContext context)
         {
             _context = context;
         }

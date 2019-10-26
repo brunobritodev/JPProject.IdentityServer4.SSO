@@ -1,8 +1,8 @@
 ﻿using IdentityServer4.Services;
+using Jp.Application.Configuration;
 using Jp.Infra.CrossCutting.Database;
 using Jp.Infra.CrossCutting.Identity.Entities.Identity;
 using Jp.Infra.CrossCutting.IdentityServer.Configuration;
-using Jp.Infra.CrossCutting.IoC;
 using Jp.UI.SSO.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

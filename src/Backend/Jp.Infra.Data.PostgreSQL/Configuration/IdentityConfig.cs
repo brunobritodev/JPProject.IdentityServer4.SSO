@@ -20,7 +20,6 @@ namespace Jp.Infra.Data.PostgreSQL.Configuration
             services.AddSingleton(storeOptions);
 
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationIdentityContext>(options => options.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
-            services.AddDbContext<JpContext>(options => options.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
             services.AddDbContext<EventStoreContext>(options => options.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             return services;

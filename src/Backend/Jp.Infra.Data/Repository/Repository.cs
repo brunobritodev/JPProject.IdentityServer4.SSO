@@ -8,10 +8,10 @@ namespace Jp.Infra.Data.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly JpContext Db;
+        protected readonly EventStoreContext Db;
         protected readonly DbSet<TEntity> DbSet;
 
-        public Repository(JpContext context)
+        public Repository(EventStoreContext context)
         {
             Db = context;
             DbSet = Db.Set<TEntity>();

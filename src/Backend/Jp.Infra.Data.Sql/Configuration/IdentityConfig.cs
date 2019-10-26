@@ -20,7 +20,6 @@ namespace Jp.Infra.Data.Sql.Configuration
             services.AddSingleton(storeOptions);
 
             services.AddEntityFrameworkSqlServer().AddDbContext<ApplicationIdentityContext>(options => options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
-            services.AddDbContext<JpContext>(options => options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
             services.AddDbContext<EventStoreContext>(options => options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             return services;
