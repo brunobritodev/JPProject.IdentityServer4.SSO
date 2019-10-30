@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Jp.Application.ViewModels.UserViewModels;
-using Jp.Infra.CrossCutting.Identity.Entities.Identity;
+using JPProject.Sso.Application.ViewModels.UserViewModels;
+using JPProject.Sso.Infra.Identity.Models.Identity;
 
 namespace Jp.UI.SSO.Configuration
 {

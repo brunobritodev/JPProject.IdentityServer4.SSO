@@ -1,12 +1,12 @@
-﻿using Jp.Application.EventSourcedNormalizers;
-using Jp.Application.Interfaces;
-using Jp.Application.ViewModels;
-using Jp.Application.ViewModels.RoleViewModels;
-using Jp.Application.ViewModels.UserViewModels;
-using Jp.Domain.Core.Bus;
-using Jp.Domain.Core.Notifications;
-using Jp.Domain.Core.ViewModels;
-using Jp.Domain.Interfaces;
+﻿using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Interfaces;
+using JPProject.Domain.Core.Notifications;
+using JPProject.Domain.Core.ViewModels;
+using JPProject.Sso.Application.EventSourcedNormalizers;
+using JPProject.Sso.Application.Interfaces;
+using JPProject.Sso.Application.ViewModels;
+using JPProject.Sso.Application.ViewModels.RoleViewModels;
+using JPProject.Sso.Application.ViewModels.UserViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
@@ -81,7 +81,7 @@ namespace Jp.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            var actualUser = await _userAppService.FindByNameAsync(username);
+            var actualUser = await _userAppService.FindByUsernameAsync(username);
             model.ApplyTo(actualUser);
             await _userManageAppService.UpdateUser(actualUser);
             return ResponsePutPatch();
@@ -89,7 +89,7 @@ namespace Jp.Management.Controllers
 
 
         [HttpDelete, Route("{id:Guid}"), Authorize(Policy = "Admin")]
-        public async Task<ActionResult> RemoveAccount(Guid id)
+        public async Task<ActionResult> RemoveAccount(string id)
         {
             var model = new RemoveAccountViewModel(id);
             await _userManageAppService.RemoveAccount(model);

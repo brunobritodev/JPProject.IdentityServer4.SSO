@@ -1,5 +1,5 @@
-﻿using Jp.Domain.Core.StringUtils;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using JPProject.Domain.Core.StringUtils;
 
 namespace Jp.UI.SSO.Models
 {

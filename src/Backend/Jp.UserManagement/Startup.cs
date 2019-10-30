@@ -1,7 +1,6 @@
 ﻿using Hellang.Middleware.ProblemDetails;
-using Jp.Application.Configuration;
-using Jp.Infra.CrossCutting.Database;
 using Jp.Management.Configuration;
+using JPProject.AspNet.Core;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,8 +38,8 @@ namespace Jp.Management
             // Response compression
             services.AddBrotliCompression();
 
-            // Identity Database
-            services.AddIdentityConfiguration(Configuration);
+            // SSO configuration
+            services.ConfigureSsoApi(Configuration);
 
             // Cors request
             services.ConfigureCors();
@@ -103,7 +102,6 @@ namespace Jp.Management
         {
             // Adding dependencies from another layers (isolated from Presentation)
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            NativeInjectorBootStrapper.RegisterServices(services, Configuration);
         }
     }
 }

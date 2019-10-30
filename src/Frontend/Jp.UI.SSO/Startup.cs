@@ -1,7 +1,5 @@
 ﻿using IdentityServer4.Services;
 using Jp.UI.SSO.Configuration;
-using JPProject.AspNet.Core;
-using JPProject.Sso.EntityFrameworkCore.SqlServer.Configuration;
 using JPProject.Sso.Infra.Identity.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -44,18 +42,11 @@ namespace Jp.UI.SSO
             // The following line enables Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
 
-            // Config identity
-            var connString = Configuration.GetConnectionString("SSOConnection");
-            services
-                .ConfigureUserIdentity<AspNetUser>()
-                .WithSqlServer(connString)
-
-                .ConfigureIdentityServer()
-                .WithSqlServer(connString)
-                .AddEventStoreSqlServer(connString);
-
             // Add localization
             services.AddMvcLocalization();
+
+            // Configure SSO
+            services.ConfigureSso(Configuration);
 
             // Improve password security
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
@@ -110,7 +101,6 @@ namespace Jp.UI.SSO
             // Adding dependencies from another layers (isolated from Presentation)
             services.AddScoped<IEventSink, IdentityServerEventStore>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            NativeInjectorBootStrapper.RegisterServices(services, Configuration);
         }
     }
 

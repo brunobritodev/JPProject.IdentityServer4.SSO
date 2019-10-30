@@ -1,9 +1,8 @@
-﻿using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Mappers;
-using Jp.Infra.CrossCutting.Identity.Context;
-using Jp.Infra.CrossCutting.Identity.Entities.Identity;
-using Jp.Infra.Data.Context;
+﻿using IdentityServer4.EntityFramework.Mappers;
 using Jp.UI.SSO.Configuration;
+using JPProject.EntityFrameworkCore.Context;
+using JPProject.Sso.Infra.Data.Context;
+using JPProject.Sso.Infra.Identity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,22 +32,16 @@ namespace Jp.UI.SSO.Util
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-            var userContext = scope.ServiceProvider.GetRequiredService<ApplicationIdentityContext>();
+            var ssoContext = scope.ServiceProvider.GetRequiredService<ApplicationSsoContext>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<UserIdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+            await WaitForDb(ssoContext);
 
-            var id4Context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            var storeDb = scope.ServiceProvider.GetRequiredService<EventStoreContext>();
+            await ssoContext.Database.MigrateAsync();
+            scope.ServiceProvider.GetRequiredService<EventStoreContext>().Database.Migrate();
 
-            await WaitForDb(id4Context);
-
-            await id4Context.Database.MigrateAsync();
-            await userContext.Database.MigrateAsync();
-            await storeDb.Database.MigrateAsync();
-
-            await EnsureSeedIdentityServerData(id4Context, configuration);
+            await EnsureSeedIdentityServerData(ssoContext, configuration);
             await EnsureSeedIdentityData(userManager, roleManager, configuration);
         }
 
@@ -57,14 +50,14 @@ namespace Jp.UI.SSO.Util
         /// </summary>
         private static async Task EnsureSeedIdentityData(
             UserManager<UserIdentity> userManager,
-            RoleManager<UserIdentityRole> roleManager,
+            RoleManager<IdentityRole> roleManager,
             IConfiguration configuration)
         {
 
             // Create admin role
             if (!await roleManager.RoleExistsAsync("Administrator"))
             {
-                var role = new UserIdentityRole { Name = "Administrator" };
+                var role = new IdentityRole { Name = "Administrator" };
 
                 await roleManager.CreateAsync(role);
             }
@@ -94,7 +87,7 @@ namespace Jp.UI.SSO.Util
         /// <summary>
         /// Generate default clients, identity and api resources
         /// </summary>
-        private static async Task EnsureSeedIdentityServerData(ConfigurationDbContext context, IConfiguration configuration)
+        private static async Task EnsureSeedIdentityServerData(ApplicationSsoContext context, IConfiguration configuration)
         {
             if (!context.Clients.Any())
             {

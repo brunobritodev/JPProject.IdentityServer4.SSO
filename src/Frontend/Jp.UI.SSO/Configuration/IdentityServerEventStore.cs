@@ -1,9 +1,9 @@
 ﻿using IdentityServer4.Events;
 using IdentityServer4.Services;
-using Jp.Domain.Core.Events;
-using Jp.Domain.Interfaces;
+using JPProject.Domain.Core.Events;
+using JPProject.Domain.Core.Interfaces;
 using System.Threading.Tasks;
-using EventTypes = Jp.Domain.Core.Events.EventTypes;
+using EventTypes = JPProject.Domain.Core.Events.EventTypes;
 using Is4Event = IdentityServer4.Events.Event;
 
 namespace Jp.UI.SSO.Configuration

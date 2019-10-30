@@ -1,5 +1,7 @@
-﻿using Jp.Application.AutoMapper;
+﻿using AutoMapper;
+using JPProject.Sso.Application.AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
 namespace Jp.Management.Configuration
@@ -10,7 +12,11 @@ namespace Jp.Management.Configuration
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.AddSingleton(AutoMapperConfig.RegisterMappings(new CustomMappingProfile()).CreateMapper());
+            var mappings = SsoMapperConfig.RegisterMappings();
+            mappings.AddProfile<CustomMappingProfile>();
+            var automapperConfig = new MapperConfiguration(mappings);
+
+            services.TryAddSingleton(automapperConfig.CreateMapper());
         }
     }
 }

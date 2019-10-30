@@ -1,5 +1,5 @@
-﻿using Jp.Domain.Core.Bus;
-using Jp.Domain.Core.Notifications;
+﻿using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

@@ -5,16 +5,16 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using Jp.Application.Interfaces;
-using Jp.Application.ViewModels;
-using Jp.Application.ViewModels.UserViewModels;
-using Jp.Domain.Core.Bus;
-using Jp.Domain.Core.Notifications;
-using Jp.Domain.Core.StringUtils;
-using Jp.Infra.CrossCutting.Identity.Entities.Identity;
 using Jp.UI.SSO.Controllers.Home;
 using Jp.UI.SSO.Models;
 using Jp.UI.SSO.Util;
+using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Notifications;
+using JPProject.Domain.Core.StringUtils;
+using JPProject.Sso.Application.Interfaces;
+using JPProject.Sso.Application.ViewModels;
+using JPProject.Sso.Application.ViewModels.UserViewModels;
+using JPProject.Sso.Infra.Identity.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -133,7 +133,7 @@ namespace Jp.UI.SSO.Controllers.Account
                 }
                 else
                 {
-                    userIdentity = await _userAppService.FindByNameAsync(model.Username);
+                    userIdentity = await _userAppService.FindByUsernameAsync(model.Username);
                 }
 
                 if (userIdentity == null)

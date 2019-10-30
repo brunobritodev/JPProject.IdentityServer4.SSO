@@ -1,8 +1,8 @@
-﻿using Jp.Application.Interfaces;
-using Jp.Application.ViewModels.RoleViewModels;
-using Jp.Application.ViewModels.UserViewModels;
-using Jp.Domain.Core.Bus;
-using Jp.Domain.Core.Notifications;
+﻿using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Notifications;
+using JPProject.Sso.Application.Interfaces;
+using JPProject.Sso.Application.ViewModels.RoleViewModels;
+using JPProject.Sso.Application.ViewModels.UserViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
