@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jp.Api.Management", "Backen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jp.UI.SSO", "Frontend\Jp.UI.SSO\Jp.UI.SSO.csproj", "{CF7B5562-179E-44EB-B7E3-7096698A46E7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5789F9D1-F2EB-471E-AAEE-CCE8EDFC050D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JPProject.Api.Management.Tests", "..\tests\JPProject.Api.Management.Tests\JPProject.Api.Management.Tests.csproj", "{A13A609B-A6A3-4022-8E9A-224432EA91A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,16 @@ Global
 		{CF7B5562-179E-44EB-B7E3-7096698A46E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF7B5562-179E-44EB-B7E3-7096698A46E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF7B5562-179E-44EB-B7E3-7096698A46E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A13A609B-A6A3-4022-8E9A-224432EA91A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A13A609B-A6A3-4022-8E9A-224432EA91A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A13A609B-A6A3-4022-8E9A-224432EA91A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A13A609B-A6A3-4022-8E9A-224432EA91A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A13A609B-A6A3-4022-8E9A-224432EA91A2} = {5789F9D1-F2EB-471E-AAEE-CCE8EDFC050D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F62CA078-A991-4001-A117-1F2726248D4F}

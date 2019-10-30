@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
-namespace Jp.Management.Configuration
+namespace Jp.Api.Management.Configuration
 {
     public static class AutoMapperSetup
     {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Jp.Management.Controllers
+namespace Jp.Api.Management.Controllers
 {
     public abstract class ApiController : ControllerBase
     {

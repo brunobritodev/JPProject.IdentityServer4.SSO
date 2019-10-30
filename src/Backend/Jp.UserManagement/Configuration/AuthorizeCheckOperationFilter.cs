@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Jp.Management.Configuration
+namespace Jp.Api.Management.Configuration
 {
     public class AuthorizeCheckOperationFilter : IOperationFilter
     {

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jp.Management.Controllers
+namespace Jp.Api.Management.Controllers
 {
     [Route("roles"), Authorize(Policy = "ReadOnly")]
     public class RolesController : ApiController

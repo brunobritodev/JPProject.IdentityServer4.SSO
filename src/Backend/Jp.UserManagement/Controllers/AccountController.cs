@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Jp.Management.Controllers
+namespace Jp.Api.Management.Controllers
 {
     [Route("accounts"), Authorize(Policy = "UserManagement")]
     public class AccountController : ApiController

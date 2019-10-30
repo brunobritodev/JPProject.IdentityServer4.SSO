@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Jp.Management.Configuration
+namespace Jp.Api.Management.Configuration
 {
     public static class SsoApiConfiguration
     {

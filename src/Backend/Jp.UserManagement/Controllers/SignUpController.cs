@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace Jp.Management.Controllers
+namespace Jp.Api.Management.Controllers
 {
     [Route("sign-up"), AllowAnonymous]
     public class SignUpController : ApiController

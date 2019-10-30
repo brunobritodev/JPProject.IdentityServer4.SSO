@@ -1,6 +1,5 @@
 ﻿using Hellang.Middleware.ProblemDetails;
-using Jp.Management.Configuration;
-using JPProject.AspNet.Core;
+using Jp.Api.Management.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
-namespace Jp.Management
+namespace Jp.Api.Management
 {
     public class Startup
     {

@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using JPProject.Admin.Application.Interfaces;
+﻿using JPProject.Admin.Application.Interfaces;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Jp.Management.Controllers
+namespace Jp.Api.Management.Controllers
 {
     [Route("[controller]"), Authorize(Policy = "ReadOnly")]
     public class ScopesController : ApiController

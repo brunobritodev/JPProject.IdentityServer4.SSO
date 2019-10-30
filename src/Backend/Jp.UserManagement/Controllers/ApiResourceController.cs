@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using IdentityServer4.Models;
+﻿using IdentityServer4.Models;
 using JPProject.Admin.Application.Interfaces;
 using JPProject.Admin.Application.ViewModels;
 using JPProject.Admin.Application.ViewModels.ApiResouceViewModels;
@@ -10,8 +8,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Jp.Management.Controllers
+namespace Jp.Api.Management.Controllers
 {
     [Route("api-resources"), Authorize(Policy = "ReadOnly")]
     public class ApiResourcesController : ApiController

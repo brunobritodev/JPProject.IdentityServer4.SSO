@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
 
-namespace Jp.Management.Configuration
+namespace Jp.Api.Management.Configuration
 {
     public static class SwaggerConfig
     {

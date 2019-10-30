@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using JPProject.Admin.Application.Interfaces;
+﻿using JPProject.Admin.Application.Interfaces;
 using JPProject.Admin.Application.ViewModels;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Notifications;
@@ -8,8 +6,10 @@ using JPProject.Domain.Core.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
-namespace Jp.Management.Controllers
+namespace Jp.Api.Management.Controllers
 {
     [Route("persisted-grants"), Authorize(Policy = "ReadOnly")]
     public class PersistedGrantsController : ApiController

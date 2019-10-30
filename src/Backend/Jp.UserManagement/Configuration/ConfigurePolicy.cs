@@ -1,7 +1,7 @@
 ﻿using IdentityServer4.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Jp.Management.Configuration
+namespace Jp.Api.Management.Configuration
 {
     public static class ConfigurePolicy
     {
