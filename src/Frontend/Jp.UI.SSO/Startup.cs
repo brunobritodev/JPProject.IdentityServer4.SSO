@@ -1,9 +1,8 @@
 ﻿using IdentityServer4.Services;
-using Jp.Application.Configuration;
-using Jp.Infra.CrossCutting.Database;
-using Jp.Infra.CrossCutting.Identity.Entities.Identity;
-using Jp.Infra.CrossCutting.IdentityServer.Configuration;
 using Jp.UI.SSO.Configuration;
+using JPProject.AspNet.Core;
+using JPProject.Sso.EntityFrameworkCore.SqlServer.Configuration;
+using JPProject.Sso.Infra.Identity.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,13 +45,17 @@ namespace Jp.UI.SSO
             services.AddApplicationInsightsTelemetry();
 
             // Config identity
-            services.AddIdentityConfiguration(Configuration);
+            var connString = Configuration.GetConnectionString("SSOConnection");
+            services
+                .ConfigureUserIdentity<AspNetUser>()
+                .WithSqlServer(connString)
+
+                .ConfigureIdentityServer()
+                .WithSqlServer(connString)
+                .AddEventStoreSqlServer(connString);
 
             // Add localization
             services.AddMvcLocalization();
-
-            // Configure identity server
-            services.AddOAuth2(Configuration, _env).ConfigureIdentityServerDatabase(Configuration);
 
             // Improve password security
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();

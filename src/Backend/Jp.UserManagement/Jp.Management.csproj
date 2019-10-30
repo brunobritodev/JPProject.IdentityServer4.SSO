@@ -21,16 +21,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.0.1-dev-00116" />
-	<PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="3.0.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.4" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Jp.Application\Jp.Application.csproj" />
-    <ProjectReference Include="..\Jp.Infra.CrossCutting.Database\Jp.Infra.CrossCutting.Database.csproj" />
   </ItemGroup>
 
     <ItemGroup>
