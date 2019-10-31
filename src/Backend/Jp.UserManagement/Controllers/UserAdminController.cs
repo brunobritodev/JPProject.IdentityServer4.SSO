@@ -86,7 +86,6 @@ namespace Jp.Api.Management.Controllers
             return ResponsePutPatch();
         }
 
-
         [HttpDelete, Route("{id:Guid}"), Authorize(Policy = "Admin")]
         public async Task<ActionResult> RemoveAccount(string id)
         {
