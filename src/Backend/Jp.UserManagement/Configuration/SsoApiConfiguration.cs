@@ -15,7 +15,7 @@ namespace Jp.Api.Management.Configuration
 {
     public static class SsoApiConfiguration
     {
-        public static void ConfigureSsoApi(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureSsoApi(this IServiceCollection services, IConfiguration configuration)
         {
             var database = configuration["ApplicationSettings:DatabaseType"].ToUpper();
             var connString = configuration.GetConnectionString("SSOConnection");
@@ -42,8 +42,11 @@ namespace Jp.Api.Management.Configuration
                     builder.WithSqlite<Startup>(connString);
                     break;
             }
+            return services;
+        }
 
-
+        public static void ConfigureDefaultSettings(this IServiceCollection services)
+        {
             var mappings = AdminUiMapperConfiguration.RegisterMappings();
             mappings.AddProfile(SsoMapperConfig.RegisterMappings());
 

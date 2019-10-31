@@ -38,7 +38,7 @@ namespace Jp.Api.Management
             services.AddBrotliCompression();
 
             // SSO configuration
-            services.ConfigureSsoApi(Configuration);
+            ConfigureSso(services);
 
             // Cors request
             services.ConfigureCors();
@@ -61,6 +61,11 @@ namespace Jp.Api.Management
 
             // .NET Native DI Abstraction
             RegisterServices(services);
+        }
+
+        public virtual void ConfigureSso(IServiceCollection services)
+        {
+            services.ConfigureSsoApi(Configuration).ConfigureDefaultSettings();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

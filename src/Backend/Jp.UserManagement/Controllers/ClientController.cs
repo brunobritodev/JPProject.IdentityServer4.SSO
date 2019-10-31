@@ -3,6 +3,7 @@ using JPProject.Admin.Application.Interfaces;
 using JPProject.Admin.Application.ViewModels;
 using JPProject.Admin.Application.ViewModels.ClientsViewModels;
 using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -13,18 +14,19 @@ using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {
-    [Route("clients")//, Authorize(Policy = "ReadOnly")
-    ]
+    [Route("clients"), Authorize(Policy = "ReadOnly")]
     public class ClientsController : ApiController
     {
         private readonly IClientAppService _clientAppService;
+        private readonly ISystemUser _user;
 
         public ClientsController(
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
-            IClientAppService clientAppService) : base(notifications, mediator)
+            IClientAppService clientAppService, ISystemUser user) : base(notifications, mediator)
         {
             _clientAppService = clientAppService;
+            _user = user;
         }
 
         [HttpGet("")]
@@ -49,7 +51,9 @@ namespace Jp.Api.Management.Controllers
                 NotifyModelStateErrors();
                 return ModelStateErrorResponseError();
             }
+
             await _clientAppService.Save(client);
+
             var newClient = await _clientAppService.GetClientDetails(client.ClientId);
 
             return ResponsePost(nameof(GetClient), new { client = client.ClientId }, newClient);

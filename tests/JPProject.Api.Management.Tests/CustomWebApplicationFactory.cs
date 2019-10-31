@@ -1,47 +1,108 @@
+using IdentityServer4;
+using IdentityServer4.AccessTokenValidation;
+using IdentityServer4.Contrib.AspNetCore.Testing.Builder;
+using IdentityServer4.Contrib.AspNetCore.Testing.Configuration;
+using IdentityServer4.Contrib.AspNetCore.Testing.Services;
+using IdentityServer4.Models;
 using Jp.Api.Management;
-using JPProject.Sso.Infra.Data.Context;
+using JPProject.Api.Management.Tests.Infra;
+using JPProject.EntityFrameworkCore.Configuration;
+using JPProject.Sso.EntityFrameworkCore.SqlServer.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace JPProject.Api.Management.Tests
 {
-    public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
+    public class CustomWebApplicationFactory : WebApplicationFactory<StartupTest>
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            ConfigureIdentityServer();
+
             builder.ConfigureServices(services =>
             {
-                // Create a new service provider.
-                var serviceProvider = new ServiceCollection()
-                    .AddEntityFrameworkInMemoryDatabase()
-                    .BuildServiceProvider();
-
                 // Add a database context (AppDbContext) using an in-memory database for testing.
-                services.AddDbContext<ApplicationSsoContext>(options =>
+                void DatabaseOptions(DbContextOptionsBuilder opt) => opt.UseInMemoryDatabase("JpTests").EnableSensitiveDataLogging();
+
+                services.ConfigureUserIdentity<AspNetUserTest>().WithSqlServer(DatabaseOptions);
+                services.AddEventStoreContext(DatabaseOptions, EventStoreMigrationOptions.Get().ShouldMigrate(false));
+                services.ConfigureJpAdmin<AspNetUserTest>().WithSqlServer(DatabaseOptions);
+
+                services.PostConfigureAll<IdentityServerAuthenticationOptions>(options =>
                 {
-                    options.UseInMemoryDatabase("InMemoryAppDb");
-                    options.UseInternalServiceProvider(serviceProvider);
+                    options.Authority = "http://localhost";
+                    options.JwtBackChannelHandler = IdentityServerClient.IdentityServer.CreateHandler();
                 });
+            }).UseStartup<StartupTest>();
 
-                // Build the service provider.
-                var sp = services.BuildServiceProvider();
-
-                // Create a scope to obtain a reference to the database contexts
-                using (var scope = sp.CreateScope())
-                {
-                    var scopedServices = scope.ServiceProvider;
-                    var appDb = scopedServices.GetRequiredService<ApplicationSsoContext>();
-
-                    var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
-
-                    // Ensure the database is created.
-                    appDb.Database.EnsureCreated();
-
-                }
-            });
         }
+
+        private void ConfigureIdentityServer()
+        {
+
+            var clientConfiguration = new ClientConfiguration("TestClient", "MySecret");
+
+            var client = new Client
+            {
+                ClientId = clientConfiguration.Id,
+                ClientSecrets = new List<Secret>
+                {
+                    new Secret(clientConfiguration.Secret.Sha256())
+                },
+                AllowedScopes = new[] { "jp_api.user", "jp_api.is4" },
+                AllowedGrantTypes = new[] { GrantType.ClientCredentials, GrantType.ResourceOwnerPassword },
+                AccessTokenType = AccessTokenType.Jwt,
+                AccessTokenLifetime = 7200
+            };
+
+            var webHostBuilder = new IdentityServerHostBuilder()
+                .AddClients(client)
+                .AddApiResources(new ApiResource
+                {
+                    Name = "jp_api",
+                    DisplayName = "JP API",
+                    Description = "OAuth2 Server Management Api",
+                    ApiSecrets = { new Secret("Q&tGrEQMypEk.XxPU:%bWDZMdpZeJiyMwpLv4F7d**w9x:7KuJ#fy,E8KPHpKz++".Sha256()) },
+
+                    UserClaims =
+                                    {
+                                        IdentityServerConstants.StandardScopes.OpenId,
+                                        IdentityServerConstants.StandardScopes.Profile,
+                                        IdentityServerConstants.StandardScopes.Email,
+                                        "is4-rights",
+                                        "username",
+                                        "roles"
+                                    },
+
+                    Scopes =
+                                    {
+                                        new Scope()
+                                        {
+                                            Name = "jp_api.user",
+                                            DisplayName = "User Management - Full access",
+                                            Description = "Full access to User Management",
+                                            Required = true
+                                        },
+                                        new Scope()
+                                        {
+                                            Name = "jp_api.is4",
+                                            DisplayName = "OAuth2 Server",
+                                            Description = "Manage mode to IS4",
+                                            Required = true
+                                        }
+                                    }
+                })
+                .UseResourceOwnerPasswordValidator(new SimpleResourceOwnerPasswordValidator())
+                .CreateWebHostBuider();
+
+            IdentityServerClient = new IdentityServerProxy(webHostBuilder);
+
+
+        }
+
+        public IdentityServerProxy IdentityServerClient { get; set; }
     }
 }

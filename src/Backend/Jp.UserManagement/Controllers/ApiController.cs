@@ -34,10 +34,7 @@ namespace Jp.Api.Management.Controllers
                 return NoContent();
             }
 
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>()
-            {
-                { nameof(DomainNotification), _notifications.GetNotifications().Select(n => n.Value).ToArray() }
-            }));
+            return BadRequest(new ValidationProblemDetails(_notifications.GetNotificationsByKey()));
         }
 
         protected ActionResult ResponseDelete()
@@ -47,10 +44,7 @@ namespace Jp.Api.Management.Controllers
                 return NoContent();
             }
 
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>()
-            {
-                { nameof(DomainNotification), _notifications.GetNotifications().Select(n => n.Value).ToArray() }
-            }));
+            return BadRequest(new ValidationProblemDetails(_notifications.GetNotificationsByKey()));
         }
 
         protected ActionResult<T> ResponsePost<T>(string action, object route, T result)
@@ -63,10 +57,7 @@ namespace Jp.Api.Management.Controllers
                 return CreatedAtAction(action, route, result);
             }
 
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>()
-            {
-                { nameof(DomainNotification), _notifications.GetNotifications().Select(n => n.Value).ToArray() }
-            }));
+            return BadRequest(new ValidationProblemDetails(_notifications.GetNotificationsByKey()));
         }
 
         protected ActionResult<T> ResponsePost<T>(string action, string controller, object route, T result)
@@ -79,10 +70,7 @@ namespace Jp.Api.Management.Controllers
                 return CreatedAtAction(action, controller, route, result);
             }
 
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>()
-            {
-                { nameof(DomainNotification), _notifications.GetNotifications().Select(n => n.Value).ToArray() }
-            }));
+            return BadRequest(new ValidationProblemDetails(_notifications.GetNotificationsByKey()));
         }
         protected ActionResult<IEnumerable<T>> ResponseGet<T>(IEnumerable<T> result)
         {
@@ -116,12 +104,9 @@ namespace Jp.Api.Management.Controllers
             return BadRequest(new ValidationProblemDetails(ModelState));
         }
 
-
         protected void NotifyError(string code, string message)
         {
             _mediator.RaiseEvent(new DomainNotification(code, message));
         }
-
-
     }
 }
