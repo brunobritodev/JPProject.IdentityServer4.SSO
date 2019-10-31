@@ -41,7 +41,7 @@ namespace JPProject.Api.Management.Tests.Controller
                 new StringContent(newUser.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
             response.EnsureSuccessStatusCode();
-
+            
         }
 
         [Fact]

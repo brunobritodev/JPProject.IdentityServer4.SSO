@@ -1,5 +1,5 @@
-<div class="row justify-content-center" *ngIf="historyData$ | async as history; else loading">
-    <div class="col-lg-7 col-md-9">
+<div class="row justify-content-center">
+    <div class="col-lg-9 col-md-12">
         <div class="card b">
             <div class="card-header bg-primary text-bold">
                 <i class="fa fa-align-justify"></i> {{ 'user.history.TITLE' | translate }}</div>
@@ -15,7 +15,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let history of history">
+                        <tr *ngFor="let history of historyData">
                             <td>{{history.category}}</td>
                             <td>{{history.action}}</td>
                             <td>{{history.when}}</td>
@@ -36,6 +36,26 @@
                             aria-valuemax="100"></div>
                     </div>
                 </ng-template>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex">
+                    
+                    <div class="ml-auto">
+                        <div class="input-group">
+                            <label class="col-form-label">Items per page:&nbsp;</label>
+                            <select class="custom-select" [(ngModel)]="quantity" (change)="loadResources()">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                            </select>
+                            <ngb-pagination [collectionSize]="total" [(page)]="page" [maxSize]="5" [rotate]="true"
+                                [ellipses]="false" [boundaryLinks]="true" [pageSize]="quantity" (pageChange)="loadResources()">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

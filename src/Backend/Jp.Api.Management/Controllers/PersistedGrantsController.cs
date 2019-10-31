@@ -8,6 +8,7 @@ using JPProject.Sso.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ServiceStack;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,6 +41,8 @@ namespace Jp.Api.Management.Controllers
             foreach (var persistedGrantViewModel in irs.PersistedGrants)
             {
                 var user = users.WithId(persistedGrantViewModel.SubjectId);
+                if (user == null) continue;
+
                 persistedGrantViewModel.Email = user.Email;
                 persistedGrantViewModel.Picture = user.Picture;
             }
@@ -50,7 +53,7 @@ namespace Jp.Api.Management.Controllers
         [HttpDelete, Route("{id}"), Authorize(Policy = "Admin")]
         public async Task<ActionResult> Remove(string id)
         {
-            var model = new RemovePersistedGrantViewModel(id);
+            var model = new RemovePersistedGrantViewModel(id.FromBase64UrlSafe().FromUtf8Bytes());
             await _persistedGrantAppService.Remove(model);
             return ResponseDelete();
         }

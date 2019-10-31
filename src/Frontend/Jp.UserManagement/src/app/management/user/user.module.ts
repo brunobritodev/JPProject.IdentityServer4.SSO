@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
 import { AlertModule } from 'ngx-bootstrap/alert';
@@ -36,6 +37,7 @@ const routes: Routes = [
         NgxMaskModule.forRoot(),
         ModalModule.forRoot(),
         TranslateModule,
+        NgbPaginationModule
     ],
     declarations: [
         ProfileComponent,

@@ -9,6 +9,7 @@ import { User } from '../../shared/models/user.model';
 import { ChangePassword } from '../../shared/view-model/change-password.model';
 import { ProfilePictureViewModel } from '../../shared/view-model/file-upload.model';
 import { SetPassword } from '../../shared/view-model/set-password.model';
+import { ListOf } from '../../shared/models/list-of.model';
 
 @Injectable()
 export class AccountManagementService {
@@ -50,7 +51,7 @@ export class AccountManagementService {
         return this.http.get<boolean>(`${this.endpoint}/password`);
     }
     
-    public getLogs(): Observable<EventHistoryData> {
-        return this.http.get<EventHistoryData>(`${this.endpoint}/logs`);
+    public getLogs(page: number, quantity: number): Observable<ListOf<EventHistoryData>> {
+        return this.http.get<ListOf<EventHistoryData>>(`${this.endpoint}/logs?limit=${quantity}&offset=${(page - 1) * quantity}`);
     }
 }
