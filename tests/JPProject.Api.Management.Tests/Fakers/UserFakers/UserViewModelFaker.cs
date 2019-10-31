@@ -24,7 +24,6 @@ namespace JPProject.Api.Management.Tests.Fakers.UserFakers
             var pass = _faker.Internet.Password();
             return new Faker<RegisterUserViewModel>()
                 .RuleFor(r => r.Email, f => f.Person.Email)
-                .RuleFor(r => r.Password, f => pass)
                 .RuleFor(r => r.Provider, f => f.Company.CompanyName())
                 .RuleFor(r => r.ProviderId, f => f.Random.AlphaNumeric(21))
                 .RuleFor(r => r.Name, f => f.Person.FullName)
