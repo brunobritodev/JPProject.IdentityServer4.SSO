@@ -77,17 +77,3 @@ services:
             - jpproject
         ports:
             - 4200:80
-
-    #############################
-    # Admin Ui
-    #############################
-    admin-ui:
-        image: jpproject-admin-ui
-        build: 
-          context: .
-          dockerfile: admin-ui.dockerfile
-        depends_on:
-            - jpproject-api
-            - jpproject
-        ports:
-            - 4300:80

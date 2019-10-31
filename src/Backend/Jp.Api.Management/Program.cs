@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.ApplicationInsights.Extensibility;
+﻿using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using System;
 
 namespace Jp.Api.Management
 {
@@ -12,7 +12,7 @@ namespace Jp.Api.Management
     {
         public static void Main(string[] args)
         {
-            Console.Title = "JP Project - User Management";
+            Console.Title = "JP Project - Api Management";
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()

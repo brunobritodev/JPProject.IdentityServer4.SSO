@@ -46,9 +46,6 @@ namespace Jp.Api.Management
             // Configure policies
             services.AddPolicies();
 
-            // Config automapper
-            services.AddAutoMapperSetup();
-
             // configure auth Server
             services.ConfigureOAuth2Server(Configuration);
 
@@ -89,10 +86,10 @@ namespace Jp.Api.Management
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ID4 User Management");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SSO Api Management");
                 c.OAuthClientId("Swagger");
                 c.OAuthClientSecret("swagger");
-                c.OAuthAppName("User Management UI - full access");
+                c.OAuthAppName("SSO Management Api");
                 c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
             });
             app.UseEndpoints(endpoints =>

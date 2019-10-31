@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration;
 using JPProject.AspNet.Core;
 using JPProject.EntityFrameworkCore.Configuration;
 using JPProject.Sso.Application.AutoMapper;
@@ -10,6 +11,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Jp.UI.SSO.Configuration
 {
@@ -28,6 +30,7 @@ namespace Jp.UI.SSO.Configuration
                         .WithMySql<Startup>(connString)
                         .AddEventStoreMySql<Startup>(connString, eventstoreOptions)
                         .ConfigureIdentityServer()
+                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
                         .WithMySql<Startup>(connString);
                     break;
                 case "SQLSERVER":
@@ -36,6 +39,7 @@ namespace Jp.UI.SSO.Configuration
                         .WithSqlServer<Startup>(connString)
                         .AddEventStoreSqlServer<Startup>(connString, eventstoreOptions)
                         .ConfigureIdentityServer()
+                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
                         .WithSqlServer<Startup>(connString);
 
                     break;
@@ -45,6 +49,7 @@ namespace Jp.UI.SSO.Configuration
                         .WithPostgreSql<Startup>(connString)
                         .AddEventStorePostgreSql<Startup>(connString, eventstoreOptions)
                         .ConfigureIdentityServer()
+                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
                         .WithPostgreSql<Startup>(connString);
                     break;
                 case "SQLITE":
@@ -53,15 +58,15 @@ namespace Jp.UI.SSO.Configuration
                         .WithSqlite<Startup>(connString)
                         .AddEventStoreSqlite<Startup>(connString, eventstoreOptions)
                         .ConfigureIdentityServer()
+                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
                         .WithSqlite<Startup>(connString);
                     break;
             }
 
-            var mappings = SsoMapperConfig.RegisterMappings();
-            mappings.AddProfile(SsoMapperConfig.RegisterMappings());
-
-            var automapperConfig = new MapperConfiguration(mappings);
-
+            var configurationExpression = new MapperConfigurationExpression();
+            SsoMapperConfig.RegisterMappings().ForEach(p => configurationExpression.AddProfile(p));
+            configurationExpression.AddProfile(new CustomMappingProfile());
+            var automapperConfig = new MapperConfiguration(configurationExpression);
 
             services.TryAddSingleton(automapperConfig.CreateMapper());
             // Adding MediatR for Domain Events and Notifications

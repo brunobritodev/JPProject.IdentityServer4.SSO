@@ -4,7 +4,6 @@ using JPProject.Domain.Core.Notifications;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.EventSourcedNormalizers;
 using JPProject.Sso.Application.Interfaces;
-using JPProject.Sso.Application.ViewModels;
 using JPProject.Sso.Application.ViewModels.RoleViewModels;
 using JPProject.Sso.Application.ViewModels.UserViewModels;
 using MediatR;

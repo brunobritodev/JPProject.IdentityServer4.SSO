@@ -5,6 +5,7 @@ using JPProject.Admin.Application.ViewModels.ClientsViewModels;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
+using JPProject.Domain.Core.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;

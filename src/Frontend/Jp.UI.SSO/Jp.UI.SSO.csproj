@@ -12,13 +12,13 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="JPProject.AspNet.Core" Version="1.0.1-10-31-073249" />
+    <PackageReference Include="JPProject.AspNet.Core" Version="1.0.1-10-31-160927" />
     <PackageReference Include="JpProject.AspNetCore.PasswordHasher.Argon2" Version="3.0.1" />
-    <PackageReference Include="JPProject.Sso.Application" Version="1.0.1-10-31-073249" />
-    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.MySql" Version="1.0.1-10-31-073249" />
-    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.PostgreSQL" Version="1.0.1-10-31-073249" />
-    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.Sqlite" Version="1.0.1-10-31-073249" />
-    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.SqlServer" Version="1.0.1-10-31-073249" />
+    <PackageReference Include="JPProject.Sso.Application" Version="1.0.1-10-31-160927" />
+    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.MySql" Version="1.0.1-10-31-160927" />
+    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.PostgreSQL" Version="1.0.1-10-31-160927" />
+    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.Sqlite" Version="1.0.1-10-31-160927" />
+    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.SqlServer" Version="1.0.1-10-31-160927" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.0.0" />

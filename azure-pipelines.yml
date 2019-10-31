@@ -96,26 +96,6 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-      # Admin UI
-      - task: Npm@1
-        displayName: 'NPM - Install - AdminUI'
-        inputs:
-          command: install
-          workingDir: src/Frontend/Jp.AdminUI
-
-      - task: Npm@1
-        displayName: 'NPM - Install - UserManagement'
-        inputs:
-          command: install
-          workingDir: src/Frontend/Jp.UserManagement
-
-      - task: Npm@1
-        displayName: 'NPM - Build Prod - AdminUI'
-        inputs:
-          command: custom
-          customCommand: 'run build -- --base-href=/admin-ui/'
-          workingDir: src/Frontend/Jp.AdminUI
-
       - task: Npm@1
         displayName: 'NPM - Build Prod - UserManagement'
         inputs:

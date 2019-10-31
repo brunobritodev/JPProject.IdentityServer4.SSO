@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/brunohbrito/jp-project.svg)](LICENSE) [![Greenkeeper badge](https://badges.greenkeeper.io/brunohbrito/JPProject.IdentityServer4.AdminUI.svg)](https://greenkeeper.io/)
 ![DOCS](https://readthedocs.org/projects/jp-project/badge/?version=latest&style=flat)
 
-Jp Project is a Open Source UI Administration Tools for IdentityServer4 v2 - release 2.4.0. 
+Jp Project is a Open Source SSO and Tools built with IdentityServer4 - release 3.0.1
 
 
 ## Table of Contents ##
@@ -89,7 +89,7 @@ The main goal of project is to be a Management Ecosystem for IdentityServer4. He
 
 - Angular 8
 - Rich UI interface
-- ASP.NET Core 2.2
+- ASP.NET Core 3.0
 - ASP.NET MVC Core 
 - ASP.NET WebApi Core
 - ASP.NET Identity Core
@@ -98,7 +98,7 @@ The main goal of project is to be a Management Ecosystem for IdentityServer4. He
 - Sql Ready
 - Postgree Ready
 - SQLite Ready
-- Entity Framework Core 2.2
+- Entity Framework Core
 - .NET Core Native DI
 - AutoMapper
 - FluentValidator

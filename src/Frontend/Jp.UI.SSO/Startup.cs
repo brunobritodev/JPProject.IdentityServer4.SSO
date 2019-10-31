@@ -54,9 +54,6 @@ namespace Jp.UI.SSO
             // Configure Federation gateway (external logins), such as Facebook, Google etc
             services.AddFederationGateway(Configuration);
 
-            // Configure automapper
-            services.AddAutoMapperSetup();
-
             // Adding MediatR for Domain Events and Notifications
             services.AddMediatR(typeof(Startup));
 

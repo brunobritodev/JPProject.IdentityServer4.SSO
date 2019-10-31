@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jp.Api.Management", "Backend\Jp.UserManagement\Jp.Api.Management.csproj", "{14A3F6B3-2B5B-43BF-A458-AA41F07365E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jp.Api.Management", "Backend\Jp.Api.Management\Jp.Api.Management.csproj", "{14A3F6B3-2B5B-43BF-A458-AA41F07365E4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jp.UI.SSO", "Frontend\Jp.UI.SSO\Jp.UI.SSO.csproj", "{CF7B5562-179E-44EB-B7E3-7096698A46E7}"
 EndProject

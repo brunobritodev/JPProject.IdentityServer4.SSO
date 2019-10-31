@@ -1,3 +1,14 @@
+# v3.1
+
+1. Now AdminUI and SSO are completely separated projects
+2. Mature Open Source in prouction
+3. All componenents from SSO and Admin are available on Nuget
+
+# v3.0
+
+1. Updated to ASP.NET Core 3
+2. Update all references to latest version
+
 # v1.4.5
 
 1. Updated for IdentityServer4 dependencies for 2.5.

@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Backend\Jp.UserManagement\Jp.Api.Management.csproj" />
+    <ProjectReference Include="..\..\src\Backend\Jp.Api.Management\Jp.Api.Management.csproj" />
   </ItemGroup>
 
 </Project>

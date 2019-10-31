@@ -5,6 +5,7 @@ using IdentityServer4.Models;
 using JPProject.Admin.Application.ViewModels;
 using JPProject.Admin.Application.ViewModels.ClientsViewModels;
 using JPProject.Api.Management.Tests.Fakers.ClientFakers;
+using JPProject.Domain.Core.ViewModels;
 using ServiceStack;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +80,7 @@ namespace JPProject.Api.Management.Tests.Controller
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
-            var clients = stringResponse.FromJson<Client>(); 
+            var clients = stringResponse.FromJson<Client>();
 
             clients.Should().NotBeNull();
         }

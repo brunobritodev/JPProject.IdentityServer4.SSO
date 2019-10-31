@@ -37,7 +37,7 @@ namespace Jp.Api.Management.Controllers
                 await _userAppService.Register(model);
 
             model.ClearSensitiveData();
-            return ResponsePost("profile", "account", null, model);
+            return ResponsePost("UserData", "Account", null, model);
         }
 
 
