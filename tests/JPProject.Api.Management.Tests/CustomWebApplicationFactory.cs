@@ -36,6 +36,8 @@ namespace JPProject.Api.Management.Tests
                     options.Authority = "http://localhost";
                     options.JwtBackChannelHandler = IdentityServerClient.IdentityServer.CreateHandler();
                 });
+
+
             }).UseStartup<StartupTest>();
 
         }

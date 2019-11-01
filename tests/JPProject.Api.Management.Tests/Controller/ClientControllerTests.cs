@@ -102,7 +102,6 @@ namespace JPProject.Api.Management.Tests.Controller
             httpResponse.EnsureSuccessStatusCode();
         }
 
-
         [Fact]
         public async Task ShouldUpdateClientId()
         {
