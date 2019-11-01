@@ -101,8 +101,8 @@ namespace Jp.Api.Management
 
         private void RegisterServices(IServiceCollection services)
         {
-            // Adding dependencies from another layers (isolated from Presentation)
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            // Adding dependencies from another layers (isolated from Presentation)
         }
     }
 }
