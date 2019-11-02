@@ -30,8 +30,8 @@ namespace Jp.UI.SSO.Configuration
                         .WithMySql<Startup>(connString)
                         .AddEventStoreMySql<Startup>(connString, eventstoreOptions)
                         .ConfigureIdentityServer()
-                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
-                        .WithMySql<Startup>(connString);
+                        .WithMySql<Startup>(connString)
+                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"));
                     break;
                 case "SQLSERVER":
                     services
@@ -39,9 +39,8 @@ namespace Jp.UI.SSO.Configuration
                         .WithSqlServer<Startup>(connString)
                         .AddEventStoreSqlServer<Startup>(connString, eventstoreOptions)
                         .ConfigureIdentityServer()
-                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
-                        .WithSqlServer<Startup>(connString);
-
+                        .WithSqlServer<Startup>(connString)
+                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"));
                     break;
                 case "POSTGRESQL":
                     services
@@ -49,8 +48,8 @@ namespace Jp.UI.SSO.Configuration
                         .WithPostgreSql<Startup>(connString)
                         .AddEventStorePostgreSql<Startup>(connString, eventstoreOptions)
                         .ConfigureIdentityServer()
-                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
-                        .WithPostgreSql<Startup>(connString);
+                        .WithPostgreSql<Startup>(connString)
+                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"));
                     break;
                 case "SQLITE":
                     services
@@ -58,8 +57,8 @@ namespace Jp.UI.SSO.Configuration
                         .WithSqlite<Startup>(connString)
                         .AddEventStoreSqlite<Startup>(connString, eventstoreOptions)
                         .ConfigureIdentityServer()
-                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
-                        .WithSqlite<Startup>(connString);
+                        .WithSqlite<Startup>(connString)
+                        .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"));
                     break;
             }
 

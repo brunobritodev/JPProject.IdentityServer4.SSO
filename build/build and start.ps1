@@ -14,10 +14,10 @@ Write-Information Restore deps
 dotnet build $sso
 dotnet build $api
 # The best way to npm install is from src folder
-cd $ui; npm install
-cd $currentPath
-cd $adminui; npm install
-cd $currentPath
+Set-Location $ui; npm install
+Set-Location $currentPath
+Set-Location $adminui; npm install
+Set-Location $currentPath
 
 
 # Start-Process -Verb runas "cmd.exe" $paramsSSO;
