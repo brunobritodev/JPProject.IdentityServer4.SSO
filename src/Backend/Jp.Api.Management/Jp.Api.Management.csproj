@@ -4,17 +4,19 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UserSecretsId>9c91d295-54c5-4d09-9bd6-fa56fb74011b</UserSecretsId>
     <DockerTargetOS>Linux</DockerTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="3.1.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-    <PackageReference Include="JPProject.Admin.Application" Version="3.0.1-prerelease1.11-03-001225" />
-    <PackageReference Include="JPProject.Admin.Database" Version="3.0.1-prerelease1.11-03-001225" />
-    <PackageReference Include="JPProject.AspNet.Core" Version="3.0.1-prerelease1.11-03-001225" />
-    <PackageReference Include="JPProject.Sso.Application" Version="3.0.1-prerelease1.11-03-001225" />
-    <PackageReference Include="JPProject.Sso.Database" Version="3.0.1-prerelease1.11-03-001225" />
+    <PackageReference Include="JPProject.Admin.Application" Version="3.0.1" />
+    <PackageReference Include="JPProject.Admin.Database" Version="3.0.1" />
+    <PackageReference Include="JPProject.AspNet.Core" Version="3.0.1" />
+    <PackageReference Include="JPProject.Sso.Application" Version="3.0.1" />
+    <PackageReference Include="JPProject.Sso.Database" Version="3.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
