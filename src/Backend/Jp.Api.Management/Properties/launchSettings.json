@@ -20,22 +20,9 @@
       "launchUrl": "swagger/index.html",
       "environmentVariables": {
         "ASPNETCORE_URLS": "http://localhost:5003;https://localhost:5002",
-        "USER_MANAGEMENT_URI": "http://localhost:4200",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "AUTHORITY": "https://localhost:5001"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5003;https://localhost:5002"
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80",
-        "ASPNETCORE_HTTPS_PORT": "44303"
-      },
-      "httpPort": 10000,
-      "useSSL": true,
-      "sslPort": 44303
     }
   }
 }

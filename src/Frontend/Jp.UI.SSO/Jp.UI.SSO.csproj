@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
       <UserSecretsId>aspnet-jpproject-04C6939F-E672-4E56-B4A5-5F064EB67F23</UserSecretsId>
       <DockerTargetOS>Linux</DockerTargetOS>
+      <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+      <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>

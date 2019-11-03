@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Jp.Api.Management.Configuration
 {
@@ -15,7 +15,7 @@ namespace Jp.Api.Management.Configuration
                 options.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Version = "v1",
-                    Title = "Identity Server 4 User Management API ",
+                    Title = "JP Project - Management API ",
                     Description = "Swagger surface",
                     Contact = new OpenApiContact()
                     {
@@ -26,7 +26,7 @@ namespace Jp.Api.Management.Configuration
                     License = new OpenApiLicense()
                     {
                         Name = "MIT",
-                        Url = new Uri("https://github.com/brunohbrito/JP-Project/blob/master/LICENSE")
+                        Url = new Uri("https://github.com/brunohbrito/JPProject.IdentityServer4.AdminUI/blob/master/LICENSE")
                     },
 
                 });

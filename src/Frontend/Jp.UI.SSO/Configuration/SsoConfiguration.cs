@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
 using JPProject.AspNet.Core;
+using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.AutoMapper;
 using JPProject.Sso.Database;
 using MediatR;
@@ -22,6 +23,7 @@ namespace Jp.UI.SSO.Configuration
                 .ConfigureUserIdentity<AspNetUser>().AddDatabase(database, connString)
 
                 .ConfigureIdentityServer()
+
                 .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
                 .AddOAuth2Database(database, connString);
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
 namespace Jp.UI.SSO.Controllers.Home
@@ -11,9 +12,9 @@ namespace Jp.UI.SSO.Controllers.Home
     public class HomeController : Controller
     {
         private readonly IIdentityServerInteractionService _interaction;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public HomeController(IIdentityServerInteractionService interaction, IHostingEnvironment hostingEnvironment)
+        public HomeController(IIdentityServerInteractionService interaction, IWebHostEnvironment hostingEnvironment)
         {
             _interaction = interaction;
             _hostingEnvironment = hostingEnvironment;

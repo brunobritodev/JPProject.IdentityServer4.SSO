@@ -1,13 +1,13 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim AS base
 WORKDIR /app
-EXPOSE 5002
-EXPOSE 5003
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["src/Backend/Jp.Api.Management/Jp.Api.Management.csproj", "Backend/Jp.Api.Management/"]
-RUN dotnet restore "src/Backend/Jp.Api.Management/Jp.Api.Management.csproj"
-COPY src/. .
+RUN dotnet restore "Backend/Jp.Api.Management/Jp.Api.Management.csproj"
+COPY src/ .
 WORKDIR "/src/Backend/Jp.Api.Management"
 RUN dotnet build "Jp.Api.Management.csproj" -c Release -o /app/build
 

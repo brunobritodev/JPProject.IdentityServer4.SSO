@@ -20,20 +20,18 @@ services:
     #############################
     # Server SSO
     #############################
-    jpproject:
+    jpproject-sso:
         image: "jpproject-sso"
         build: 
           context: .
           dockerfile: sso.dockerfile
-        ports:
-            - "5000:5000"
         links:
             - jpdatabase
         depends_on:
             - jpdatabase
         environment: 
             ASPNETCORE_ENVIRONMENT: Development
-            ASPNETCORE_URLS: http://+:5000
+            ASPNETCORE_URLS: http://+:5001
             CUSTOMCONNSTR_SSOConnection: "server=jpdatabase,port=3306;database=jpproject;user=jp;password=10203040"
             ApplicationSettings:EnableExternalProviders: "false" # Because Auth url is http://jpproject (modified by host to point to 127.0.0.1), then Google and Facebook reject it.
             ApplicationSettings:DatabaseType: MySql
@@ -53,27 +51,35 @@ services:
         build: 
           context: .
           dockerfile: api.dockerfile
-        ports:
-            - "5003:80"
         depends_on:
             - jpdatabase
         environment: 
             ASPNETCORE_ENVIRONMENT: "Development"
             ASPNETCORE_URLS: http://+
             CUSTOMCONNSTR_SSOConnection: "server=jpdatabase,port=3306;database=jpproject;user=jp;password=10203040"
-            ApplicationSettings:Authority: "http://jpproject:5000"
+            ApplicationSettings:Authority: "http://jpproject-sso:5001"
             ApplicationSettings:DatabaseType: MySql
 
     #############################
     # User management UI
     #############################
-    user-ui:
-        image: jpproject-user-management-ui
+    jpproject-users:
+        image: jpproject-users
         build: 
           context: .
-          dockerfile: ui-user-management.dockerfile
-        depends_on:
-            - jpproject-api
-            - jpproject
+          dockerfile: users.dockerfile
+
+    
+    reverse-proxy:
+        container_name: jpproject
+        build:
+            context: .
+            dockerfile: nginx.dockerfile
         ports:
-            - 4200:80
+            - '5001:5001'
+            - '5002:5002'
+            - '4200:4200'
+        depends_on:
+            - 'jpproject-api'
+            - 'jpproject-users'
+            - 'jpproject-sso'
