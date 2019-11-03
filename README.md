@@ -1,20 +1,33 @@
-![image](https://github.com/brunohbrito/JP-Project/blob/master/docs/images/logo.png?raw=true)
+![image](https://github.com/brunohbrito/JPProject.Core/blob/master/build/logo.png?raw=true)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/08v6mg6q439x16xt?svg=true)](https://ci.appveyor.com/project/brunohbrito/jp-project)
 [![Build Status](https://dev.azure.com/brunohbrito/JpProject/_apis/build/status/JPProject%20CD%20Build?branchName=master)](https://dev.azure.com/brunohbrito/JpProject/_build/latest?definitionId=2&branchName=master)
-[![License](https://img.shields.io/github/license/brunohbrito/jp-project.svg)](LICENSE) [![Greenkeeper badge](https://badges.greenkeeper.io/brunohbrito/JPProject.IdentityServer4.AdminUI.svg)](https://greenkeeper.io/)
-![DOCS](https://readthedocs.org/projects/jp-project/badge/?version=latest&style=flat)
+[![License](https://img.shields.io/github/license/brunohbrito/JPProject.IdentityServer4.SSO)](LICENSE)
 
-Jp Project is a Open Source SSO and Tools built with IdentityServer4 - release 3.0.1
+This is the full version of JP Project. It provide SSO and an Api where it's possible to manage both IdentityServer4 and ASP.NET Identity.
+
+# Installation
+
+Windows users:
+* download [jpproject-docker-windows.zip](https://github.com/brunohbrito/JP-Project/raw/master/build/jpproject-docker-windows.zip)
+* Unzip and execute `docker-run.bat` (As administrator)
+
+Linux users:
+* Download [docker-compose.yml](https://github.com/brunohbrito/JP-Project/raw/master/build/docker-compose.yml)
+* Add `127.0.0.1 jpproject` entry to hosts file (`/etc/hosts`)
+* `docker-compose up`
 
 
 ## Table of Contents ##
 
+- [Installation](#installation)
+  - [Table of Contents](#table-of-contents)
 - [Presentation](#presentation)
   - [Admin UI](#admin-ui)
   - [Login page](#login-page)
   - [Consent page](#consent-page)
   - [Profile](#profile)
+- [How to start?](#how-to-start)
 - [Demo](#demo)
   - [We are online at Azure.](#we-are-online-at-azure)
 - [Docker](#docker)
@@ -25,18 +38,42 @@ Jp Project is a Open Source SSO and Tools built with IdentityServer4 - release 3
 - [Docs](#docs)
   - [Contributing](#contributing)
   - [Free](#free)
+  - [3.0.1](#301)
   - [v1.4.5](#v145)
-  - [v1.4.0](#v140)
-  - [v1.3](#v13)
-  - [v1.2](#v12)
 - [What comes next?](#what-comes-next)
 - [License](#license)
 
-------------------
-
 # Presentation
 
-Here some screenshots
+The main goal of JP Project is to be a Management Ecosystem for IdentityServer4 and ASP.NET Identity. 
+
+Helping Startup's and Organization to Speed Up Microservices Environment. Providing tools for an OAuth2 Server and User Management. 
+
+Built with IdentityServer4. An OpenID Connect and OAuth 2.0 framework for ASP.NET Core.
+
+SSO has some flows:
+* Single Sign On
+* Register users
+* Recover password flow
+* MFA
+* Federation Gateway (Login by Google, Facebook.. etc)
+* Argon2 password hashing
+* CSP Headers
+* Event monitoring (For compliance scenarios)
+
+Admin UI is an administrative panel where it's possible to manage both OAuth2 Server and Identities. 
+
+From OAuth2 panel it's possible to manage:
+* `Clients`
+* `Identity Resources`
+* `Api Resources`
+* `Persisted Grants`
+
+From Identity panel it's possible to manage `Users` and `Roles`
+
+It's open source and free. From community to community.
+
+Screenshots
 
 ## Admin UI ##
 <img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-adminui.gif"  width="480" />
@@ -49,6 +86,15 @@ Here some screenshots
 
 ## Profile ##
 <img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-usermanagement.gif" width="480" />
+
+
+# How to start?
+
+First you need to choose.
+
+* You need everything (Best choice)? JP Project provide a complete SSO with an Administration panel. Check it at [SSO - Full Version](https://github.com/brunohbrito/JPProject.IdentityServer4.SSO)
+
+* You already have an IdentityServer4 Up and running? Go to [Admin Panel - Light version](https://github.com/brunohbrito/JPProject.IdentityServer4.AdminUI)
 
 # Demo #
 
@@ -85,7 +131,6 @@ Linux users:
 Check below how it was developed.
 
 Written in ASP.NET Core and Angular 8.
-The main goal of project is to be a Management Ecosystem for IdentityServer4. Helping Startup's and Organization to Speed Up the Setup of User Management. Helping teams and entrepreneurs to achieve the company's primary purpose: Maximize shareholder value.
 
 - Angular 8
 - Rich UI interface
@@ -152,6 +197,11 @@ We'll love it! Please [Read the docs](https://jp-project.readthedocs.io/en/lates
 If you need help building or running your Jp Project platform
 There are several ways we can help you out.
 
+## 3.0.1
+
+1. ASP.NET Core 3.0 support
+2. Separated repositories, for better management. Improving tests, integration tests. And to support more scenarios.
+
 ## v1.4.5
 
 Breaking change: **Argon2 password hashing**. Be careful before update. If you are using the old version all users must need to update their passwords.
@@ -161,39 +211,6 @@ Breaking change: **Argon2 password hashing**. Be careful before update. If you a
 2. Argon2 Password Hasher
 3. Show version at footer
 
-## v1.4.0
-
-1. Added :boom: **New Translations** (auto-generate) :green_heart: :blue_heart:
-   * Spanish
-   * French
-   * Dutch
-   * Russian
-   * Chinese Simplified
-   * Chinese Traditional
-
-    <small>If you find some mistakes feel free to PR</small>
-
-2. Added integration with Azure DevOps for full CI/CD. ASAP SonarQube
-
-3. Bug fixes
-
-## v1.3
-
-- Bug fixes
-  - angular-oauth2-oidc Session Improvements for Angular Apps. Incluind Admin UI
-  - Some Action attributes was HttpPost instead HttpPut (fixed)
-- New unity tests
-
-## v1.2
-
-- Docker support
-- Available at Docker Hub
-- IdentityServer4 v2 (release 2.4.0)
-  - Device flow
-- ASP.NET Core 2.2 support
-- Plugins update
-- Angular 7.2
-
 Check [Changelog.md](https://github.com/brunohbrito/JP-Project/blob/master/CHANGELOG.md) for a complete list of changes.
 
 # What comes next?
@@ -201,6 +218,8 @@ Check [Changelog.md](https://github.com/brunohbrito/JP-Project/blob/master/CHANG
 * Code coverage
 * UI for Device codes 
 * CI with SonarCloud
+* E-mail template management
+* Blob service management
 
 
 # License
