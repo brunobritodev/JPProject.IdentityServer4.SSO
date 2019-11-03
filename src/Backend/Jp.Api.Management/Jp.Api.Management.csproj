@@ -10,17 +10,11 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="3.1.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-    <PackageReference Include="JPProject.Admin.Application" Version="3.0.0" />
-    <PackageReference Include="JPProject.Admin.EntityFrameworkCore.MySql" Version="3.0.0" />
-    <PackageReference Include="JPProject.Admin.EntityFrameworkCore.PostgreSQL" Version="3.0.0" />
-    <PackageReference Include="JPProject.Admin.EntityFrameworkCore.Sql" Version="3.0.0" />
-    <PackageReference Include="JPProject.Admin.EntityFrameworkCore.Sqlite" Version="3.0.0" />
-    <PackageReference Include="JPProject.AspNet.Core" Version="3.0.0" />
-    <PackageReference Include="JPProject.Sso.Application" Version="3.0.0" />
-    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.MySql" Version="3.0.0" />
-    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.PostgreSQL" Version="3.0.0" />
-    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.Sqlite" Version="3.0.0" />
-    <PackageReference Include="JPProject.Sso.EntityFrameworkCore.SqlServer" Version="3.0.0" />
+    <PackageReference Include="JPProject.Admin.Application" Version="3.0.1-prerelease1.11-03-001225" />
+    <PackageReference Include="JPProject.Admin.Database" Version="3.0.1-prerelease1.11-03-001225" />
+    <PackageReference Include="JPProject.AspNet.Core" Version="3.0.1-prerelease1.11-03-001225" />
+    <PackageReference Include="JPProject.Sso.Application" Version="3.0.1-prerelease1.11-03-001225" />
+    <PackageReference Include="JPProject.Sso.Database" Version="3.0.1-prerelease1.11-03-001225" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />

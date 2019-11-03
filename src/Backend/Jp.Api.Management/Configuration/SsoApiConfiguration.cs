@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
 using JPProject.Admin.Application.AutoMapper;
+using JPProject.Admin.Database;
 using JPProject.AspNet.Core;
-using JPProject.EntityFrameworkCore.Configuration;
+using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.AutoMapper;
-using JPProject.Sso.EntityFrameworkCore.MySql.Configuration;
-using JPProject.Sso.EntityFrameworkCore.PostgreSQL.Configuration;
-using JPProject.Sso.EntityFrameworkCore.Sqlite.Configuration;
-using JPProject.Sso.EntityFrameworkCore.SqlServer.Configuration;
+using JPProject.Sso.Database;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,31 +18,14 @@ namespace Jp.Api.Management.Configuration
     {
         public static IServiceCollection ConfigureSsoApi(this IServiceCollection services, IConfiguration configuration)
         {
-            var database = configuration["ApplicationSettings:DatabaseType"].ToUpper();
+            var database = configuration.GetValue<DatabaseType>("ApplicationSettings:DatabaseType");
             var connString = configuration.GetConnectionString("SSOConnection");
-            var userIdentityBuilder = services.ConfigureUserIdentity<AspNetUser>();
-            var identityServerApiBuilder = services.ConfigureJpAdmin<AspNetUser>();
 
-            switch (database)
-            {
-                case "MYSQL":
-                    userIdentityBuilder.WithMySql<Startup>(connString).AddEventStoreMySql<Startup>(connString, EventStoreMigrationOptions.Get().ShouldMigrate(false));
-                    identityServerApiBuilder.WithMySql<Startup>(connString);
-                    break;
-                case "SQLSERVER":
-                    userIdentityBuilder.WithSqlServer<Startup>(connString).AddEventStoreSqlServer<Startup>(connString, EventStoreMigrationOptions.Get().ShouldMigrate(false));
-                    identityServerApiBuilder.WithSqlServer<Startup>(connString);
+            services.ConfigureUserIdentity<AspNetUser>().AddDatabase(database, connString);
 
-                    break;
-                case "POSTGRESQL":
-                    userIdentityBuilder.WithPostgreSql<Startup>(connString).AddEventStorePostgreSql<Startup>(connString, EventStoreMigrationOptions.Get().ShouldMigrate(false));
-                    identityServerApiBuilder.WithPostgreSql<Startup>(connString);
-                    break;
-                case "SQLITE":
-                    userIdentityBuilder.WithSqlite<Startup>(connString).AddEventStoreSqlite<Startup>(connString, EventStoreMigrationOptions.Get().ShouldMigrate(false));
-                    identityServerApiBuilder.WithSqlite<Startup>(connString);
-                    break;
-            }
+            services.ConfigureJpAdmin<AspNetUser>().AddDatabase(database, connString);
+
+
             return services;
         }
 
