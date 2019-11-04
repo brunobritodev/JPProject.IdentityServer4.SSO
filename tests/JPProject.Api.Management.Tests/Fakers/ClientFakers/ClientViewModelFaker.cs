@@ -10,7 +10,7 @@ namespace JPProject.Api.Management.Tests.Fakers.ClientFakers
         public static Faker<SaveClientViewModel> GenerateSaveClient(string clientId = null)
         {
             return new Faker<SaveClientViewModel>()
-                .RuleFor(s => s.ClientId, f => clientId ?? f.Lorem.Word())
+                .RuleFor(s => s.ClientId, f => clientId ?? f.Random.Guid().ToString())
                 .RuleFor(s => s.ClientName, f => f.Lorem.Word())
                 .RuleFor(s => s.ClientUri, f => f.Lorem.Word())
                 .RuleFor(s => s.LogoUri, f => f.Lorem.Word())
