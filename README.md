@@ -14,7 +14,7 @@ Windows users:
 
 Linux users:
 * Download [docker-compose.yml](https://github.com/brunohbrito/JP-Project/raw/master/build/docker-compose.yml)
-* Add `127.0.0.1 jpproject` entry to hosts file (`/etc/hosts`)
+* Add `127.0.0.1 jpproject-sso` entry to hosts file (`/etc/hosts`)
 * `docker-compose up`
 
 
@@ -34,7 +34,7 @@ Linux users:
 - [Technologies](#technologies)
   - [Architecture](#architecture)
   - [Give a Star! ⭐](#give-a-star-%e2%ad%90)
-  - [How to build](#how-to-build)
+  - [Development Scenario](#development-scenario)
 - [Docs](#docs)
   - [Contributing](#contributing)
   - [Free](#free)
@@ -168,16 +168,15 @@ Written in ASP.NET Core and Angular 8.
 
 Do you love it? give us a Star!
 
-## How to build
-Jp Project is built against ASP.NET Core 2.2.
+## Development Scenario
 
-* [Install](https://www.microsoft.com/net/download/core#/current) the latest .NET Core 2.2 SDK
+Jp Project is built against ASP.NET Core 3.0.
 
+* [Install](https://www.microsoft.com/net/download/core#/current) the latest .NET Core 3.0 SDK
 
-`src/JpProject.sln` Contains SSO and API
+`src/JPProject.SSO.sln` Contains SSO and API
 
 For UI's use VSCode.
-- AdminUI -> Inside VSCode open folder `rootFolder/src/Frontend/Jp.AdminUI`, then terminal and `npm install && npm start`
 - User Management -> Inside VSCode open folder `rootFolder/src/Frontend/Jp.UserManagement`, then terminal and `npm install && npm start`
 
 Wait for ng to complete his proccess then go to http://localhost:5000!
