@@ -30,7 +30,6 @@ Linux users:
 - [How to start?](#how-to-start)
 - [Demo](#demo)
   - [We are online at Azure.](#we-are-online-at-azure)
-- [Docker](#docker)
 - [Technologies](#technologies)
   - [Architecture](#architecture)
   - [Give a Star! ⭐](#give-a-star-%e2%ad%90)
@@ -109,22 +108,6 @@ Check it now at [Jp Project](https://jpproject.azurewebsites.net/admin-ui/).
 You can check also [SSO](https://jpproject.azurewebsites.net/sso/) and [User Management](https://jpproject.azurewebsites.net/user-management/)
 
 _New users are readonly_
-
-# Docker #
-
-Run through docker compose ❤️
-
-Wanna try? As easy as:
-
-Windows users:
-* download [jpproject-docker-windows.zip](https://github.com/brunohbrito/JP-Project/raw/master/build/jpproject-docker-windows.zip)
-* Unzip and execute `docker-run.bat` (As administrator)
-
-Linux users:
-* Download [docker-compose.yml](https://github.com/brunohbrito/JP-Project/raw/master/build/docker-compose.yml)
-* Add `127.0.0.1 jpproject` entry to hosts file (`/etc/hosts`)
-* `docker-compose up`
-
 
 # Technologies #
 
