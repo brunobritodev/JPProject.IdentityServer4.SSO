@@ -1,5 +1,5 @@
 version: 1.2.{build}
-image: Visual Studio 2017
+image: Visual Studio 2019
 branches:
   only:
   - master
@@ -14,9 +14,12 @@ before_build:
   - cmd: dotnet --version
   # Display minimal restore text
   - cmd: dotnet restore ./src --verbosity m
+  # angular restore
+  - cmd: npm install src/Frontend/Jp.UserManagement
 
 build_script:
   - cmd: dotnet build ./src
+  - cmd: run build src/Frontend/Jp.UserManagement --base-href=/user-management/
 
 test_script:
   - cmd: dotnet test ./src

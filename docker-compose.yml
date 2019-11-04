@@ -31,14 +31,14 @@ services:
             ASPNETCORE_ENVIRONMENT: Development
             ASPNETCORE_URLS: http://+:5001
             CUSTOMCONNSTR_SSOConnection: "server=jpdatabase,port=3306;database=jpproject;user=jp;password=10203040"
-            ApplicationSettings:EnableExternalProviders: "false" # Because Auth url is http://jpproject (modified by host to point to 127.0.0.1), then Google and Facebook reject it.
+            ApplicationSettings:EnableExternalProviders: "false" # Because Auth url is http://jpproject-sso (modified by host to point to 127.0.0.1), then Google and Facebook reject it.
             ApplicationSettings:DatabaseType: MySql
             ApplicationSettings:DefaultUser: bruno
             ApplicationSettings:DefaultPass: Pa$$word123
             ApplicationSettings:DefaultEmail: bhdebrito@gmail.com
             ApplicationSettings:UserManagementURL: http://localhost:4200
             ApplicationSettings:IS4AdminUi: http://localhost:4300
-            ApplicationSettings:ResourceServerURL: http://localhost:5003
+            ApplicationSettings:ResourceServerURL: http://localhost:5002
             CertificateOptions:Type: Temporary
 
     # #############################
