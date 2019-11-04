@@ -70,7 +70,7 @@ jobs:
         displayName: 'Docker - Build - UserManagement'
         inputs:
           command: 'build'
-          Dockerfile: '**/ui-user-management.dockerfile'
+          Dockerfile: '**/users.dockerfile'
 
       - task: Docker@2
         displayName: 'Docker - Build - SSO'
