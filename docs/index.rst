@@ -6,17 +6,60 @@ Getting Started
 .. image:: images/logo.png
     :align: center
 
-Jp Project is a Open Source Quickstart for IdentityServer4 v2 - release 2.4.0. 
+The main goal of JP Project is to be a Management Ecosystem for IdentityServer4 and ASP.NET Identity. 
 
-Built with ASP.NET Core 2.2 and Angular 7.
+Helping Startup's and Organization to Speed Up Microservices Environment. Providing tools for an OAuth2 Server and User Management. 
 
-The main goal of project is to be a Management Ecosystem for IdentityServer4. Helping Startup's and Organization to Speed Up the Setup of User Management.
+Built with IdentityServer4. An OpenID Connect and OAuth 2.0 framework for ASP.NET Core.
 
-Helping teams and entrepreneurs to achieve the company's primary purpose: Maximize shareholder value.
+Features of SSO:
+
+* Register users
+* Recover password flow
+* MFA
+* Federation Gateway (Login by Google, Facebook.. etc)
+* Argon2 password hashing
+* CSP Headers
+* Event monitoring (For compliance scenarios)
+
+Admin UI is an administrative panel where it's possible to manage the OAuth2 Server, Users and Roles. 
+
+From OAuth2 panel it's possible to manage:
+* `Clients`
+* `Identity Resources`
+* `Api Resources`
+* `Persisted Grants`
+
+From Identity panel it's possible to manage `Users` and `Roles`
+
+It's open source and free. From community to community.
+
+Screenshots
+
+Admin UI
+^^^^^^^^
+<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-adminui.gif"  width="480" />
+
+Login page
+^^^^^^^^^^
+<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/login.JPG?raw=true" width="480" />
+
+Consent page
+^^^^^^^^^^^^
+<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/consent-page.JPG?raw=true" width="480" />
+
+Profile
+^^^^^^^
+<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-usermanagement.gif" width="480" />
+
+
+
+Demo online
+===========
 
 Now we are online! `See it in action <https://jpproject.azurewebsites.net/admin-ui>`_
 
-There is a intro video too!
+Below an intro video!
 
 .. raw:: html
 

@@ -7,43 +7,49 @@ Equinox Project
 ---------------
 The ASP.NET Core Architecture was based on `Equinox Project <https://github.com/EduardoPires/EquinoxProject/>`_. 
 
-Angular 6
+Angular 8
 ---------
 
-To manage existing user and new one's a SPA Angular 6 was created. But instead begin of nothing, the `CoreUI <https://github.com/coreui/coreui-angular>`_ Admin was used.
-
-Application Insights ready
---------------------------
-
-You can monitor Application in production ambient with Application Insights.
+To manage existing user and new one's a SPA Angular 8 was built.
 
 
 Technologies
 -------------
 
-These Technologies was used to build app
+Check below how it was developed.
 
-DDD
-^^^
+Written in ASP.NET Core and Angular 8.
 
-.. image:: ../images/ddd.png
+- Angular 8
+- Rich UI interface
+- ASP.NET Core 3.0
+- ASP.NET MVC Core 
+- ASP.NET WebApi Core
+- ASP.NET Identity Core
+- Argon2 Password Hashing
+- MySql Ready
+- Sql Ready
+- Postgree Ready
+- SQLite Ready
+- Entity Framework Core
+- .NET Core Native DI
+- AutoMapper
+- FluentValidator
+- MediatR
+- Swagger UI
+- High customizable
+- Translation for 7 different languages
 
 
-ASP.NET CORE
+Architecture
 ^^^^^^^^^^^^
 
-* Full architecture with responsibility separation concerns, SOLID and Clean Code
-* Domain Driven Design (Layers and Domain Model Pattern)
-* Domain Events
-* Domain Notification
-* CQRS (Imediate Consistency)
-* Event Sourcing
-* Unit of Work
-* Repository and Generic Repository
-* Serilog
+- Architecture with responsibility separation concerns, SOLID and Clean Code
+- Domain Driven Design (Layers and Domain Model Pattern)
+- Domain Events
+- Domain Notification
+- CQRS (Imediate Consistency)
+- Event Sourcing
+- Unit of Work
+- Repository and Generic Repository
 
-Angular 7
-^^^^^^^^^^
-
-* OpenId Connect throug angular-oauth2-oidc plugin to manage login.
-* Bootstrap 4
