@@ -1,7 +1,6 @@
 ![image](https://github.com/brunohbrito/JPProject.Core/blob/master/build/logo.png?raw=true)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/08v6mg6q439x16xt?svg=true)](https://ci.appveyor.com/project/brunohbrito/jp-project)
-[![Build Status](https://dev.azure.com/brunohbrito/JpProject/_apis/build/status/JPProject%20CD%20Build?branchName=master)](https://dev.azure.com/brunohbrito/JpProject/_build/latest?definitionId=2&branchName=master)
+[![Build Status](https://dev.azure.com/brunohbrito/Jp%20Project/_apis/build/status/JPProject%20-%20SSO%20-%20CD?branchName=master)](https://dev.azure.com/brunohbrito/Jp%20Project/_build/latest?definitionId=10&branchName=master)
 [![License](https://img.shields.io/github/license/brunohbrito/JPProject.IdentityServer4.SSO)](LICENSE)
 
 This is the full version of JP Project. It provide SSO and an Api where it's possible to manage both IdentityServer4 and ASP.NET Identity.
@@ -9,11 +8,11 @@ This is the full version of JP Project. It provide SSO and an Api where it's pos
 # Installation
 
 Windows users:
-* download [jpproject-docker-windows.zip](https://github.com/brunohbrito/JP-Project/raw/master/build/jpproject-docker-windows.zip)
+* download [jpproject-docker-windows.zip](https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/releases/download/3.0.0/jpproject-docker-windows.zip)
 * Unzip and execute `docker-run.bat` (As administrator)
 
 Linux users:
-* Download [docker-compose.yml](https://github.com/brunohbrito/JP-Project/raw/master/build/docker-compose.yml)
+* Download [docker-compose.yml](https://raw.githubusercontent.com/brunohbrito/JPProject.IdentityServer4.SSO/master/build/docker-compose.yml)
 * Add `127.0.0.1 jpproject-sso` entry to hosts file (`/etc/hosts`)
 * `docker-compose up`
 
