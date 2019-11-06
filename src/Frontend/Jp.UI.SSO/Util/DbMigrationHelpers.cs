@@ -1,6 +1,6 @@
 ﻿using IdentityServer4.EntityFramework.Mappers;
-using Jp.UI.SSO.Configuration;
 using JPProject.EntityFrameworkCore.Context;
+using JPProject.EntityFrameworkCore.MigrationHelper;
 using JPProject.Sso.Infra.Data.Context;
 using JPProject.Sso.Infra.Identity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -36,7 +36,7 @@ namespace Jp.UI.SSO.Util
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            await WaitForDb(ssoContext);
+            await DbHealthChecker.TestConnection(ssoContext);
 
             await ssoContext.Database.MigrateAsync();
             scope.ServiceProvider.GetRequiredService<EventStoreContext>().Database.Migrate();
@@ -122,24 +122,5 @@ namespace Jp.UI.SSO.Util
             }
         }
 
-        private static async Task WaitForDb(DbContext context)
-        {
-            var maxAttemps = 12;
-            var delay = 5000;
-
-            var healthChecker = new DbHealthChecker();
-            for (int i = 0; i < maxAttemps; i++)
-            {
-                if (healthChecker.TestConnection(context))
-                {
-                    return;
-                }
-                await Task.Delay(delay);
-            }
-
-            // after a few attemps we give up
-            throw new Exception("Error wating database");
-
-        }
     }
 }

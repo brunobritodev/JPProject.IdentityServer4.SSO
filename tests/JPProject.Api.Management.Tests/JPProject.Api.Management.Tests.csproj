@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="UnitTest1.cs~RF4d49d6c.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Bogus" Version="28.4.1" />
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="IdentityServer4.Contrib.AspNetCore.Testing" Version="3.0.1" />

@@ -71,13 +71,13 @@ namespace Jp.Api.Management
             if (env.IsDevelopment())
             {
                 app.UseDefaultCors();
-                app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
+            app.UseDeveloperExceptionPage();
 
             app.UseRouting();
             app.UseAuthentication();

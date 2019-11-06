@@ -74,16 +74,16 @@ It's open source and free. From community to community.
 Screenshots
 
 ## Admin UI ##
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-adminui.gif"  width="480" />
+<img src="https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/jp-adminui.gif"  width="480" />
 
 ## Login page ##
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/login.JPG?raw=true" width="480" />
+<img src="https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/login.JPG?raw=true" width="480" />
 
 ## Consent page ##
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/consent-page.JPG?raw=true" width="480" />
+<img src="https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/consent-page.JPG?raw=true" width="480" />
 
 ## Profile ##
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-usermanagement.gif" width="480" />
+<img src="https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/jp-usermanagement.gif" width="480" />
 
 
 # How to start?
