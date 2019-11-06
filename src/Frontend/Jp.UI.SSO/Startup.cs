@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,7 @@ namespace Jp.UI.SSO
                 iis.AuthenticationDisplayName = "Windows";
                 iis.AutomaticAuthentication = false;
             });
+
             services.AddControllersWithViews()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
                 .AddDataAnnotationsLocalization();
@@ -71,10 +73,10 @@ namespace Jp.UI.SSO
             }
             else
             {
-                app.UseHsts(options => options.MaxAge(days: 365));
                 app.UseHttpsRedirection();
             }
 
+            app.UseHsts(options => options.MaxAge(days: 365));
             app.UseSerilogRequestLogging();
             app.UseSecurityHeaders(env);
             app.UseStaticFiles();
@@ -83,7 +85,10 @@ namespace Jp.UI.SSO
 
             app.UseRouting();
             app.UseAuthorization();
-
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
