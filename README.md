@@ -8,13 +8,13 @@ This is the full version of JP Project. It provide SSO and an Api where it's pos
 # Installation
 
 Windows users:
-* download [jpproject-docker-windows.zip](https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/releases/download/3.0.0/jpproject-docker-windows.zip)
+* download [jpproject-docker.zip](https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/releases/download/3.0.0/jpproject-docker.zip)
 * Unzip and execute `docker-run.bat` (As administrator)
 
 Linux users:
-* Download [docker-compose.yml](https://raw.githubusercontent.com/brunohbrito/JPProject.IdentityServer4.SSO/master/build/docker-compose.yml)
+* Download [jpproject-docker.zip](https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/releases/download/3.0.0/jpproject-docker.zip)
 * Add `127.0.0.1 jpproject-sso` entry to hosts file (`/etc/hosts`)
-* `docker-compose up`
+* unzip and execute `docker-compose up`
 
 
 ## Table of Contents ##
@@ -74,16 +74,16 @@ It's open source and free. From community to community.
 Screenshots
 
 ## Admin UI ##
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-adminui.gif"  width="480" />
+<img src="https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/jp-adminui.gif"  width="480" />
 
 ## Login page ##
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/login.JPG?raw=true" width="480" />
+<img src="https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/login.JPG?raw=true" width="480" />
 
 ## Consent page ##
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/consent-page.JPG?raw=true" width="480" />
+<img src="https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/consent-page.JPG?raw=true" width="480" />
 
 ## Profile ##
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-usermanagement.gif" width="480" />
+<img src="https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/jp-usermanagement.gif" width="480" />
 
 
 # How to start?
