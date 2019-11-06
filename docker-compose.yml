@@ -39,7 +39,7 @@ services:
             ApplicationSettings:UserManagementURL: http://localhost:4200
             ApplicationSettings:IS4AdminUi: http://localhost:4300
             ApplicationSettings:ResourceServerURL: http://localhost:5002
-            ApplicationSettings:ShowDefaultUserPass: "false"
+            ApplicationSettings:ShowDefaultUserPass: "true"
             CertificateOptions:Type: Temporary
 
     # #############################
