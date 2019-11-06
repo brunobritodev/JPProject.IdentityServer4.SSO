@@ -52,7 +52,7 @@ namespace JPProject.Api.Management.Tests.Controller
             await Login();
             var httpResponse = await _client.GetAsync("/clients");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace JPProject.Api.Management.Tests.Controller
 
             var httpResponse = await _client.PostAsync("/clients", new StringContent(client.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; }
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; }
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/clients");
         }
@@ -77,13 +77,13 @@ namespace JPProject.Api.Management.Tests.Controller
 
             var httpResponse = await _client.PostAsync("/clients", new StringContent(client.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/clients");
 
             httpResponse = await _client.GetAsync($"/clients/{client.ClientId}");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
@@ -100,13 +100,13 @@ namespace JPProject.Api.Management.Tests.Controller
 
             var httpResponse = await _client.PostAsync("/clients", new StringContent(client.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/clients");
 
             httpResponse = await _client.DeleteAsync($"/clients/{client.ClientId}");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync("/clients", new StringContent(newClient.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/clients");
 
@@ -130,11 +130,11 @@ namespace JPProject.Api.Management.Tests.Controller
             client.AllowedGrantTypes = new[] { GrantType.ClientCredentials };
             client.ClientId = "newclient";
             httpResponse = await _client.PutAsync($"/clients/{oldClientId}", new StringContent(client.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Get updated
             httpResponse = await _client.GetAsync($"/clients/{client.ClientId}");
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Deserialize and examine results.
             stringResponse = await httpResponse.Content.ReadAsStringAsync();
@@ -156,7 +156,7 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/secrets", new StringContent(newSecret.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/secrets");
 
@@ -175,13 +175,13 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/secrets", new StringContent(newSecret.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/secrets");
 
             httpResponse = await _client.GetAsync($"/clients/{newClient.ClientId}/secrets");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
@@ -203,13 +203,13 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/secrets", new StringContent(newSecret.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/secrets");
 
             httpResponse = await _client.GetAsync($"/clients/{newClient.ClientId}/secrets");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
@@ -217,7 +217,7 @@ namespace JPProject.Api.Management.Tests.Controller
 
 
             httpResponse = await _client.DeleteAsync($"/clients/{newClient.ClientId}/secrets/{secrets.First().Id}");
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
         }
 
 
@@ -233,7 +233,7 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/properties", new StringContent(newProperty.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/properties");
 
@@ -252,13 +252,13 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/properties", new StringContent(newProperty.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/properties");
 
             httpResponse = await _client.GetAsync($"/clients/{newClient.ClientId}/properties");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
@@ -280,20 +280,20 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/properties", new StringContent(newProperty.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/properties");
 
             httpResponse = await _client.GetAsync($"/clients/{newClient.ClientId}/properties");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
             var properties = stringResponse.FromJson<IEnumerable<ClientPropertyViewModel>>();
 
             httpResponse = await _client.DeleteAsync($"/clients/{newClient.ClientId}/properties/{properties.First().Id}");
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
         }
 
 
@@ -311,7 +311,7 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/claims", new StringContent(claim.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/claims");
 
@@ -330,13 +330,13 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/claims", new StringContent(claim.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/claims");
 
             httpResponse = await _client.GetAsync($"/clients/{newClient.ClientId}/claims");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
@@ -358,13 +358,13 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync($"/clients/{newClient.ClientId}/claims", new StringContent(claim.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/claims");
 
             httpResponse = await _client.GetAsync($"/clients/{newClient.ClientId}/claims");
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
 
             // Deserialize and examine results.
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
@@ -373,7 +373,7 @@ namespace JPProject.Api.Management.Tests.Controller
             claims.Should().HaveCountGreaterThan(0);
 
             httpResponse = await _client.DeleteAsync($"/clients/{newClient.ClientId}/claims/{claims.First().Id}");
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
         }
 
 
@@ -384,7 +384,7 @@ namespace JPProject.Api.Management.Tests.Controller
             // Create one
             var httpResponse = await _client.PostAsync("/clients", new StringContent(newClient.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            try { httpResponse.EnsureSuccessStatusCode(); } catch (Exception ex) { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
+            try { httpResponse.EnsureSuccessStatusCode(); } catch  { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/clients");
             return newClient;
