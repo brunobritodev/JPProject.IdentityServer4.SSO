@@ -6,6 +6,7 @@ using JPProject.AspNet.Core;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.AutoMapper;
 using JPProject.Sso.Database;
+using JPProject.Sso.Infra.Identity.Models.Identity;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,7 @@ namespace Jp.Api.Management.Configuration
             services.ConfigureUserIdentity<AspNetUser>().AddDatabase(database, connString);
 
             services.ConfigureJpAdmin<AspNetUser>().AddDatabase(database, connString);
-
+            services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
 
             return services;
         }
