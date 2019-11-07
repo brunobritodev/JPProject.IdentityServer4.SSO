@@ -1,0 +1,35 @@
+docker run -d --restart=unless-stopped -p 80:80 -p 443:443 -v /opt/nginx.conf:/etc/nginx/nginx.conf -v /var/www/:/var/www/ -v /etc/letsencrypt:/etc/letsencrypt --name sso-lb nginx:1.17
+
+sudo docker service create \
+            -d \
+            --name portainer_agent \
+            --network jpproject-nt \
+            -e AGENT_CLUSTER_ADDR=tasks.portainer_agent \
+            --mode global \
+            --constraint 'node.platform.os == linux' \
+            --mount type=bind,src=//var/run/docker.sock,dst=/var/run/docker.sock \
+            portainer/agent
+     sudo docker service create \
+            -d \
+            --name portainer \
+            --network jpproject-nt \
+            --publish 9000:9000 \
+            --replicas=1 \
+            portainer/portainer -H "tcp://tasks.portainer_agent:9001" --tlsskipverify --admin-password "$(docker run --rm httpd:2.4-alpine htpasswd -nbB admin powerfullpassword | cut -d ":" -f 2)" --logo https://github.com/brunohbrito/JPProject.Core/raw/master/build/logo.png?raw=true
+			
+
+// HTTPS
+	location /.well-known/acme-challenge {
+	   allow all;
+	   root /var/www/html/shared;
+	}
+docker run --rm -it -v "/root/letsencrypt/log:/var/log/letsencrypt" -v "/var/www/html/shared:/var/www/" -v "/etc/letsencrypt:/etc/letsencrypt" -v "/root/letsencrypt/lib:/var/lib/letsencrypt" lojzik/letsencrypt certonly --webroot --webroot-path /var/www --email bhdebrito@gmail.com -d sso.jpproject.net
+
+
+            ssl_certificate                         /etc/letsencrypt/live/api.jpproject.net/fullchain.pem;
+            ssl_certificate_key                     /etc/letsencrypt/live/api.jpproject.net/privkey.pem;
+            ssl_protocols                           TLSv1 TLSv1.1 TLSv1.2;
+            ssl_ciphers                             HIGH:!aNULL:!MD5;
+			
+sudo chmod a+rwx /var/log			
+sudo 0 0 * * * docker run --rm -v "/root/letsencrypt/log:/var/log/letsencrypt" -v "/var/www/html/shared:/var/www/" -v "/etc/letsencrypt:/etc/letsencrypt" -v "/root/letsencrypt/lib:/var/lib/letsencrypt" lojzik/letsencrypt renew >> /var/log/certbot.log 2>&1 && service nginx reload >> /var/log/certbot.log 2>&1

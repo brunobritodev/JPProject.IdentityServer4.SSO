@@ -31,7 +31,7 @@ namespace Jp.UI.SSO.Util
                     },
                     AllowedCorsOrigins = { configuration.GetValue<string>("ApplicationSettings:IS4AdminUi")},
                     IdentityTokenLifetime = 3600,
-                    LogoUri = "https://jpproject.azurewebsites.net/sso/images/brand/logo.png",
+                    LogoUri = "https://jpproject.blob.core.windows.net/images/jplogo.png",
                     AuthorizationCodeLifetime = 3600,
                     AllowedScopes =
                     {
@@ -57,8 +57,7 @@ namespace Jp.UI.SSO.Util
                         $"{configuration.GetValue<string>("ApplicationSettings:UserManagementURL")}/silent-refresh.html"
                     },
                     PostLogoutRedirectUris =  { $"{configuration.GetValue<string>("ApplicationSettings:UserManagementURL")}" },
-                    AllowedCorsOrigins = { $"{configuration.GetValue<string>("ApplicationSettings:UserManagementURL")}" },
-                    LogoUri = "https://jpproject.azurewebsites.net/sso/images/clientLogo/1.jpg",
+                    LogoUri = "https://jpproject.blob.core.windows.net/images/usermanagement.jpg",
                     IdentityTokenLifetime = 3600,
                     AuthorizationCodeLifetime = 3600,
                     AllowedScopes =
@@ -77,7 +76,7 @@ namespace Jp.UI.SSO.Util
                     ClientId = "Swagger",
                     ClientName = "Swagger UI",
                     AllowedGrantTypes = GrantTypes.Implicit,
-                    LogoUri = "https://avatars3.githubusercontent.com/u/16343502?s=400&v=4",
+                    LogoUri = "https://jpproject.blob.core.windows.net/images/swagger.png",
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris =
                     {

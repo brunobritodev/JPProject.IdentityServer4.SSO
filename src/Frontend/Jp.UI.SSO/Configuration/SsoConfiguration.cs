@@ -27,6 +27,7 @@ namespace Jp.UI.SSO.Configuration
                 .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
                 .AddOAuth2Database(database, connString);
 
+
             var configurationExpression = new MapperConfigurationExpression();
             SsoMapperConfig.RegisterMappings().ForEach(p => configurationExpression.AddProfile(p));
             configurationExpression.AddProfile(new CustomMappingProfile());

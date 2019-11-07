@@ -69,11 +69,11 @@ services:
           dockerfile: users.dockerfile
 
           
-    #############################
-    # Admin UI
-    #############################
-    jpproject-admin:
-        image: admin-teste:latest
+    # #############################
+    # # Admin UI
+    # #############################
+    # jpproject-admin:
+    #     image: bhdebrito/jpproject-admin-ui
 
 
     reverse-proxy:

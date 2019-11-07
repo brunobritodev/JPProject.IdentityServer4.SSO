@@ -80,15 +80,21 @@ namespace Jp.UI.SSO
             app.UseSerilogRequestLogging();
             app.UseSecurityHeaders(env);
             app.UseStaticFiles();
+
+            var fordwardedHeaderOptions = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            };
+            fordwardedHeaderOptions.KnownNetworks.Clear();
+            fordwardedHeaderOptions.KnownProxies.Clear();
+
+            app.UseForwardedHeaders(fordwardedHeaderOptions);
+
             app.UseIdentityServer();
             app.UseLocalization();
 
             app.UseRouting();
             app.UseAuthorization();
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

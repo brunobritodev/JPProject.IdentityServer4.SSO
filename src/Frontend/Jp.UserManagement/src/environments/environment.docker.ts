@@ -10,6 +10,6 @@ export const environment = {
     ResourceServer: "http://localhost:5002/",
     AuthorityUri:  "http://jpproject-sso:5001",
     RequireHttps: false,
-    Uri: "http://localhost:4300"
+    Uri: "http://localhost:4200"
   };
   
