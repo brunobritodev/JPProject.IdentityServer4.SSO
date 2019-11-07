@@ -7,9 +7,9 @@ export const environment = {
     production: false,
     GoogleClientId: "",
     FacebookClientId: "",
-    ResourceServer: "http://api.teste.work/",
-    AuthorityUri:  "http://sso.teste.work",
+    ResourceServer: "http://localhost:5002/",
+    IssuerUri:  "http://jpproject-sso:5001",
     RequireHttps: false,
-    Uri: "http://users.teste.work"
+    Uri: "http://localhost:4300"
   };
   

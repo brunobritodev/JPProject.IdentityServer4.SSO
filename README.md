@@ -16,7 +16,6 @@ Linux users:
 * Add `127.0.0.1 jpproject-sso` entry to hosts file (`/etc/hosts`)
 * unzip and execute `docker-compose up`
 
-
 ## Table of Contents ##
 
 - [Installation](#installation)
@@ -27,8 +26,9 @@ Linux users:
   - [Consent page](#consent-page)
   - [Profile](#profile)
 - [How to start?](#how-to-start)
-- [Demo](#demo)
-  - [We are online at Azure.](#we-are-online-at-azure)
+  - [Demo](#demo)
+  - [We are online](#we-are-online)
+  - [Wanna go production?](#wanna-go-production)
 - [Technologies](#technologies)
   - [Architecture](#architecture)
   - [Give a Star! ⭐](#give-a-star-%e2%ad%90)
@@ -94,19 +94,27 @@ First you need to choose.
 
 * You already have an IdentityServer4 Up and running? Go to [Admin Panel - Light version](https://github.com/brunohbrito/JPProject.IdentityServer4.AdminUI)
 
-# Demo #
+## Demo 
 
 Check our demo online.
 
-## We are online at Azure. 
+## We are online
 
 <img align="right" width="100px" src="https://www.developpez.net/forums/attachments/p289604d1/a/a/a" />
 
-Check it now at [Jp Project](https://jpproject.azurewebsites.net/admin-ui/).
+Check it now at [Admin Panel](https://admin.jpproject.net).
 
-You can check also [SSO](https://jpproject.azurewebsites.net/sso/) and [User Management](https://jpproject.azurewebsites.net/user-management/)
+You can check also [SSO](https://sso.jpproject.net) and [Profile Manager](https://user.jpproject.net)
 
 _New users are readonly_
+
+## Wanna go production?
+
+Check [docs](https://jp-project.readthedocs.io/en/latest/) to see how to and some examples: 
+* Azure App Service 
+* Docker Swarm + Nginx in Linux.
+* Docker compose + nginx in linux
+* Make a PR and show how you have done your environment!
 
 # Technologies #
 
