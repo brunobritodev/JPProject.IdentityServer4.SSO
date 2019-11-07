@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Jp.Api.Management.Controllers
 {
-    [Route("version"), Authorize(Policy = "ReadOnly"), ApiController]
+    [Route("version"), ApiController]
     public class VersionController : ControllerBase
     {
         [HttpGet]

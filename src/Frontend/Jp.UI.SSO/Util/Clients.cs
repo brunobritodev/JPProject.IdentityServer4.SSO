@@ -22,12 +22,12 @@ namespace Jp.UI.SSO.Util
 
                     ClientId = "IS4-Admin",
                     ClientName = "IS4-Admin",
-                    ClientUri = configuration.GetValue<string>("ApplicationSettings:IS4AdminUi"),
+                    ClientUri = configuration["ApplicationSettings:IS4AdminUi"],
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new[] {
-                        $"{configuration.GetValue<string>("ApplicationSettings:IS4AdminUi")}/login-callback",
-                        $"{configuration.GetValue<string>("ApplicationSettings:IS4AdminUi")}/silent-refresh.html"
+                        $"{configuration["ApplicationSettings:IS4AdminUi"]}/login-callback",
+                        $"{configuration["ApplicationSettings:IS4AdminUi"]}/silent-refresh.html"
                     },
                     AllowedCorsOrigins = { configuration.GetValue<string>("ApplicationSettings:IS4AdminUi")},
                     IdentityTokenLifetime = 3600,
@@ -53,10 +53,11 @@ namespace Jp.UI.SSO.Util
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = true,
                     RedirectUris =new[] {
-                        $"{configuration.GetValue<string>("ApplicationSettings:UserManagementURL")}/login-callback",
-                        $"{configuration.GetValue<string>("ApplicationSettings:UserManagementURL")}/silent-refresh.html"
+                        $"{configuration["ApplicationSettings:UserManagementURL"]}/login-callback",
+                        $"{configuration["ApplicationSettings:UserManagementURL"]}/silent-refresh.html"
                     },
-                    PostLogoutRedirectUris =  { $"{configuration.GetValue<string>("ApplicationSettings:UserManagementURL")}" },
+                    AllowedCorsOrigins = { configuration["ApplicationSettings:UserManagementURL"] },
+                    PostLogoutRedirectUris =  { $"{configuration["ApplicationSettings:UserManagementURL"]}" },
                     LogoUri = "https://jpproject.blob.core.windows.net/images/usermanagement.jpg",
                     IdentityTokenLifetime = 3600,
                     AuthorizationCodeLifetime = 3600,

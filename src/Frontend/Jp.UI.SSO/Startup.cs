@@ -74,9 +74,9 @@ namespace Jp.UI.SSO
             else
             {
                 app.UseHttpsRedirection();
+                app.UseHsts(options => options.MaxAge(days: 365));
             }
 
-            app.UseHsts(options => options.MaxAge(days: 365));
             app.UseSerilogRequestLogging();
             app.UseSecurityHeaders(env);
             app.UseStaticFiles();
