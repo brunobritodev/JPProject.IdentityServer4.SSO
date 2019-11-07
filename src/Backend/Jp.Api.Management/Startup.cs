@@ -68,17 +68,15 @@ namespace Jp.Api.Management
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (!env.IsDevelopment())
             {
-                app.UseDefaultCors();
-            }
-            else
-            {
+
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
-            app.UseDeveloperExceptionPage();
 
+            app.UseDefaultCors();
+            app.UseDeveloperExceptionPage();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

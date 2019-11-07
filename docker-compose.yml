@@ -73,7 +73,7 @@ services:
     # Admin UI
     #############################
     jpproject-admin:
-        image: admin-teste:latest
+        image: bhdebrito/jpproject-admin-ui
 
 
     reverse-proxy:

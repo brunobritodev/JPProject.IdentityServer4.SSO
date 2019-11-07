@@ -9,7 +9,7 @@ namespace Jp.Api.Management.Configuration
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("Development",
+                options.AddPolicy("Default",
                     builder => builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader());
@@ -20,7 +20,7 @@ namespace Jp.Api.Management.Configuration
 
         public static void UseDefaultCors(this IApplicationBuilder app)
         {
-            app.UseCors("Development");
+            app.UseCors("Default");
         }
 
     }

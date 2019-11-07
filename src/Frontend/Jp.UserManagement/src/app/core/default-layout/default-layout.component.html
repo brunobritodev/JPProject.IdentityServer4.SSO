@@ -1,6 +1,4 @@
-<app-header [fixed]="true"
-    [navbarBrandFull]="{src: 'assets/img/brand/logo.png', height: 40, alt: 'Jp Project', href: 'https://github.com/brunohbrito/JP-Project'}"
-    [navbarBrandMinimized]="{src: 'assets/img/brand/logo-min.png', height: 40, alt: 'Jp Project', href: 'https://github.com/brunohbrito/JP-Project'}"
+<app-header [fixed]="true" [navbarBrandFull]="{src: 'assets/brand/logo.png', height: 33, alt: 'Jp Project', href: 'https://github.com/brunohbrito/JP-Project'}" [navbarBrandMinimized]="{src: 'assets/brand/logo-min.png', height: 40, alt: 'Jp Project', href: 'https://github.com/brunohbrito/JP-Project'}"
     [sidebarToggler]="'lg'" [asideMenuToggler]="false" [mobileAsideMenuToggler]="false">
     <ul class="nav navbar-nav d-md-down-none">
         <li class="nav-item px-3">
@@ -12,8 +10,7 @@
     </ul>
     <ul class="nav navbar-nav ml-auto">
         <li class="nav-item dropdown" dropdown placement="bottom right">
-            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                dropdownToggle (click)="false">
+            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
                 <i class="fa fa-2x fa-globe"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right pointer" *dropdownMenu aria-labelledby="simple-dropdown">
@@ -32,12 +29,9 @@
             </div>
         </li>
         <li class="nav-item dropdown" dropdown placement="bottom right">
-            <a class="nav-link" data-toggle="dropdown" *ngIf="userProfile$ | async; let userProfile" href="#"
-                role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
-                <img *ngIf="userProfile.picture" class="img-avatar" [src]="userProfile.picture"
-                    alt="userProfile.name" />
-                <img *ngIf="!userProfile.picture" class="img-avatar" src="/assets/img/dummy.png"
-                    alt="userProfile.name" />{{userProfile.name}}&nbsp;&nbsp;
+            <a class="nav-link" data-toggle="dropdown" *ngIf="userProfile$ | async; let userProfile" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+                <img *ngIf="userProfile.picture" class="img-avatar" [src]="userProfile.picture" alt="userProfile.name" />
+                <img *ngIf="!userProfile.picture" class="img-avatar" src="/assets/img/dummy.png" alt="userProfile.name" />{{userProfile.name}}&nbsp;&nbsp;
             </a>
             <div class="dropdown-menu dropdown-menu-right pointer" *dropdownMenu aria-labelledby="simple-dropdown">
                 <div class="dropdown-header text-center"><strong>Account</strong></div>
@@ -59,7 +53,8 @@
         </ol>
         <div class="container-fluid">
             <router-outlet></router-outlet>
-        </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.container-fluid -->
     </main>
 </div>
 <app-footer>
