@@ -70,7 +70,6 @@ namespace Jp.Api.Management
         {
             if (!env.IsDevelopment())
             {
-
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }

@@ -42,5 +42,12 @@ namespace JPProject.Api.Management.Tests.Fakers.UserFakers
                 .RuleFor(r => r.Picture, f => f.Person.Avatar);
         }
 
+        public static Faker<SaveUserClaimViewModel> GenerateClaim(string username = null)
+        {
+            return new Faker<SaveUserClaimViewModel>()
+                .RuleFor(s => s.Value, f => f.Lorem.Word())
+                .RuleFor(s => s.Type, f => f.Person.Email)
+                .RuleFor(s => s.Username, f => username ?? f.Internet.UserName());
+        }
     }
 }
