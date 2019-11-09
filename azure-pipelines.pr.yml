@@ -52,7 +52,7 @@ jobs:
         displayName: 'NPM - Build Prod - UserManagement'
         inputs:
           command: custom
-          customCommand: 'run build -- --base-href=/user-management/'
+          customCommand: 'run build'
           workingDir: src/Frontend/Jp.UserManagement
 
   - job: 'docker'
