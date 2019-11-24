@@ -38,6 +38,11 @@ namespace Jp.UI.SSO
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>().UseSerilog(providers: Providers));
+                
+                .ConfigureWebHostDefaults(webBuilder => 
+                    webBuilder
+                        .UseStartup<Startup>()
+                        .UseSerilog(providers: Providers)
+                    );
     }
 }

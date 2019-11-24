@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Services;
 using Jp.UI.SSO.Configuration;
+using JPProject.Sso.Infra.Data.Context;
 using JPProject.Sso.Infra.Identity.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -58,6 +59,9 @@ namespace Jp.UI.SSO
 
             // Adding MediatR for Domain Events and Notifications
             services.AddMediatR(typeof(Startup));
+
+
+            //services.AddEFCoreConfig<ApplicationSsoContext>();
 
             // .NET Native DI Abstraction
             RegisterServices(services);
