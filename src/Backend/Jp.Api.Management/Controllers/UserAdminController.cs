@@ -102,9 +102,9 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpDelete, Route("{username}/claims/{type}"), Authorize(Policy = "Admin")]
-        public async Task<ActionResult> RemoveClaim(string type, string value)
+        public async Task<ActionResult> RemoveClaim(string username, string type, string value)
         {
-            var model = new RemoveUserClaimViewModel(type, value);
+            var model = new RemoveUserClaimViewModel(type, value) { Username = username };
             await _userManageAppService.RemoveClaim(model);
             return ResponseDelete();
         }

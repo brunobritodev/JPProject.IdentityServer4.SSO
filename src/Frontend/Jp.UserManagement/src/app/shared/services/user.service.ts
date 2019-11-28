@@ -28,18 +28,18 @@ export class UserService {
     }
 
     public checkEmail(email: string): Observable<boolean> {
-        return this.http.get<boolean>(`${this.endpoint}/check-email/${email}`);
+        return this.http.get<boolean>(`${this.endpoint}/check-email/${encodeURI(email)}`);
     }
 
     public recoverPassword(emailOrPassword: ForgotPassword): Observable<boolean> {
-        return this.http.post<boolean>(`${this.endpointUser}/${emailOrPassword}/password/forget`, emailOrPassword);
+        return this.http.post<boolean>(`${this.endpointUser}/${encodeURI(emailOrPassword.usernameOrEmail)}/password/forget`, {});
     }
 
     public resetPassword(username: string, model: ResetPassword): any {
-        return this.http.post<boolean>(`${this.endpointUser}/${username}/password/reset`, model);
+        return this.http.post<boolean>(`${this.endpointUser}/${encodeURI(username)}/password/reset`, model);
     }
 
     public confirmEmail(username: string, model: ConfirmEmail): any {
-        return this.http.post<boolean>(`${this.endpointUser}/${username}/confirm-email`, model);
+        return this.http.post<boolean>(`${this.endpointUser}/${encodeURI(username)}/confirm-email`, model);
     }
 }

@@ -110,7 +110,7 @@ jobs:
         displayName: 'NPM - Build Prod - UserManagement'
         inputs:
           command: custom
-          customCommand: 'run build -- --base-href=/user-management/'
+          customCommand: 'run build -- --configuration=production'
           workingDir: src/Frontend/Jp.UserManagement
 
       - task: ArchiveFiles@2
