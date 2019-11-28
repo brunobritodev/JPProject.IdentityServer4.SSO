@@ -22,24 +22,23 @@ services:
     jpproject:
         image: bhdebrito/jpproject-sso
         container_name: jpproject-sso
-        ports:
-            - "5000:5000"
         links:
             - jpdatabase
         depends_on:
             - jpdatabase
         environment: 
             ASPNETCORE_ENVIRONMENT: Development
-            ASPNETCORE_URLS: http://+:5000
+            ASPNETCORE_URLS: http://+:5001
             CUSTOMCONNSTR_SSOConnection: "server=jpdatabase,port=3306;database=jpproject;user=jp;password=10203040"
-            ApplicationSettings:EnableExternalProviders: "false" # Because Auth url is http://jpproject (modified by host to point to 127.0.0.1), then Google and Facebook reject it.
+            ApplicationSettings:EnableExternalProviders: "false" # Because Auth url is http://jpproject-sso (modified by host to point to 127.0.0.1), then Google and Facebook reject it.
             ApplicationSettings:DatabaseType: MySql
             ApplicationSettings:DefaultUser: bruno
             ApplicationSettings:DefaultPass: Pa$$word123
             ApplicationSettings:DefaultEmail: bhdebrito@gmail.com
             ApplicationSettings:UserManagementURL: http://localhost:4200
             ApplicationSettings:IS4AdminUi: http://localhost:4300
-            ApplicationSettings:ResourceServerURL: http://localhost:5003
+            ApplicationSettings:ResourceServerURL: http://localhost:5002
+            ApplicationSettings:ShowDefaultUserPass: "true"
             CertificateOptions:Type: Temporary
 
     # #############################
@@ -48,15 +47,13 @@ services:
     jpproject-api:
         image: bhdebrito/jpproject-api
         container_name: jpproject-api
-        ports:
-            - "5003:80"
-        depends_on:
+        links:
             - jpdatabase
         environment: 
             ASPNETCORE_ENVIRONMENT: "Development"
             ASPNETCORE_URLS: http://+
             CUSTOMCONNSTR_SSOConnection: "server=jpdatabase,port=3306;database=jpproject;user=jp;password=10203040"
-            ApplicationSettings:Authority: "http://jpproject:5000"
+            ApplicationSettings:Authority: "http://jpproject-sso:5001"
             ApplicationSettings:DatabaseType: MySql
 
     #############################
@@ -65,20 +62,26 @@ services:
     users:
         container_name: users
         image: bhdebrito/jpproject-user-management-ui
-        depends_on:
-            - jpproject-api
-            - jpproject
-        ports:
-            - 4200:80
 
     #############################
-    # Admin Ui
+    # Admin UI
     #############################
-    admin-ui:
-        container_name: admin-ui
+    jpproject-admin:
+        container_name: adminui
         image: bhdebrito/jpproject-admin-ui
-        depends_on:
-            - jpproject-api
-            - jpproject
+
+
+    reverse-proxy:
+        container_name: jpproject
+        build:
+            context: .
+            dockerfile: nginx.dockerfile
         ports:
-            - 4300:80
+            - '5001:5001'
+            - '5002:5002'
+            - '4200:4200'
+            - '4300:4300'
+        depends_on:
+            - 'jpproject-api'
+            - 'jpproject-users'
+            - 'jpproject-sso'
