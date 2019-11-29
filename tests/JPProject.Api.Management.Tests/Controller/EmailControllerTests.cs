@@ -4,7 +4,11 @@ using IdentityModel.Client;
 using IdentityServer4.Contrib.AspNetCore.Testing.Configuration;
 using JPProject.Api.Management.Tests.Fakers.EmailFakers;
 using JPProject.Sso.Application.ViewModels.EmailViewModels;
+using JPProject.Sso.Domain.Models;
 using ServiceStack;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
@@ -38,6 +42,33 @@ namespace JPProject.Api.Management.Tests.Controller
                 "jp_api.user", "jp_api.is4");
             // The endpoint or route of the controller action.
             _client.SetBearerToken(_token.AccessToken);
+        }
+
+        [Fact]
+        public async Task ShouldSaveEmail()
+        {
+            await Login();
+
+            var email = EmailFakers.GenerateEmail().Generate();
+
+            var httpResponse = await _client.PutAsync($"/emails/{email.Type}", new StringContent(email.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
+
+            try { httpResponse.EnsureSuccessStatusCode(); } catch { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; }
+        }
+
+        [Fact]
+        public async Task ShouldListAllEmailTypes()
+        {
+            await Login();
+
+            var httpResponse = await _client.GetAsync($"/emails/types");
+
+            try { httpResponse.EnsureSuccessStatusCode(); } catch { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; }
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var types = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<KeyValue>>(content);
+
+            types.Select(s => s.Value).Should().Match(enumerable => enumerable.All(a => Enum.IsDefined(typeof(EmailType), a)));
         }
 
         [Fact]
@@ -110,5 +141,11 @@ namespace JPProject.Api.Management.Tests.Controller
             httpResponse.Headers.Location.Should().NotBeNull();
             httpResponse.Headers.Location.PathAndQuery.Should().Contain("/emails");
         }
+        public class KeyValue
+        {
+            public int Key { get; set; }
+            public string Value { get; set; }
+        }
+
     }
 }
