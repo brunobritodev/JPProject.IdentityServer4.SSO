@@ -1,7 +1,9 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Jp.UI.SSO.Configuration
@@ -25,8 +27,8 @@ namespace Jp.UI.SSO.Configuration
                     {
                         OnCreatingTicket = context =>
                         {
-                            //if (context.User.ContainsKey("image"))
-                            //    context.Identity.AddClaim(new Claim(JwtClaimTypes.Picture, context.User.GetValue("image").SelectToken("url").ToString()));
+                            if (context.User.GetRawText().Contains("picture"))
+                                context.Identity.AddClaim(new Claim(JwtClaimTypes.Picture, context.User.GetProperty("picture").GetString()));
                             return Task.CompletedTask;
                         }
                     };
@@ -45,8 +47,8 @@ namespace Jp.UI.SSO.Configuration
                         {
                             OnCreatingTicket = context =>
                             {
-                                //if (context.User.ContainsKey("picture"))
-                                //    context.Identity.AddClaim(new Claim(JwtClaimTypes.Picture, context.User.GetValue("picture").SelectToken("data").SelectToken("url").ToString()));
+                                if (context.User.GetRawText().Contains("picture"))
+                                    context.Identity.AddClaim(new Claim(JwtClaimTypes.Picture, context.User.GetProperty("picture").GetProperty("data").GetProperty("url").GetString()));
                                 return Task.CompletedTask;
                             }
                         };

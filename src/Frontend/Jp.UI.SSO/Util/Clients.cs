@@ -38,6 +38,7 @@ namespace Jp.UI.SSO.Util
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
+                        "role",
                         "jp_api.is4"
                     }
                 },

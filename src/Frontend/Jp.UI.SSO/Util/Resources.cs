@@ -9,15 +9,17 @@ namespace Jp.UI.SSO.Util
     {
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
+
             return new List<IdentityResource>
             {
                 // some standard scopes from the OIDC spec
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
+
                 new IdentityResource("username", new []{ "username"}),
                 // custom identity resource with some consolidated claims
-                new IdentityResource("roles", "Roles", new[] { JwtClaimTypes.Role }),
+                new IdentityResource("role", "Roles", new[] { JwtClaimTypes.Role }){Description = "A list of associated roles to user."},
 
                 // add additional identity resource
                 new IdentityResource("is4-rights", "IdentityServer4 Admin Panel Permissions", new [] { "is4-rights"})
@@ -43,7 +45,7 @@ namespace Jp.UI.SSO.Util
                                         IdentityServerConstants.StandardScopes.Email,
                                         "is4-rights",
                                         "username",
-                                        "roles"
+                                        "role"
                                     },
 
                                     Scopes =

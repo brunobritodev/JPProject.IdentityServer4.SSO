@@ -30,14 +30,8 @@ namespace Jp.Api.Management.Controllers
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<ConfigurationViewModel>>> List()
         {
+            var userAdmin = _systemUser.IsInRole("Administrator");
             var settings = await _globalConfigurationSettingsAppService.ListSettings();
-            if (!_systemUser.IsInRole("Administrator"))
-            {
-                foreach (var configurationViewModel in settings)
-                {
-                    configurationViewModel.UpdateSensitive();
-                }
-            }
             return ResponseGet(settings);
         }
 

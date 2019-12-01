@@ -5,7 +5,6 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using Jp.UI.SSO.Controllers.Home;
 using Jp.UI.SSO.Models;
 using Jp.UI.SSO.Util;
 using JPProject.Domain.Core.Bus;
@@ -130,7 +129,6 @@ namespace Jp.UI.SSO.Controllers.Account
                 if (model.IsUsernameEmail())
                 {
                     userIdentity = await _userAppService.FindByEmailAsync(model.Username);
-
                 }
                 else
                 {
@@ -628,8 +626,7 @@ namespace Jp.UI.SSO.Controllers.Account
             }
 
             // email
-            var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value ??
-               claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value ?? claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
             if (email != null)
             {
                 filtered.Add(new Claim(JwtClaimTypes.Email, email));
@@ -684,29 +681,5 @@ namespace Jp.UI.SSO.Controllers.Account
         private void ProcessLoginCallbackForSaml2p(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
         {
         }
-        #region Helpers
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-        }
-
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-        }
-
-        #endregion
-
     }
 }
