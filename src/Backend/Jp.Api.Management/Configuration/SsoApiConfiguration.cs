@@ -23,7 +23,6 @@ namespace Jp.Api.Management.Configuration
             var connString = configuration.GetConnectionString("SSOConnection");
 
             services.ConfigureUserIdentity<AspNetUser>().AddDatabase(database, connString);
-
             services.ConfigureJpAdmin<AspNetUser>().AddDatabase(database, connString);
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
 

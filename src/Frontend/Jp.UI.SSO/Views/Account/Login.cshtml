@@ -14,10 +14,18 @@
             <div class="card-group">
                 @if (Model.EnableLocalLogin)
                 {
-                    <div class="card p-4">
+                    <div class="card">
+                        @if (!string.IsNullOrEmpty(Model.ClientLogo))
+                        {
+                            <div class="card-header text-center">
+                                <img class="img-fluid" src="@Model.ClientLogo" alt="Client Logo" />
+                            </div>
+                        }
+
                         <div class="card-body">
+
                             <h1>@Localizer["Title-Login"]</h1>
-                            <p class="text-muted">@Localizer["Body-Sign"]</p>
+                            <br />
                             <form asp-route="Login">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -70,11 +78,11 @@
                             </form>
                         </div>
                         <!--Please, help us, do not remove this info-->
-                        <div class="d-none d-lg-block text-center">
-                            <small>@Localizer["Body-Jp Project"] - </small> <a href="https://github.com/brunohbrito/JP-Project" target="_blank"><img class="icon" width="25%" src="@Url.Content("~/images/brand/logo.png")"></a>
+                        <div class="p-4 d-none d-lg-block text-center">
+                            <small>@Localizer["Body-Jp Project"] - </small><br /> <a href="https://github.com/brunohbrito/JP-Project" target="_blank"><img class="img-brand" src="@Url.Content("~/images/brand/logo.png")"></a>
                         </div>
-                        <div class="d-lg-none text-center">
-                            <small>@Localizer["Body-Jp Project"] - </small>  <a href="https://github.com/brunohbrito/JP-Project" target="_blank"><img class="icon" src="@Url.Content("~/images/brand/logo-min.png")"></a>
+                        <div class="p-4 d-lg-none text-center">
+                            <small>@Localizer["Body-Jp Project"] - </small><br /> <a href="https://github.com/brunohbrito/JP-Project" target="_blank"><img class="img-brand" src="@Url.Content("~/images/brand/logo-min.png")"></a>
                         </div>
                     </div>
                 }
@@ -130,5 +138,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>

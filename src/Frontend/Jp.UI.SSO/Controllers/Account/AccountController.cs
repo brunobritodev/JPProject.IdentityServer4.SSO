@@ -5,7 +5,6 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using Jp.UI.SSO.Controllers.Home;
 using Jp.UI.SSO.Models;
 using Jp.UI.SSO.Util;
 using JPProject.Domain.Core.Bus;
@@ -27,6 +26,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Jp.UI.SSO.Controllers.Account
 {
@@ -103,7 +103,6 @@ namespace Jp.UI.SSO.Controllers.Account
         {
             // the user clicked the "cancel" button
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-
             if (button != "login")
             {
                 if (context != null)
@@ -129,7 +128,6 @@ namespace Jp.UI.SSO.Controllers.Account
                 if (model.IsUsernameEmail())
                 {
                     userIdentity = await _userAppService.FindByEmailAsync(model.Username);
-
                 }
                 else
                 {
@@ -147,40 +145,11 @@ namespace Jp.UI.SSO.Controllers.Account
                     var result = await _signInManager.PasswordSignInAsync(userIdentity.UserName, model.Password, model.RememberLogin, lockoutOnFailure: true);
                     if (result.Succeeded)
                     {
-                        await _events.RaiseAsync(new UserLoginSuccessEvent(userIdentity.UserName, userIdentity.Id.ToString(), userIdentity.UserName));
-
-                        if (context != null)
-                        {
-                            if (await _clientStore.IsPkceClientAsync(context.ClientId))
-                            {
-                                // if the client is PKCE then we assume it's native, so this change in how to
-                                // return the response is for better UX for the end user.
-                                return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
-                            }
-
-                            // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                            return Redirect(model.ReturnUrl);
-                        }
-
-                        // request for a local page
-                        if (Url.IsLocalUrl(model.ReturnUrl))
-                        {
-                            return Redirect(model.ReturnUrl);
-                        }
-                        else if (model.ReturnUrl.IsMissing())
-                        {
-                            return Redirect("~/");
-                        }
-                        else
-                        {
-                            // user might have clicked on a malicious link - should be logged
-                            throw new Exception("invalid return URL");
-                        }
+                        return await SuccessfullLogin(model, userIdentity, context);
                     }
                     else
                     {
-                        await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
-                        ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+                        await FailedLogin(model, result, userIdentity);
                     }
                 }
             }
@@ -188,6 +157,54 @@ namespace Jp.UI.SSO.Controllers.Account
             // something went wrong, show form with error
             var vm = await BuildLoginViewModelAsync(model);
             return View(vm);
+        }
+
+        private async Task<IActionResult> SuccessfullLogin(LoginInputModel model, UserViewModel userIdentity, AuthorizationRequest context)
+        {
+            await _events.RaiseAsync(new UserLoginSuccessEvent(userIdentity.UserName, userIdentity.Id, userIdentity.UserName));
+
+            if (context != null)
+            {
+                if (await _clientStore.IsPkceClientAsync(context.ClientId))
+                {
+                    // if the client is PKCE then we assume it's native, so this change in how to
+                    // return the response is for better UX for the end user.
+                    return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
+                }
+
+                // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                return Redirect(model.ReturnUrl);
+            }
+
+            // request for a local page
+            if (Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
+            if (model.ReturnUrl.IsMissing())
+            {
+                return Redirect("~/");
+            }
+
+            // user might have clicked on a malicious link - should be logged
+            await _events.RaiseAsync(new MaliciousRedirectUrlEvent(model.ReturnUrl));
+            throw new Exception("invalid return URL");
+        }
+
+        private async Task FailedLogin(LoginInputModel model, SignInResult result, UserViewModel userIdentity)
+        {
+            await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+            if (result.IsNotAllowed)
+            {
+                if (!userIdentity.EmailConfirmed || !userIdentity.PhoneNumberConfirmed)
+                    ModelState.AddModelError("", AccountOptions.AccountNotConfirmedMessage);
+                else
+                    ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+            }
+
+            if (result.IsLockedOut)
+                ModelState.AddModelError("", AccountOptions.AccountBlocked);
         }
 
 
@@ -379,12 +396,15 @@ namespace Jp.UI.SSO.Controllers.Account
                 var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
 
                 // this is meant to short circuit the UI and only trigger the one external IdP
+                var client = await _clientStore.FindClientByIdAsync(context?.ClientId);
                 var vm = new LoginViewModel
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
                     Username = context?.LoginHint,
-                    ShowDefaultUserPass = _configuration["ApplicationSettings:ShowDefaultUserPass"] == "true"
+                    ShowDefaultUserPass = _configuration["ApplicationSettings:ShowDefaultUserPass"] == "true",
+                    ClientLogo = client.LogoUri
+
                 };
 
                 if (!local)
@@ -408,11 +428,13 @@ namespace Jp.UI.SSO.Controllers.Account
                 }).ToList();
 
             var allowLocal = true;
+            var clientLogo = string.Empty;
             if (context?.ClientId != null)
             {
                 var client = await _clientStore.FindEnabledClientByIdAsync(context.ClientId);
                 if (client != null)
                 {
+                    clientLogo = client.LogoUri;
                     allowLocal = client.EnableLocalLogin;
 
                     if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
@@ -430,7 +452,8 @@ namespace Jp.UI.SSO.Controllers.Account
                 ReturnUrl = returnUrl,
                 Username = context?.LoginHint,
                 ExternalProviders = providers.ToArray(),
-                ShowDefaultUserPass = _configuration["ApplicationSettings:ShowDefaultUserPass"] == "true"
+                ShowDefaultUserPass = _configuration["ApplicationSettings:ShowDefaultUserPass"] == "true",
+                ClientLogo = clientLogo
             };
         }
 
@@ -454,13 +477,15 @@ namespace Jp.UI.SSO.Controllers.Account
             }
 
             var context = await _interaction.GetLogoutContextAsync(logoutId);
-            if (context?.ShowSignoutPrompt == false)
-            {
-                // it's safe to automatically sign-out
-                vm.ShowLogoutPrompt = false;
-                return vm;
-            }
+            //if (context?.ShowSignoutPrompt == false)
+            //{
+            //    // it's safe to automatically sign-out
+            //    vm.ShowLogoutPrompt = false;
+            //    return vm;
+            //}
 
+            vm.Client = context?.ClientName;
+            vm.PostLogoutRedirectUri = context?.PostLogoutRedirectUri;
             // show the logout prompt. this prevents attacks where the user
             // is automatically signed out by another malicious web page.
             return vm;
@@ -608,8 +633,7 @@ namespace Jp.UI.SSO.Controllers.Account
             }
 
             // email
-            var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value ??
-               claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value ?? claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
             if (email != null)
             {
                 filtered.Add(new Claim(JwtClaimTypes.Email, email));
@@ -664,29 +688,5 @@ namespace Jp.UI.SSO.Controllers.Account
         private void ProcessLoginCallbackForSaml2p(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
         {
         }
-        #region Helpers
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-        }
-
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-        }
-
-        #endregion
-
     }
 }

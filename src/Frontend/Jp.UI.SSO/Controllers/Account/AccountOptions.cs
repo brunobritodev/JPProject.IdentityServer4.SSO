@@ -21,5 +21,7 @@ namespace Jp.UI.SSO.Controllers.Account
         public static bool IncludeWindowsGroups = false;
 
         public static string InvalidCredentialsErrorMessage = "Invalid username or password";
+        public static string AccountNotConfirmedMessage = "Confirm your account";
+        public static string AccountBlocked = "Temporary blocked. Wait 5 minutes and try again";
     }
 }

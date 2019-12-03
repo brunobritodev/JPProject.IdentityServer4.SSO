@@ -33,11 +33,13 @@ namespace Jp.UI.SSO.Util
                     IdentityTokenLifetime = 3600,
                     LogoUri = "https://jpproject.blob.core.windows.net/images/jplogo.png",
                     AuthorizationCodeLifetime = 3600,
+                    PostLogoutRedirectUris = {$"{configuration["ApplicationSettings:IS4AdminUi"]}",},
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
+                        "role",
                         "jp_api.is4"
                     }
                 },

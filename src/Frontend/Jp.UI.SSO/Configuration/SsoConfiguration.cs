@@ -21,12 +21,11 @@ namespace Jp.UI.SSO.Configuration
 
             services
                 .ConfigureUserIdentity<AspNetUser>().AddDatabase(database, connString)
-
+                .AddCustomClaimsFactory<ApplicationClaimsIdentityFactory>()
                 .ConfigureIdentityServer()
 
                 .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
                 .AddOAuth2Database(database, connString);
-
 
             var configurationExpression = new MapperConfigurationExpression();
             SsoMapperConfig.RegisterMappings().ForEach(p => configurationExpression.AddProfile(p));

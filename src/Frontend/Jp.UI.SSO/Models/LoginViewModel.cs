@@ -20,5 +20,6 @@ namespace Jp.UI.SSO.Models
         public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
         public bool EnableExternalProviders { get; set; }
         public bool ShowDefaultUserPass { get; set; }
+        public string ClientLogo { get; set; }
     }
 }

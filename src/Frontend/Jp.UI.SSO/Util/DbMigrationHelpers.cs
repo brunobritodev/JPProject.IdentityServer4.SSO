@@ -1,13 +1,16 @@
 ﻿using IdentityServer4.EntityFramework.Mappers;
 using JPProject.EntityFrameworkCore.Context;
 using JPProject.EntityFrameworkCore.MigrationHelper;
+using JPProject.Sso.Domain.Models;
 using JPProject.Sso.Infra.Data.Context;
 using JPProject.Sso.Infra.Identity.Models.Identity;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -31,6 +34,7 @@ namespace Jp.UI.SSO.Util
         {
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
+            var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
             var ssoContext = scope.ServiceProvider.GetRequiredService<ApplicationSsoContext>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
@@ -43,6 +47,38 @@ namespace Jp.UI.SSO.Util
 
             await EnsureSeedIdentityServerData(ssoContext, configuration);
             await EnsureSeedIdentityData(userManager, roleManager, configuration);
+            await EnsureSeedGlobalConfigurationData(ssoContext, configuration, env);
+        }
+
+        private static async Task EnsureSeedGlobalConfigurationData(ApplicationSsoContext context,
+            IConfiguration configuration, IWebHostEnvironment env)
+        {
+            if (!context.GlobalConfigurationSettings.Any())
+            {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Server", configuration.GetSection("EmailConfiguration:SmtpServer").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Port", configuration.GetSection("EmailConfiguration:SmtpPort").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:UseSsl", configuration.GetSection("EmailConfiguration:UseSsl").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Username", configuration.GetSection("EmailConfiguration:SmtpUsername").Value, true, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Password", configuration.GetSection("EmailConfiguration:SmtpPassword").Value, true, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SendEmail", configuration.GetSection("EmailConfiguration:SendEmail").Value, false, false));
+
+                await context.SaveChangesAsync();
+            }
+
+            if (!context.Emails.Any())
+            {
+                var newUserEmail = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets/templates/new-user-email.html"));
+                var resetPasswordEmail = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets/templates/reset-password-email.html"));
+                var template = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets/templates/default-template.html"));
+
+                await context.Emails.AddAsync(new Email(newUserEmail, "Welcome to JP Project - Confirm your e-mail", new Sender("jpteam@jpproject.net", "JP Team"), EmailType.NewUser, null));
+                await context.Emails.AddAsync(new Email(newUserEmail, "Welcome to JP Project - Confirm your e-mail", new Sender("jpteam@jpproject.net", "JP Team"), EmailType.NewUserWithoutPassword, null));
+                await context.Emails.AddAsync(new Email(resetPasswordEmail, "JP Project - Reset Password", new Sender("jpteam@jpproject.net", "JP Team"), EmailType.RecoverPassword, null));
+
+                await context.Templates.AddRangeAsync(new Template(template, "JP Team", "default-template", Users.GetEmail(configuration)));
+
+                await context.SaveChangesAsync();
+            }
         }
 
         /// <summary>
