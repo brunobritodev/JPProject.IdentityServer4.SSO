@@ -103,7 +103,6 @@ namespace Jp.UI.SSO.Controllers.Account
         {
             // the user clicked the "cancel" button
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-
             if (button != "login")
             {
                 if (context != null)
@@ -397,12 +396,15 @@ namespace Jp.UI.SSO.Controllers.Account
                 var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
 
                 // this is meant to short circuit the UI and only trigger the one external IdP
+                var client = await _clientStore.FindClientByIdAsync(context?.ClientId);
                 var vm = new LoginViewModel
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
                     Username = context?.LoginHint,
-                    ShowDefaultUserPass = _configuration["ApplicationSettings:ShowDefaultUserPass"] == "true"
+                    ShowDefaultUserPass = _configuration["ApplicationSettings:ShowDefaultUserPass"] == "true",
+                    ClientLogo = client.LogoUri
+
                 };
 
                 if (!local)
@@ -426,11 +428,13 @@ namespace Jp.UI.SSO.Controllers.Account
                 }).ToList();
 
             var allowLocal = true;
+            var clientLogo = string.Empty;
             if (context?.ClientId != null)
             {
                 var client = await _clientStore.FindEnabledClientByIdAsync(context.ClientId);
                 if (client != null)
                 {
+                    clientLogo = client.LogoUri;
                     allowLocal = client.EnableLocalLogin;
 
                     if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
@@ -448,7 +452,8 @@ namespace Jp.UI.SSO.Controllers.Account
                 ReturnUrl = returnUrl,
                 Username = context?.LoginHint,
                 ExternalProviders = providers.ToArray(),
-                ShowDefaultUserPass = _configuration["ApplicationSettings:ShowDefaultUserPass"] == "true"
+                ShowDefaultUserPass = _configuration["ApplicationSettings:ShowDefaultUserPass"] == "true",
+                ClientLogo = clientLogo
             };
         }
 
@@ -472,13 +477,15 @@ namespace Jp.UI.SSO.Controllers.Account
             }
 
             var context = await _interaction.GetLogoutContextAsync(logoutId);
-            if (context?.ShowSignoutPrompt == false)
-            {
-                // it's safe to automatically sign-out
-                vm.ShowLogoutPrompt = false;
-                return vm;
-            }
+            //if (context?.ShowSignoutPrompt == false)
+            //{
+            //    // it's safe to automatically sign-out
+            //    vm.ShowLogoutPrompt = false;
+            //    return vm;
+            //}
 
+            vm.Client = context?.ClientName;
+            vm.PostLogoutRedirectUri = context?.PostLogoutRedirectUri;
             // show the logout prompt. this prevents attacks where the user
             // is automatically signed out by another malicious web page.
             return vm;
