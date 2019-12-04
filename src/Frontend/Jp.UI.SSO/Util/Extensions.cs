@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
-using IdentityServer4.Stores;
 
 namespace Jp.UI.SSO.Util
 {
@@ -23,6 +22,12 @@ namespace Jp.UI.SSO.Util
             }
 
             return false;
+        }
+
+        public static bool IsBehindReverseProxy(this IWebHostEnvironment host, IConfiguration configuration)
+        {
+            var config = configuration["ASPNETCORE_REVERSEPROXY"];
+            return !string.IsNullOrEmpty(config) && config.Equals("true");
         }
     }
 }

@@ -184,7 +184,7 @@ namespace Jp.UI.SSO.Controllers.Account
 
             if (model.ReturnUrl.IsMissing())
             {
-                return Redirect("~/");
+                return RedirectToAction("Index", "Home");
             }
 
             // user might have clicked on a malicious link - should be logged
