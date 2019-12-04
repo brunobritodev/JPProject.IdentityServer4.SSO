@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Services;
 using Jp.UI.SSO.Configuration;
+using Jp.UI.SSO.Util;
 using JPProject.Sso.Infra.Identity.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -75,7 +76,7 @@ namespace Jp.UI.SSO
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+            else if (env.IsProduction() && !env.IsBehindReverseProxy(Configuration))
             {
                 app.UseHttpsRedirection();
                 app.UseHsts(options => options.MaxAge(days: 365));
