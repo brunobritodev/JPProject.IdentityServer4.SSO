@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {
-    [Route("[controller]"), Authorize(Policy = "ReadOnly")]
+    [Route("[controller]"), Authorize(Policy = "Default")]
     public class ScopesController : ApiController
     {
         private readonly IScopesAppService _scopesAppService;
