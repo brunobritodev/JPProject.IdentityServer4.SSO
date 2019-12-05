@@ -1,5 +1,7 @@
-﻿using Hellang.Middleware.ProblemDetails;
+﻿using System.Threading.Tasks;
+using Hellang.Middleware.ProblemDetails;
 using Jp.Api.Management.Configuration;
+using Jp.Api.Management.Configuration.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +27,10 @@ namespace Jp.Api.Management
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvcCore()
+                .AddMvcCore(options =>
+                {
+
+                })
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -63,6 +68,7 @@ namespace Jp.Api.Management
         public virtual void ConfigureSso(IServiceCollection services)
         {
             services.ConfigureSsoApi(Configuration).ConfigureDefaultSettings();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

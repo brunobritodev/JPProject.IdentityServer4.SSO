@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {
-    [Route("emails"), Authorize(Policy = "ReadOnly")]
+    [Route("emails"), Authorize(Policy = "Default")]
     public class EmailController : ApiController
     {
         private readonly IEmailAppService _emailAppService;

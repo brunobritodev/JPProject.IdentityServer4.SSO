@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {
-    [Route("persisted-grants"), Authorize(Policy = "ReadOnly")]
+    [Route("persisted-grants"), Authorize(Policy = "Default")]
     public class PersistedGrantsController : ApiController
     {
         private readonly IPersistedGrantAppService _persistedGrantAppService;
@@ -50,7 +50,7 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(irs);
         }
 
-        [HttpDelete, Route("{id}"), Authorize(Policy = "Admin")]
+        [HttpDelete, Route("{id}")]
         public async Task<ActionResult> Remove(string id)
         {
             var model = new RemovePersistedGrantViewModel(id.FromBase64UrlSafe().FromUtf8Bytes());

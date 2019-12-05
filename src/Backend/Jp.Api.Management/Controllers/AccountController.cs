@@ -56,7 +56,7 @@ namespace Jp.Api.Management.Controllers
             return ResponsePutPatch();
         }
 
-        [HttpPatch, Route("profile"), Authorize(Policy = "Admin")]
+        [HttpPatch, Route("profile")]
         public async Task<ActionResult> PartialUpdate([FromBody] JsonPatchDocument<UserViewModel> model)
         {
             if (!ModelState.IsValid)
@@ -135,6 +135,11 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(await _userAppService.GetEvents(_systemUser.Username, new PagingViewModel(limit ?? 10, offset ?? 0, search)));
         }
 
+        [Route("access-denied"), AllowAnonymous]
+        public ActionResult AccessDenied(string ReturnUrl)
+        {
+            return Unauthorized();
+        }
     }
 
 }

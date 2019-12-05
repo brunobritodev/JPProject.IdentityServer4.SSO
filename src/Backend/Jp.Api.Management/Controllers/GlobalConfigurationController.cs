@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {
-    [Route("global-configuration"), Authorize(Policy = "ReadOnly")]
+    [Route("global-configuration"), Authorize(Policy = "Default")]
     public class GlobalConfigurationController : ApiController
     {
         private readonly IGlobalConfigurationAppService _globalConfigurationSettingsAppService;

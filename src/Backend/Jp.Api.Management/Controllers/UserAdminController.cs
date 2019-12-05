@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {
-    [Route("admin/users"), Authorize(Policy = "ReadOnly")]
+    [Route("admin/users"), Authorize(Policy = "Default")]
     public class UserAdminController : ApiController
     {
         private readonly IUserManageAppService _userManageAppService;
@@ -57,7 +57,7 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(irs);
         }
 
-        [HttpPut, Route("{username}"), Authorize(Policy = "Admin")]
+        [HttpPut, Route("{username}")]
         public async Task<ActionResult> Update(string username, [FromBody] UserViewModel model)
         {
             if (!ModelState.IsValid)
@@ -70,7 +70,7 @@ namespace Jp.Api.Management.Controllers
             return ResponsePutPatch();
         }
 
-        [HttpPatch, Route("{username}"), Authorize(Policy = "Admin")]
+        [HttpPatch, Route("{username}")]
         public async Task<ActionResult> PartialUpdate(string username, [FromBody] JsonPatchDocument<UserViewModel> model)
         {
             if (!ModelState.IsValid)
@@ -85,7 +85,7 @@ namespace Jp.Api.Management.Controllers
             return ResponsePutPatch();
         }
 
-        [HttpDelete, Route("{id:Guid}"), Authorize(Policy = "Admin")]
+        [HttpDelete, Route("{id:Guid}")]
         public async Task<ActionResult> RemoveAccount(string id)
         {
             var model = new RemoveAccountViewModel(id);
@@ -101,7 +101,7 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpDelete, Route("{username}/claims/{type}"), Authorize(Policy = "Admin")]
+        [HttpDelete, Route("{username}/claims/{type}")]
         public async Task<ActionResult> RemoveClaim(string username, string type, string value)
         {
             var model = new RemoveUserClaimViewModel(type, value) { Username = username };
@@ -110,7 +110,7 @@ namespace Jp.Api.Management.Controllers
         }
 
 
-        [HttpPost, Route("{username}/claims"), Authorize(Policy = "Admin")]
+        [HttpPost, Route("{username}/claims")]
         public async Task<ActionResult<SaveUserClaimViewModel>> SaveClaim(string username, [FromBody] SaveUserClaimViewModel model)
         {
             if (!ModelState.IsValid)
@@ -131,7 +131,7 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpPost, Route("{username}/roles"), Authorize(Policy = "Admin")]
+        [HttpPost, Route("{username}/roles")]
         public async Task<ActionResult<SaveUserRoleViewModel>> SaveRole(string username, [FromBody] SaveUserRoleViewModel model)
         {
             if (!ModelState.IsValid)
@@ -145,7 +145,7 @@ namespace Jp.Api.Management.Controllers
             return ResponsePost(nameof(Roles), new { username }, model);
         }
 
-        [HttpDelete, Route("{username}/roles/{role}"), Authorize(Policy = "Admin")]
+        [HttpDelete, Route("{username}/roles/{role}")]
         public async Task<ActionResult> RemoveRole(string username, string role)
         {
             if (!ModelState.IsValid)
@@ -166,7 +166,7 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpDelete, Route("{username}/logins"), Authorize(Policy = "Admin")]
+        [HttpDelete, Route("{username}/logins")]
         public async Task<ActionResult> RemoveLogin(string username, string loginProvider, string providerKey)
         {
             var model = new RemoveUserLoginViewModel(username, loginProvider, providerKey);
@@ -175,7 +175,7 @@ namespace Jp.Api.Management.Controllers
         }
 
 
-        [HttpPut, Route("{username}/password"), Authorize(Policy = "Admin")]
+        [HttpPut, Route("{username}/password")]
         public async Task<ActionResult> ResetPassword(string username, [FromBody] AdminChangePasswordViewodel model)
         {
             if (!ModelState.IsValid)

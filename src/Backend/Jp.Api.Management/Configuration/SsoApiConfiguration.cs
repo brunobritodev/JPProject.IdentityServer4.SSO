@@ -11,6 +11,8 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Net;
+using System.Threading.Tasks;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Jp.Api.Management.Configuration
@@ -26,7 +28,22 @@ namespace Jp.Api.Management.Configuration
             services.ConfigureJpAdmin<AspNetUser>().AddDatabase(database, connString);
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
 
+            SetupGeneralAuthorizationSettings(services);
+
             return services;
+        }
+
+        private static void SetupGeneralAuthorizationSettings(IServiceCollection services)
+        {
+            services.ConfigureApplicationCookie(options =>
+            {
+                //options.AccessDeniedPath = new PathString("/accounts/access-denied");
+                options.Events.OnRedirectToAccessDenied = context =>
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    return Task.CompletedTask;
+                };
+            });
         }
 
         public static void ConfigureDefaultSettings(this IServiceCollection services)
