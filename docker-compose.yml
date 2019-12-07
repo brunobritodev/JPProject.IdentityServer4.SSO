@@ -36,7 +36,7 @@ services:
             ApplicationSettings:DefaultUser: bruno
             ApplicationSettings:DefaultPass: Pa$$word123
             ApplicationSettings:DefaultEmail: bhdebrito@gmail.com
-            ApplicationSettings:UserManagementURL: http://localhost:4200
+            ApplicationSettings:UserManagementURL: http://localhost:4400
             ApplicationSettings:IS4AdminUi: http://localhost:4300
             ApplicationSettings:ResourceServerURL: http://localhost:5002
             ApplicationSettings:ShowDefaultUserPass: "true"
@@ -72,7 +72,7 @@ services:
     #############################
     # Admin UI
     #############################
-    jpproject-admin:
+    jpproject-admin-ui:
         image: bhdebrito/jpproject-admin-ui
 
 
@@ -84,7 +84,7 @@ services:
         ports:
             - '5001:5001'
             - '5002:5002'
-            - '4200:4200'
+            - '4400:4400'
             - '4300:4300'
         depends_on:
             - 'jpproject-api'

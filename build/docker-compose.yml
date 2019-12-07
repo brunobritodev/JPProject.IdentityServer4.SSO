@@ -20,7 +20,7 @@ services:
     # Server SSO
     #############################
     jpproject-sso:
-        image: bhdebrito/jpproject-sso:3.1.0
+        image: bhdebrito/jpproject-sso:3.1.1
         container_name: jpproject-sso
         depends_on:
             - jpdatabase
@@ -33,7 +33,7 @@ services:
             ApplicationSettings:DefaultUser: bruno
             ApplicationSettings:DefaultPass: Pa$$word123
             ApplicationSettings:DefaultEmail: bhdebrito@gmail.com
-            ApplicationSettings:UserManagementURL: http://localhost:4200
+            ApplicationSettings:UserManagementURL: http://localhost:4400
             ApplicationSettings:IS4AdminUi: http://localhost:4300
             ApplicationSettings:ResourceServerURL: http://localhost:5002
             CertificateOptions:Type: Temporary
@@ -42,7 +42,7 @@ services:
     # Management API
     #############################
     jpproject-api:
-        image: bhdebrito/jpproject-api:3.1.0
+        image: bhdebrito/jpproject-api:3.1.1
         container_name: jpproject-api
         depends_on:
             - jpdatabase
@@ -78,12 +78,12 @@ services:
     # Reverse proxy
     #############################
     reverse-proxy:
-        image: bhdebrito/jpproject-reverse-proxy:3.1.0
+        image: bhdebrito/jpproject-reverse-proxy:3.1.1
         container_name: jpproject-reverse-proxy
         ports:
             - '5001:5001'
             - '5002:5002'
-            - '4200:4200'
+            - '4400:4400'
             - '4300:4300'
         depends_on:
             - 'jpproject-api'
