@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using JPProject.Domain.Core.StringUtils;
 using JPProject.Sso.Infra.Identity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -21,6 +22,11 @@ namespace Jp.UI.SSO.Configuration
             var claims = new List<Claim>();
             if (user.Birthdate.HasValue)
                 claims.Add(new Claim(JwtClaimTypes.BirthDate, user.Birthdate.Value.ToString("yyyy-MM-dd")));
+
+            if (user.Name.IsPresent())
+                claims.Add(new Claim(JwtClaimTypes.GivenName, user.Name));
+            else
+                claims.Add(new Claim(JwtClaimTypes.GivenName, user.UserName));
 
             var roles = await UserManager.GetRolesAsync(user);
 
