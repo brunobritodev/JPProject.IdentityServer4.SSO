@@ -20,7 +20,7 @@ services:
     # Server SSO
     #############################
     jpproject-sso:
-        image: bhdebrito/jpproject-sso:3.1.1
+        image: bhdebrito/jpproject-sso:3.1.3
         container_name: jpproject-sso
         depends_on:
             - jpdatabase
@@ -42,7 +42,7 @@ services:
     # Management API
     #############################
     jpproject-api:
-        image: bhdebrito/jpproject-api:3.1.1
+        image: bhdebrito/jpproject-api:3.1.3
         container_name: jpproject-api
         depends_on:
             - jpdatabase
