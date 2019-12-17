@@ -37,7 +37,10 @@ namespace Jp.Api.Management
                 }).AddApiExplorer();
 
 
-            services.AddProblemDetails();
+            services.AddProblemDetails(setup =>
+            {
+                setup.IncludeExceptionDetails = _ => Environment.IsDevelopment();
+            });
 
             // Response compression
             services.AddBrotliCompression();
@@ -68,7 +71,7 @@ namespace Jp.Api.Management
         public virtual void ConfigureSso(IServiceCollection services)
         {
             services.ConfigureSsoApi(Configuration).ConfigureDefaultSettings();
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
