@@ -215,3 +215,18 @@ Check [Changelog.md](https://github.com/brunohbrito/JPProject.IdentityServer4.SS
 # License
 
 Jp Project is Open Source software and is released under the MIT license. This license allow the use of Jp Project in free and commercial applications and libraries without restrictions.
+
+
+# Start App From Development
+
+1. Run MySQL `docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=10203040 -e MYSQL_USER=bruno -e MYSQL_PASSWORD=10203040 -e MYSQL_DATABASE=jpproject -p 3306:3306 -d mysql`
+1. Alternative MSSQL `docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=@Password1" -e 'MSSQL_PID=Express' -p 1433:1433 --name sql1 -d mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04`
+1. `Jump to \JPProject.IdentityServer4.SSO\src\Frontend\Jp.UI.SSO`
+1. Start up project
+1. `cd src\Frontend\Jp.UserManagement`
+1. `npm install && ng serve`
+1. `cd src\Backend\Jp.Api.Management`
+1. Start up project
+1. Jump to project root
+1. `cd src\Frontend\Jp.AdminUI`
+1. `npm install && ng serve --port 4300`

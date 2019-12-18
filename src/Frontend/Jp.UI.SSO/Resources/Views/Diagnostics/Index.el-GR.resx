@@ -117,46 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Body-Configured-login" xml:space="preserve">
-    <value>There are no configured  login for this client.</value>
+  <data name="Body-Claims" xml:space="preserve">
+    <value>Αξιώσεις</value>
   </data>
-  <data name="Body-Facebook" xml:space="preserve">
-    <value>Facebook</value>
+  <data name="Body-Clients" xml:space="preserve">
+    <value>Πελάτες</value>
   </data>
-  <data name="Body-Forgot" xml:space="preserve">
-    <value>Forgot password?</value>
+  <data name="Body-Properties" xml:space="preserve">
+    <value>Ιδιότητες</value>
   </data>
-  <data name="Body-Google+" xml:space="preserve">
-    <value>Google+</value>
+  <data name="Menu-Diagnostics" xml:space="preserve">
+    <value>Διαγνωστικό</value>
   </data>
-  <data name="Body-Jp Project" xml:space="preserve">
-    <value>Jp Project is an Open Source Identity Server4 initiative</value>
+  <data name="Menu-Home" xml:space="preserve">
+    <value>Αρχική</value>
   </data>
-  <data name="Body-Login" xml:space="preserve">
-    <value>Login</value>
+  <data name="Menu-User" xml:space="preserve">
+    <value>Χρήστης</value>
   </data>
-  <data name="Body-Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="Body-Register-now" xml:space="preserve">
-    <value>Register Now!</value>
-  </data>
-  <data name="Body-RememberLogin" xml:space="preserve">
-    <value>Remember Login</value>
-  </data>
-  <data name="Body-Sign" xml:space="preserve">
-    <value>Sign in to your account</value>
-  </data>
-  <data name="Body-Sign-up" xml:space="preserve">
-    <value>Sign up</value>
-  </data>
-  <data name="Body-Twitter" xml:space="preserve">
-    <value>Twitter</value>
-  </data>
-  <data name="Title-Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="Title-Username" xml:space="preserve">
-    <value>Username</value>
+  <data name="Title-Cookie" xml:space="preserve">
+    <value>Cookie Αυθεντικοποίησης</value>
   </data>
 </root>

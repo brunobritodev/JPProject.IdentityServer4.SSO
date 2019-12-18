@@ -117,46 +117,77 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Body-Configured-login" xml:space="preserve">
-    <value>There are no configured  login for this client.</value>
+  <data name="Body-Click" xml:space="preserve">
+    <value>Κλικ</value>
   </data>
-  <data name="Body-Facebook" xml:space="preserve">
-    <value>Facebook</value>
+  <data name="Body-Demo" xml:space="preserve">
+    <value>Επιλέξτε demo</value>
   </data>
-  <data name="Body-Forgot" xml:space="preserve">
-    <value>Forgot password?</value>
+  <data name="Body-Document" xml:space="preserve">
+    <value>Ο IdentityServer δημοσιεύει ένα &lt;a href="~/.well-known/openid-configuration"&gt;έγγραφο εντοπισμού&lt;/a&gt; όπου μπορείτε να βρείτε πληροφορίες και συνδέσμους για όλα τα endpointa, κλειδιά κλπ.</value>
   </data>
-  <data name="Body-Google+" xml:space="preserve">
-    <value>Google+</value>
+  <data name="Body-Here" xml:space="preserve">
+    <value>εδώ</value>
   </data>
-  <data name="Body-Jp Project" xml:space="preserve">
-    <value>Jp Project is an Open Source Identity Server4 initiative</value>
+  <data name="Body-HimselfData" xml:space="preserve">
+    <value>είναι ένα περιβάλλον χρήστη για τη διαχείριση δεδομένων χρηστών. Μπορείτε να αλλάξετε το προφίλ σας, να ενημερώσετε τον κωδικό πρόσβασης κλπ.</value>
   </data>
-  <data name="Body-Login" xml:space="preserve">
-    <value>Login</value>
+  <data name="Body-IS4-Main-Goal" xml:space="preserve">
+    <value>Ο κύριος στόχος του Jp Project είναι να παράσχει ένα</value>
   </data>
-  <data name="Body-Password" xml:space="preserve">
-    <value>Password</value>
+  <data name="Body-Jp-Description" xml:space="preserve">
+    <value>&lt;h1 class="mb-3 text-sm-nowrap"&gt;Jp Project&lt;/h1&gt;
+&lt;h2 class="mb-3 text-sm-nowrap"&gt;Δωρεάν περιβάλλον διαχείρισης του IdentityServer 4&lt;/h2&gt;
+&lt;p class="lead"&gt;
+    Το μόνο περιβάλλον διοχείρισης που χρειάζεστε για να &lt;strong&gt;δημιουργήσετε την λύση Καθολικής Σύνδεσης&lt;/strong&gt;.
+&lt;/p&gt;
+&lt;p class="lead mb-4"&gt;
+    Το Jp Project είναι ένα προϊόν ανοικτού λογισμικού. Δημιουργήθηκε με την χρήση των Bootstrap 4, Angular 8 και .Net Core 3.1.
+&lt;/p&gt;
+&lt;div class="d-flex flex-column flex-md-row lead mb-3"&gt;
+    &lt;a href="#live-preview" class="btn btn-lg btn-outline-light mb-3 mb-md-0 mr-md-3"&gt;Δωρεάν προεπισκόπηση&lt;/a&gt;
+    &lt;a href="https://github.com/brunohbrito/JP-Project" class="btn btn-lg btn-outline-light mb-3 mb-md-0 mr-md-3"&gt;Κατεβάστε το Jp Project&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class="version text-small mt-3"&gt;
+    Έκδοση βιβλιοθήκης: &lt;strong&gt;1.1&lt;/strong&gt; · Έκδοση προτύπου διαχειριστικού περιβάλλοντος: &lt;strong&gt;1.1&lt;/strong&gt;
+&lt;/div&gt;</value>
   </data>
-  <data name="Body-Register-now" xml:space="preserve">
-    <value>Register Now!</value>
+  <data name="Body-Manage" xml:space="preserve">
+    <value>για να διαχειριστείτε τις αποθηκευμένες εξουσιοδοτήσεις σας.</value>
   </data>
-  <data name="Body-RememberLogin" xml:space="preserve">
-    <value>Remember Login</value>
+  <data name="Body-ManageServer" xml:space="preserve">
+    <value>για τη διαχείριση του Server.</value>
   </data>
-  <data name="Body-Sign" xml:space="preserve">
-    <value>Sign in to your account</value>
+  <data name="Body-RichUI" xml:space="preserve">
+    <value>για να διαχειριστείτε τον Identity Server 4. Ένα πλούσιο περιβάλλον χρήστη Angular 8.</value>
   </data>
-  <data name="Body-Sign-up" xml:space="preserve">
-    <value>Sign up</value>
+  <data name="Body-SSO" xml:space="preserve">
+    <value>Καθολική Σύνδεση</value>
   </data>
-  <data name="Body-Twitter" xml:space="preserve">
-    <value>Twitter</value>
+  <data name="Body-UIAngular7" xml:space="preserve">
+    <value>Πλούσιο περιβάλλον χρήστη σε πρότυπο Core UI Angular 8.</value>
   </data>
-  <data name="Title-Login" xml:space="preserve">
-    <value>Login</value>
+  <data name="Body-User-Interface" xml:space="preserve">
+    <value>Διαχειριστής</value>
   </data>
-  <data name="Title-Username" xml:space="preserve">
-    <value>Username</value>
+  <data name="Body-UserManagement" xml:space="preserve">
+    <value>Διαχείριση χρηστών</value>
+  </data>
+  <data name="Body-Welcome" xml:space="preserve">
+    <value>&lt;h1 class="display-4"&gt;Καλώς ήλθατε!&lt;/h1&gt;
+&lt;p class="lead"&gt;Το Jp Project αποτελείτε από 3 εφαρμογές Web: Server Καθολικής Σύνδεσης, Διαχείριση Χρηστών and εφαρμογή Διαχειριστή για τον ID4.&lt;/p&gt;
+&lt;hr class="my-4"&gt;
+&lt;p&gt;Προσπελάστε παρακάτω κάθε μία από τις εφαρμογές.&lt;/p&gt;
+&lt;p&gt;
+    Εδώ είναι οι σύνδεσμοι στο
+    &lt;a class="text-white-50" href="https://github.com/brunohbrito/JP-Project"&gt;αποθετήριο πηγαίου κώδικα&lt;/a&gt;,
+    και στην &lt;a class="text-white-50" href="https://jp-project.readthedocs.io/en/latest/index.html"&gt;τεχνική τεκμηρίωση για περισσότερες πληροφορίες&lt;/a&gt;.
+&lt;/p&gt;</value>
+  </data>
+  <data name="Menu-Home" xml:space="preserve">
+    <value>Αρχική</value>
+  </data>
+  <data name="Menu-User" xml:space="preserve">
+    <value>Χρήστης</value>
   </data>
 </root>

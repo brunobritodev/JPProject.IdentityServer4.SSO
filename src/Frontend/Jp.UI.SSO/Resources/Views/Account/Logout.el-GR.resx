@@ -117,46 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Body-Configured-login" xml:space="preserve">
-    <value>There are no configured  login for this client.</value>
+  <data name="Body-IdentityServer" xml:space="preserve">
+    <value>Θέλετε να αποσυνδεθείτε από την εφαρμογή {{client}};</value>
   </data>
-  <data name="Body-Facebook" xml:space="preserve">
-    <value>Facebook</value>
+  <data name="Body-Logout" xml:space="preserve">
+    <value>Αποσύνδεση</value>
   </data>
-  <data name="Body-Forgot" xml:space="preserve">
-    <value>Forgot password?</value>
+  <data name="Body-No" xml:space="preserve">
+    <value>Όχι</value>
   </data>
-  <data name="Body-Google+" xml:space="preserve">
-    <value>Google+</value>
+  <data name="Body-Yes" xml:space="preserve">
+    <value>Ναι</value>
   </data>
-  <data name="Body-Jp Project" xml:space="preserve">
-    <value>Jp Project is an Open Source Identity Server4 initiative</value>
-  </data>
-  <data name="Body-Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="Body-Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="Body-Register-now" xml:space="preserve">
-    <value>Register Now!</value>
-  </data>
-  <data name="Body-RememberLogin" xml:space="preserve">
-    <value>Remember Login</value>
-  </data>
-  <data name="Body-Sign" xml:space="preserve">
-    <value>Sign in to your account</value>
-  </data>
-  <data name="Body-Sign-up" xml:space="preserve">
-    <value>Sign up</value>
-  </data>
-  <data name="Body-Twitter" xml:space="preserve">
-    <value>Twitter</value>
-  </data>
-  <data name="Title-Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="Title-Username" xml:space="preserve">
-    <value>Username</value>
+  <data name="Title-Home" xml:space="preserve">
+    <value>Αρχική</value>
   </data>
 </root>
