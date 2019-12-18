@@ -32,22 +32,24 @@ namespace Jp.UI.SSO.Util
 
         public static async Task EnsureSeedData(IServiceProvider serviceProvider)
         {
-            using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+                var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                var ssoContext = scope.ServiceProvider.GetRequiredService<ApplicationSsoContext>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-            var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-            var ssoContext = scope.ServiceProvider.GetRequiredService<ApplicationSsoContext>();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                await DbHealthChecker.TestConnection(ssoContext);
 
-            await DbHealthChecker.TestConnection(ssoContext);
+                await ssoContext.Database.MigrateAsync();
+                scope.ServiceProvider.GetRequiredService<EventStoreContext>().Database.Migrate();
 
-            await ssoContext.Database.MigrateAsync();
-            scope.ServiceProvider.GetRequiredService<EventStoreContext>().Database.Migrate();
 
-            await EnsureSeedIdentityServerData(ssoContext, configuration);
-            await EnsureSeedIdentityData(userManager, roleManager, configuration);
-            await EnsureSeedGlobalConfigurationData(ssoContext, configuration, env);
+                await EnsureSeedIdentityServerData(ssoContext, configuration);
+                await EnsureSeedIdentityData(userManager, roleManager, configuration);
+                await EnsureSeedGlobalConfigurationData(ssoContext, configuration, env);
+            }
         }
 
         private static async Task EnsureSeedGlobalConfigurationData(ApplicationSsoContext context,
@@ -67,9 +69,9 @@ namespace Jp.UI.SSO.Util
 
             if (!context.Emails.Any())
             {
-                var newUserEmail = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets\templates\new-user-email.html"));
-                var resetPasswordEmail = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets\templates\reset-password-email.html"));
-                var template = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets\templates\default-template.html"));
+                var newUserEmail = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets/templates/new-user-email.html"));
+                var resetPasswordEmail = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets/templates/reset-password-email.html"));
+                var template = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets/templates/default-template.html"));
 
                 await context.Emails.AddAsync(new Email(newUserEmail, "Welcome to JP Project - Confirm your e-mail", new Sender("jpteam@jpproject.net", "JP Team"), EmailType.NewUser, null));
                 await context.Emails.AddAsync(new Email(newUserEmail, "Welcome to JP Project - Confirm your e-mail", new Sender("jpteam@jpproject.net", "JP Team"), EmailType.NewUserWithoutPassword, null));

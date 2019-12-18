@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {
-    [Route("roles"), Authorize(Policy = "ReadOnly")]
+    [Route("roles"), Authorize(Policy = "Default")]
     public class RolesController : ApiController
     {
         private readonly IRoleManagerAppService _roleManagerAppService;
@@ -41,7 +41,7 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpDelete, Route("{role}"), Authorize(Policy = "Admin")]
+        [HttpDelete, Route("{role}")]
         public async Task<ActionResult> Remove(string role)
         {
             var model = new RemoveRoleViewModel(role);
@@ -49,7 +49,7 @@ namespace Jp.Api.Management.Controllers
             return ResponseDelete();
         }
 
-        [HttpPost, Route(""), Authorize(Policy = "Admin")]
+        [HttpPost, Route("")]
         public async Task<ActionResult<RoleViewModel>> NewRole([FromBody] SaveRoleViewModel model)
         {
             if (!ModelState.IsValid)
@@ -63,7 +63,7 @@ namespace Jp.Api.Management.Controllers
             return ResponsePost(nameof(Details), new { role = savedModel.Name }, savedModel);
         }
 
-        [HttpPut, Route("{role}"), Authorize(Policy = "Admin")]
+        [HttpPut, Route("{role}")]
         public async Task<ActionResult> UpdateRole(string role, [FromBody] UpdateRoleViewModel model)
         {
             if (!ModelState.IsValid)
@@ -82,7 +82,7 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpDelete, Route("{role}/{username}"), Authorize(Policy = "Admin")]
+        [HttpDelete, Route("{role}/{username}")]
         public async Task<ActionResult> RemoveUser(string role, string username)
         {
             var model = new RemoveUserFromRoleViewModel(role, username);

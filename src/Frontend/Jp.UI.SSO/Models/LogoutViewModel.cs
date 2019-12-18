@@ -9,6 +9,7 @@ namespace Jp.UI.SSO.Models
         public LogoutViewModel() { }
         public bool ShowLogoutPrompt { get; set; }
         public string PostLogoutRedirectUri { get; set; }
+        public string Client { get; set; }
     }
 
 

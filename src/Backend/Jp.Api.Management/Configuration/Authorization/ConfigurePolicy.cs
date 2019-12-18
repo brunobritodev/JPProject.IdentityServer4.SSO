@@ -1,7 +1,8 @@
 ﻿using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Jp.Api.Management.Configuration
+namespace Jp.Api.Management.Configuration.Authorization
 {
     public static class ConfigurePolicy
     {
@@ -19,8 +20,11 @@ namespace Jp.Api.Management.Configuration
 
                 options.AddPolicy("UserManagement", policy =>
                     policy.RequireAuthenticatedUser());
-            });
 
+                options.AddPolicy("Default",
+                    policy => policy.Requirements.Add(new AccountRequirement()));
+            });
+            services.AddSingleton<IAuthorizationHandler, AccountRequirementHandler>();
         }
     }
 }

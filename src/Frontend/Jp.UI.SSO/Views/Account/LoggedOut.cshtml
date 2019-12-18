@@ -17,7 +17,7 @@
                             @*Cya!*@
                             <small>@Localizer["Title-You-are-now-logged-out"]</small>
                         </h1>
-                        @if (Model.PostLogoutRedirectUri != null)
+                        @if (!string.IsNullOrEmpty(Model.PostLogoutRedirectUri))
                         {
                             <div>
                                 @Localizer["Body-Click"] <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">@Localizer["Body-here"]</a> @Localizer["Body-to-return"]
@@ -45,6 +45,6 @@
     {
     @if (Model.AutomaticRedirectAfterSignOut)
     {
-        <script src="~/js/signout-redirect.js"></script>
+        <script src="@Url.Content("~/js/signout-redirect.js")"></script>
     }
 }

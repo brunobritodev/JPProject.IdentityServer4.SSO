@@ -1,6 +1,7 @@
 ﻿@using JPProject.Domain.Core.StringUtils
 @model Jp.UI.SSO.Models.LogoutViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Org.BouncyCastle.Crypto.Engines
 @inject IViewLocalizer Localizer
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -21,7 +22,14 @@
         <div class="card-group">
             <div class="card p-4">
                 <div class="card-body">
-                    <p>@Localizer["Body-IdentityServer"]</p>
+                    @if (!string.IsNullOrEmpty(Model.Client))
+                    {
+                        <p>@Localizer["Body-IdentityServer"].Value.Replace("{{client}}", Model.Client)</p>
+                    }
+                    else
+                    {
+                        <p>@Localizer["Body-IdentityServer"].Value.Replace("{{client}}", "JP Project")</p>
+                    }
                     <form asp-action="Logout">
                         <input type="hidden" name="logoutId" value="@Model.LogoutId" />
                         <fieldset>

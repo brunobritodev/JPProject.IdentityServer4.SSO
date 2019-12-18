@@ -1,6 +1,6 @@
 ﻿using IdentityServer4.Services;
 using Jp.UI.SSO.Configuration;
-using JPProject.Sso.Infra.Data.Context;
+using Jp.UI.SSO.Util;
 using JPProject.Sso.Infra.Identity.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+
 
 namespace Jp.UI.SSO
 {
@@ -75,7 +76,7 @@ namespace Jp.UI.SSO
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+            else if (env.IsProduction() && !env.IsBehindReverseProxy(Configuration))
             {
                 app.UseHttpsRedirection();
                 app.UseHsts(options => options.MaxAge(days: 365));
@@ -115,5 +116,6 @@ namespace Jp.UI.SSO
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
+
 
 }
