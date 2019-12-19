@@ -124,7 +124,7 @@
     <value>Επιλέξτε demo</value>
   </data>
   <data name="Body-Document" xml:space="preserve">
-    <value>Ο IdentityServer δημοσιεύει ένα &lt;a href="~/.well-known/openid-configuration"&gt;έγγραφο εντοπισμού&lt;/a&gt; όπου μπορείτε να βρείτε πληροφορίες και συνδέσμους για όλα τα endpointa, κλειδιά κλπ.</value>
+    <value>Ο IdentityServer δημοσιεύει ένα &lt;a href="~/.well-known/openid-configuration"&gt;έγγραφο εντοπισμού&lt;/a&gt; όπου μπορείτε να βρείτε πληροφορίες και συνδέσμους για όλα τα endpoints, κλειδιά κλπ.</value>
   </data>
   <data name="Body-Here" xml:space="preserve">
     <value>εδώ</value>
@@ -139,7 +139,7 @@
     <value>&lt;h1 class="mb-3 text-sm-nowrap"&gt;Jp Project&lt;/h1&gt;
 &lt;h2 class="mb-3 text-sm-nowrap"&gt;Δωρεάν περιβάλλον διαχείρισης του IdentityServer 4&lt;/h2&gt;
 &lt;p class="lead"&gt;
-    Το μόνο περιβάλλον διοχείρισης που χρειάζεστε για να &lt;strong&gt;δημιουργήσετε την λύση Καθολικής Σύνδεσης&lt;/strong&gt;.
+    Το μόνο περιβάλλον διοχείρισης που χρειάζεστε για να &lt;strong&gt;δημιουργήσετε λύση Καθολικής Σύνδεσης&lt;/strong&gt;.
 &lt;/p&gt;
 &lt;p class="lead mb-4"&gt;
     Το Jp Project είναι ένα προϊόν ανοικτού λογισμικού. Δημιουργήθηκε με την χρήση των Bootstrap 4, Angular 8 και .Net Core 3.1.
@@ -162,20 +162,20 @@
     <value>για να διαχειριστείτε τον Identity Server 4. Ένα πλούσιο περιβάλλον χρήστη Angular 8.</value>
   </data>
   <data name="Body-SSO" xml:space="preserve">
-    <value>Καθολική Σύνδεση</value>
+    <value>Καθολικη Συνδεση</value>
   </data>
   <data name="Body-UIAngular7" xml:space="preserve">
     <value>Πλούσιο περιβάλλον χρήστη σε πρότυπο Core UI Angular 8.</value>
   </data>
   <data name="Body-User-Interface" xml:space="preserve">
-    <value>Διαχειριστής</value>
+    <value>Διαχειριστικό Περιβάλλον</value>
   </data>
   <data name="Body-UserManagement" xml:space="preserve">
-    <value>Διαχείριση χρηστών</value>
+    <value>Διαχειριση χρηστων</value>
   </data>
   <data name="Body-Welcome" xml:space="preserve">
     <value>&lt;h1 class="display-4"&gt;Καλώς ήλθατε!&lt;/h1&gt;
-&lt;p class="lead"&gt;Το Jp Project αποτελείτε από 3 εφαρμογές Web: Server Καθολικής Σύνδεσης, Διαχείριση Χρηστών and εφαρμογή Διαχειριστή για τον ID4.&lt;/p&gt;
+&lt;p class="lead"&gt;Το Jp Project αποτελείτε από 3 εφαρμογές Web: Server Καθολικής Σύνδεσης, Περιβάλλον Διαχείρισης Χρηστών and εφαρμογή Διαχειριστή για τον ID4.&lt;/p&gt;
 &lt;hr class="my-4"&gt;
 &lt;p&gt;Προσπελάστε παρακάτω κάθε μία από τις εφαρμογές.&lt;/p&gt;
 &lt;p&gt;

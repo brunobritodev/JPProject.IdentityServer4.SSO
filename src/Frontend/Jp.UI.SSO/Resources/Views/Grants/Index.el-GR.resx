@@ -141,6 +141,9 @@
   <data name="Body-Revoke Access" xml:space="preserve">
     <value>Ανάκληση πρόσβασης</value>
   </data>
+  <data name="Body-Revoke-Access" xml:space="preserve">
+    <value>Ανάκληση πρόσβασης</value>
+  </data>
   <data name="Title-Home" xml:space="preserve">
     <value>Αρχική</value>
   </data>
