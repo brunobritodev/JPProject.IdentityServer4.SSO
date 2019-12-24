@@ -13,11 +13,12 @@ WORKDIR /app
 
 # add app
 COPY ["src/Frontend/Jp.UserManagement/", "/app"]
+COPY ["environment.ts", "src/environments/environment.prod.ts"]
 
 # rebuild node
 RUN npm rebuild node-sass
 # generate build
-RUN npm run ng build -- --configuration=docker
+RUN npm run ng build -- --configuration=production
 
 ##################
 ### production ###

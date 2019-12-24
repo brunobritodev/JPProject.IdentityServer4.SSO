@@ -194,17 +194,25 @@ namespace Jp.UI.SSO.Controllers.Account
 
         private async Task FailedLogin(LoginInputModel model, SignInResult result, UserViewModel userIdentity)
         {
-            await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
-            if (result.IsNotAllowed)
-            {
-                if (!userIdentity.EmailConfirmed || !userIdentity.PhoneNumberConfirmed)
-                    ModelState.AddModelError("", AccountOptions.AccountNotConfirmedMessage);
-                else
-                    ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
-            }
-
             if (result.IsLockedOut)
+            {
                 ModelState.AddModelError("", AccountOptions.AccountBlocked);
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "account blocked"));
+            }
+            else
+            {
+                //if (!userIdentity.EmailConfirmed || !userIdentity.PhoneNumberConfirmed)
+                if (!userIdentity.EmailConfirmed) // In case only e-mail to be confirmed
+                {
+                    ModelState.AddModelError("", AccountOptions.AccountNotConfirmedMessage);
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "not confirmed account"));
+                }
+                else
+                {
+                    ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+                }
+            }
         }
 
 
