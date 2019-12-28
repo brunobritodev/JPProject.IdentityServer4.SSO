@@ -26,6 +26,7 @@ services:
             - jpdatabase
         environment: 
             ASPNETCORE_ENVIRONMENT: Development
+            ASPNETCORE_REVERSEPROXY: "true"
             ASPNETCORE_URLS: http://+:5001
             CUSTOMCONNSTR_SSOConnection: "server=jpdatabase,port=3306;database=jpproject;user=jp;password=10203040"
             ApplicationSettings:EnableExternalProviders: "false" # Because Auth url is http://jpproject (modified by host to point to 127.0.0.1), then Google and Facebook reject it.
@@ -48,10 +49,14 @@ services:
             - jpdatabase
         environment: 
             ASPNETCORE_ENVIRONMENT: "Development"
+            ASPNETCORE_REVERSEPROXY: "true"
             ASPNETCORE_URLS: http://+
             CUSTOMCONNSTR_SSOConnection: "server=jpdatabase,port=3306;database=jpproject;user=jp;password=10203040"
             ApplicationSettings:Authority: "http://jpproject-sso:5001"
             ApplicationSettings:DatabaseType: MySql
+            ApplicationSettings:UserManagementURL: http://localhost:4400
+            ApplicationSettings:IS4AdminUi: http://localhost:4300
+            ApplicationSettings:ResourceServerURL: http://localhost:5002
 
     #############################
     # User management UI
