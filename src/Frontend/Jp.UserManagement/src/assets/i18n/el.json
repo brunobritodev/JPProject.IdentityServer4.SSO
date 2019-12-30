@@ -38,63 +38,63 @@
 		"SIGN-UP": "Εγγραφείτε"
 	},
 	"login-callback": {
-		"LOADING": "Τα στοιχεία χρήστ φορτώνονται"
+		"LOADING": "Τα στοιχεία χρήστη φορτώνονται"
 	},
 	"recover": {
-		"CHECK": "Check your e-mail.",
-		"RECOVER": "Recover password",
-		"RESET": "Send reset link",
-		"SENDING-EMAIL": "Sending e-mail",
-		"SUCCESS": "Success",
-		"USERNAME-EMAIL": "Please provide your username or e-mail."
+		"CHECK": "Ελέγξε το  e-mail σας.",
+		"RECOVER": "Επαναφορά password",
+		"RESET": "Αποστολή link επαναφοράς",
+		"SENDING-EMAIL": "Περιμένετε όσο διαρκεί η αποστολή e-mail",
+		"SUCCESS": "Επιτυχία",
+		"USERNAME-EMAIL": "Παρακαλώ να εισάγετε το username ή το e-mail σας."
 	},
 	"register": {
-		"CREATE-ACCOUNT": "Create your account",
+		"CREATE-ACCOUNT": "Δημιουργήστε τον λογαριασμό σας",
 		"FACEBOOK": "Facebook",
 		"GOOGLE+": "Google+",
-		"REGISTER": "Register"
+		"REGISTER": "Εγγραφείτε"
 	},
 	"reset-password": {
-		"RESET": "Reset",
-		"RESET-PASSWORD": "Reset your password"
+		"RESET": "Επαναφορά",
+		"RESET-PASSWORD": "Επαναφέρετε το password σας"
 	},
 	"unauthorized": {
-		"ADMINISTRATOR": "Contact administrator",
-		"DO-NOT-ACCESS": "You do not have access to this area.",
+		"ADMINISTRATOR": "Επικοινωνήστε με τον διαχειριστή",
+		"DO-NOT-ACCESS": "Δεν έχετε πρόσβαση.",
 		"UNAUTHORIZED": "Unauthorized"
 	},
 	"user": {
 		"account": {
-			"ARE-YOU-SURE": "Are you sure?",
-			"CONFIRM-PASSWORD": "Confirm password",
-			"CREATE-PASSWORD": "Create password",
-			"CURRENT-PASSWORD": "Current password",
-			"DELETE-ACCOUNT": "Delete account",
-			"DELETE-CONFIRMATION": "You will be asked for confirmation before delete account.",
-			"NEW-PASSWORD": "New password",
-			"REMOVE-ACCOUNT": "Remove Account",
-			"TITLE": "Account",
-			"UPDATE-PASSWORD": "Update password"
+			"ARE-YOU-SURE": "Είστε σίγουρος?",
+			"CONFIRM-PASSWORD": "Επιβεβαίωση password",
+			"CREATE-PASSWORD": "Δημιουργεία password",
+			"CURRENT-PASSWORD": "Τρέχων password",
+			"DELETE-ACCOUNT": "Διαγραφή λογαρισμού",
+			"DELETE-CONFIRMATION": "Θα σας ζητηθεί επιβεβαίωση πριν διαγράψετε τον λογαριασμό σας.",
+			"NEW-PASSWORD": "Νέο password",
+			"REMOVE-ACCOUNT": "Αφαίρεση Λογαριασμού",
+			"TITLE": "Λογαριασμός",
+			"UPDATE-PASSWORD": "Ενημέρωση password"
 		},
 		"history": {
-			"CATEGORY": "Category",
-			"ACTION": "Action",
+			"CATEGORY": "Κατηγορία",
+			"ACTION": "Λειτουργία",
 			"DETAILS": "Details",
 			"TITLE": "Logs",
-			"WHEN": "When",
-			"WHO": "Who"
+			"WHEN": "Πότε",
+			"WHO": "ποιός"
 		},
 		"profile": {
-			"BIO": "Bio",
-			"CHOOSE-FILE": "Choose File",
-			"COMPANY": "Company",
-			"JOB TITLE": "Job Title",
-			"NAME": "Name",
-			"PHONE NUMBER": "Phone Number",
-			"PICTURE": "Picture",
-			"PROFILE": "Profile",
-			"UPDATE-SETTINGS": "Update Settings",
-			"UPLOAD": "Upload",
+			"BIO": "Βιογραφικό",
+			"CHOOSE-FILE": "Επιλογή αρχείου",
+			"COMPANY": "Εταιρεία",
+			"JOB TITLE": "Τίτλος εργασίας",
+			"NAME": "Όνομα",
+			"PHONE NUMBER": "Τηλέφωνο",
+			"PICTURE": "Εικόνα",
+			"PROFILE": "Προφίλ",
+			"UPDATE-SETTINGS": "Ενημέρωση Ρυθμίσεων",
+			"UPLOAD": "Ανέβασμα",
 			"URL": "URL"
 		}
 	}
