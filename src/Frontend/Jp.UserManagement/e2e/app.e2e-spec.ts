@@ -7,8 +7,8 @@ describe('core-ui App', function() {
     page = new CoreUIPage();
   });
 
-  it('should display footer containing creativeLabs', () => {
+  it('should display card containing Login', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toContain('creativeLabs');
+    expect(page.getHeaderText()).toContain('Login');
   });
 });
