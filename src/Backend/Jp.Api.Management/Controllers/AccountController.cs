@@ -136,7 +136,7 @@ namespace Jp.Api.Management.Controllers
         }
 
         [Route("access-denied"), AllowAnonymous]
-        public ActionResult AccessDenied(string ReturnUrl)
+        protected ActionResult AccessDenied(string ReturnUrl)
         {
             return Unauthorized();
         }
