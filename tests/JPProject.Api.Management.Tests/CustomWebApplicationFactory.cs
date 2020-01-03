@@ -6,7 +6,7 @@ using IdentityServer4.Contrib.AspNetCore.Testing.Services;
 using IdentityServer4.Models;
 using Jp.Api.Management;
 using JPProject.Api.Management.Tests.Infra;
-using JPProject.EntityFrameworkCore.Configuration;
+using JPProject.EntityFrameworkCore.Context;
 using JPProject.Sso.EntityFrameworkCore.SqlServer.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -28,7 +28,7 @@ namespace JPProject.Api.Management.Tests
                 void DatabaseOptions(DbContextOptionsBuilder opt) => opt.UseInMemoryDatabase("JpTests").EnableSensitiveDataLogging();
 
                 services.ConfigureUserIdentity<AspNetUserTest>().WithSqlServer(DatabaseOptions);
-                services.AddEventStoreContext(DatabaseOptions, EventStoreMigrationOptions.Get().ShouldMigrate(false));
+                services.AddDbContext<EventStoreContext>(DatabaseOptions);
                 services.ConfigureJpAdmin<AspNetUserTest>().WithSqlServer(DatabaseOptions);
 
                 services.PostConfigureAll<IdentityServerAuthenticationOptions>(options =>
