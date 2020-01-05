@@ -8,7 +8,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 
 import { User } from '../../shared/models/user.model';
 import { UserService } from '../../shared/services/user.service';
-import { DefaultResponse } from '../../shared/view-model/default-response.model';
+import { ProblemDetails } from '../../shared/view-model/default-response.model';
 
 
 export function getAlertConfig(): AlertConfig {
@@ -99,25 +99,19 @@ export class RegisterComponent implements OnInit {
     }
 
     public register() {
+        this.showButtonLoading = true;
 
-        try {
+        this.userService.register(this.model).subscribe(
+            registerResult => { if (registerResult) this.router.navigate(["/login"]); },
+            err => {
+                this.errors = ProblemDetails.GetErrors(err).map(a => a.value);
+                this.showButtonLoading = false;
+            }
+        );
 
-            this.userService.register(this.model).subscribe(
-                registerResult => { if (registerResult) this.router.navigate(["/login"]); },
-                err => {
-                    this.errors = DefaultResponse.GetErrors(err).map(a => a.value);
-                    this.showButtonLoading = false;
-                }
-            );
-        } catch (error) {
-            this.errors = [];
-            this.errors.push("Unknown error while trying to register");
-            this.showButtonLoading = false;
-            return observableThrowError("Unknown error while trying to register");
-        }
     }
 
-    
+
 
     public socialSignIn(socialPlatform: string) {
         let socialPlatformProvider;

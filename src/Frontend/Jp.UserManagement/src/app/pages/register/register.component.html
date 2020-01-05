@@ -9,7 +9,7 @@
                                 <h1>{{ 'register.REGISTER' | translate }}</h1>
                                 <p class="text-muted">{{ 'register.CREATE-ACCOUNT' | translate }}</p>
                                 <div class="col-sm-12">
-                                     <div class="text-center" *ngIf="model.picture" >
+                                    <div class="text-center" *ngIf="model.picture">
                                         <img class="img-fluid img-circle" [src]="model.picture" />
                                     </div>
                                 </div>
@@ -23,39 +23,34 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-user"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Username" name="username" autocomplete="username" [(ngModel)]="model.username"
-                                        (keyup)="checkIfUniquenameExists()" (blur)="checkIfUniquenameExists()" [ngClass]="getClassUsernameExist()"
-                                        required>
+                                    <input type="text" class="form-control" placeholder="Username" name="username" autocomplete="username" [(ngModel)]="model.username" (keyup)="checkIfUniquenameExists()" (blur)="checkIfUniquenameExists()" [ngClass]="getClassUsernameExist()" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">@</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Email" name="email" autocomplete="email" [(ngModel)]="model.email" (keyup)="checkIfEmailExists()"
-                                        (blur)="checkIfEmailExists()" [ngClass]="getClassEmailExist()" required>
+                                    <input type="text" class="form-control" placeholder="Email" name="email" autocomplete="email" [(ngModel)]="model.email" (keyup)="checkIfEmailExists()" (blur)="checkIfEmailExists()" [ngClass]="getClassEmailExist()" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa fa-phone"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Phone Number" mask="(000) 000-0000}" name="phoneNumber" autocomplete="tel" [(ngModel)]="model.phoneNumber"
-                                        required>
+                                    <input type="text" class="form-control" placeholder="Phone Number" mask="(000) 000-0000}" name="phoneNumber" autocomplete="tel" [(ngModel)]="model.phoneNumber" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-lock"></i></span>
                                     </div>
-                                    <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="new-password" [(ngModel)]="model.password"
-                                        required>
+                                    <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="new-password" [(ngModel)]="model.password" required>
                                 </div>
                                 <div class="input-group mb-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-lock"></i></span>
                                     </div>
-                                    <input type="password" class="form-control" placeholder="Repeat password" name="confirmPassword" autocomplete="new-password"
-                                        [(ngModel)]="model.confirmPassword" required>
+                                    <input type="password" class="form-control" placeholder="Repeat password" name="confirmPassword" autocomplete="new-password" [(ngModel)]="model.confirmPassword" required>
                                 </div>
-                                <button type="button" class="btn btn-block btn-success" (click)="register()">{{ 'register.CREATE-ACCOUNT' | translate }}</button>
+                                <button type="button" class="btn btn-block btn-success" (click)="register()" *ngIf="!showButtonLoading">{{ 'register.CREATE-ACCOUNT' | translate }}</button>
+                                <button class="btn btn-block btn-success" type="button" *ngIf="showButtonLoading"><i class="fa fa-spinner fa-spin" ></i></button>
                                 <hr>
                                 <div *ngIf="errors.length > 0">
                                     <alert type="danger">

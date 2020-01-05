@@ -7,7 +7,7 @@ import { forkJoin, Observable, throwError as observableThrowError } from 'rxjs';
 import { SettingsService } from '../../../core/settings/settings.service';
 import { User } from '../../../shared/models/user.model';
 import { ChangePassword } from '../../../shared/view-model/change-password.model';
-import { DefaultResponse } from '../../../shared/view-model/default-response.model';
+import { ProblemDetails } from '../../../shared/view-model/default-response.model';
 import { SetPassword } from '../../../shared/view-model/set-password.model';
 import { AccountManagementService } from '../account-management.service';
 
@@ -61,7 +61,7 @@ export class AccountComponent implements OnInit {
                     this.toastr.success('Password changed!', 'Success!');
                 },
                 (err) => {
-                    this.errors = DefaultResponse.GetErrors(err).map(a => a.value);
+                    this.errors = ProblemDetails.GetErrors(err).map(a => a.value);
                     this.changingPassword = false;
                 }
             );
@@ -85,7 +85,7 @@ export class AccountComponent implements OnInit {
                 this.toastr.success('Bye!', 'Success!');
             },
             err => {
-                this.errors = DefaultResponse.GetErrors(err).map(a => a.value);
+                this.errors = ProblemDetails.GetErrors(err).map(a => a.value);
                 this.changingPassword = false;
             }
         );
@@ -104,7 +104,7 @@ export class AccountComponent implements OnInit {
                     this.toastr.success('Password created!', 'Success!');
                 },
                 err => {
-                    this.errors = DefaultResponse.GetErrors(err).map(a => a.value);
+                    this.errors = ProblemDetails.GetErrors(err).map(a => a.value);
                     this.changingPassword = false;
                 }
             );

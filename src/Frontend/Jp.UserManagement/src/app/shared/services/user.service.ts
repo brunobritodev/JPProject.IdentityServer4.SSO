@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { User } from '../models/user.model';
 import { ConfirmEmail } from '../view-model/confirm-email.model';
-import { DefaultResponse } from '../view-model/default-response.model';
+import { ProblemDetails } from '../view-model/default-response.model';
 import { ForgotPassword } from '../view-model/forgot-password.model';
 import { ResetPassword } from '../view-model/reset-password.model';
 

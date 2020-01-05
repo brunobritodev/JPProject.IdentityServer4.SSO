@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { UserService } from '../../shared/services/user.service';
 import { ConfirmEmail } from '../../shared/view-model/confirm-email.model';
-import { DefaultResponse } from '../../shared/view-model/default-response.model';
+import { ProblemDetails } from '../../shared/view-model/default-response.model';
 
 @Component({
     selector: "app-dashboard",
@@ -58,7 +58,7 @@ export class ConfirmEmailComponent implements OnInit, OnDestroy {
                     },
                     response => {
                         this.errors = [];
-                        this.errors = DefaultResponse.GetErrors(response).map(a => a.value);
+                        this.errors = ProblemDetails.GetErrors(response).map(a => a.value);
                         this.showButtonLoading = false;
                     }
                 );
