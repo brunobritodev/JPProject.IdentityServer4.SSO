@@ -1,0 +1,101 @@
+{
+	"app": {
+		"ANGULAR-BLOG": "Angular blog",
+		"CLI": "CLI Documentation",
+		"HELP-YOU": "Δείτε μερικά links που θα σας βοηθήσουν να ξεκινήσετε:",
+		"HEROES": "Tour of Heroes",
+		"WELCOME-TO": "ΚΑΛΩΣ ΗΡΘΑΤΕ ΣΤΟ"
+	},
+	"confirm-email": {
+		"E-MAIL-CONFIRMATION": "Επιβεβαίωση E-mail",
+		"SUCCESS": "Επιτυχία",
+		"THANK-YOU.": "ΕΥΧΑΡΙΣΤΟΥΜΕ.",
+		"VALIDATING-E-MAIL": "Επικύρωση e-mail"
+	},
+	"error": {
+		"404": "404",
+		"500": "500",
+		"OOPS": "Ούπς! Φαίνεται ότι χαθήχατε.",
+		"PAGE-NOT-FOUND": "Η σελίδα που ψάχνετε δεν υπάρχει.",
+		"PROBLEM": "Υπάρχει κάποιο πρόβλημα!",
+		"UNAVAILABLE": "Η σελίδα που ψάχνετε είναι προσωρινά μη διαθέσιμη."
+	},
+	"general": {
+		"AVAILABLE-LANGUAGES": "Διαθέσιμες γλώσσες",
+		"LOGIN": "Σύνδεση",
+		"NO": "Όχι",
+		"SEARCH": "Αναζήτηση",
+		"YES": "Ναι"
+	},
+	"home": {
+		"LEARN-MORE": "Μάθετε περισσότερα",
+        "MANAGEMENT": "Αυτό είναι το UI Διαχείρισης Χρηστών του JP Project. Εδώ μπορεί ο χρήστης να διαχειριστεί το password (αλλαγή, προσθήκη) και ενημερώσει τα στοιχεία προφίλ του.",
+		"WELCOME": "Καλώς ήρθατε!"
+	},
+	"login": {
+		"LOADING": "Περιμένετε όσο ο server φορτώνει κάποιες πληροφορίες.",
+		"REGISTER-NOW": "Κάντε εγγραφή τώρα!",
+		"SIGN-UP": "Εγγραφείτε"
+	},
+	"login-callback": {
+		"LOADING": "Τα στοιχεία χρήστη φορτώνονται"
+	},
+	"recover": {
+		"CHECK": "Ελέγξε το  e-mail σας.",
+		"RECOVER": "Επαναφορά password",
+		"RESET": "Αποστολή link επαναφοράς",
+		"SENDING-EMAIL": "Περιμένετε όσο διαρκεί η αποστολή e-mail",
+		"SUCCESS": "Επιτυχία",
+		"USERNAME-EMAIL": "Παρακαλώ να εισάγετε το username ή το e-mail σας."
+	},
+	"register": {
+		"CREATE-ACCOUNT": "Δημιουργήστε τον λογαριασμό σας",
+		"FACEBOOK": "Facebook",
+		"GOOGLE+": "Google+",
+		"REGISTER": "Εγγραφείτε"
+	},
+	"reset-password": {
+		"RESET": "Επαναφορά",
+		"RESET-PASSWORD": "Επαναφέρετε το password σας"
+	},
+	"unauthorized": {
+		"ADMINISTRATOR": "Επικοινωνήστε με τον διαχειριστή",
+		"DO-NOT-ACCESS": "Δεν έχετε πρόσβαση.",
+		"UNAUTHORIZED": "Unauthorized"
+	},
+	"user": {
+		"account": {
+			"ARE-YOU-SURE": "Είστε σίγουρος?",
+			"CONFIRM-PASSWORD": "Επιβεβαίωση password",
+			"CREATE-PASSWORD": "Δημιουργεία password",
+			"CURRENT-PASSWORD": "Τρέχων password",
+			"DELETE-ACCOUNT": "Διαγραφή λογαρισμού",
+			"DELETE-CONFIRMATION": "Θα σας ζητηθεί επιβεβαίωση πριν διαγράψετε τον λογαριασμό σας.",
+			"NEW-PASSWORD": "Νέο password",
+			"REMOVE-ACCOUNT": "Αφαίρεση Λογαριασμού",
+			"TITLE": "Λογαριασμός",
+			"UPDATE-PASSWORD": "Ενημέρωση password"
+		},
+		"history": {
+			"CATEGORY": "Κατηγορία",
+			"ACTION": "Λειτουργία",
+			"DETAILS": "Details",
+			"TITLE": "Logs",
+			"WHEN": "Πότε",
+			"WHO": "ποιός"
+		},
+		"profile": {
+			"BIO": "Βιογραφικό",
+			"CHOOSE-FILE": "Επιλογή αρχείου",
+			"COMPANY": "Εταιρεία",
+			"JOB TITLE": "Τίτλος εργασίας",
+			"NAME": "Όνομα",
+			"PHONE NUMBER": "Τηλέφωνο",
+			"PICTURE": "Εικόνα",
+			"PROFILE": "Προφίλ",
+			"UPDATE-SETTINGS": "Ενημέρωση Ρυθμίσεων",
+			"UPLOAD": "Ανέβασμα",
+			"URL": "URL"
+		}
+	}
+}
