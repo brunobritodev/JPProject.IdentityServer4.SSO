@@ -1,4 +1,5 @@
 ﻿using IdentityServer4.Models;
+using Jp.Api.Management.ViewModel;
 using JPProject.Admin.Application.Interfaces;
 using JPProject.Admin.Application.ViewModels;
 using JPProject.Admin.Application.ViewModels.ClientsViewModels;
@@ -6,11 +7,14 @@ using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using JPProject.Domain.Core.ViewModels;
+using JPProject.Sso.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using ServiceStack;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
@@ -20,14 +24,18 @@ namespace Jp.Api.Management.Controllers
     {
         private readonly IClientAppService _clientAppService;
         private readonly ISystemUser _user;
+        private readonly IStorage _storage;
 
         public ClientsController(
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
-            IClientAppService clientAppService, ISystemUser user) : base(notifications, mediator)
+            IClientAppService clientAppService,
+            ISystemUser user,
+            IStorage storage) : base(notifications, mediator)
         {
             _clientAppService = clientAppService;
             _user = user;
+            _storage = storage;
         }
 
         [HttpGet("")]
@@ -45,7 +53,7 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpPost("")]
-        public async Task<ActionResult<Client>> Post([FromBody] SaveClientViewModel client)
+        public async Task<ActionResult<Client>> Post([FromBody] SaveClientWithLogoViewModel client)
         {
             if (!ModelState.IsValid)
             {
@@ -53,6 +61,12 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
+            if (client.Logo != null)
+            {
+                client.Logo.VirtualLocation = "images";
+                client.LogoUri = await _storage.Upload(client.Logo);
+            }
+            var teste = client.ToJson();
             await _clientAppService.Save(client);
 
             var newClient = await _clientAppService.GetClientDetails(client.ClientId);
@@ -61,7 +75,7 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpPut("{client}")]
-        public async Task<ActionResult<ClientViewModel>> Update(string client, [FromBody] Client model)
+        public async Task<ActionResult<ClientViewModel>> Update(string client, [FromBody] UpdateClientWithLogoViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -69,11 +83,15 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
+            if (model.Logo != null)
+            {
+                await _storage.Remove(Path.GetFileName(model.LogoUri), "images");
+                model.LogoUri = await _storage.Upload(model.Logo);
+            }
 
             await _clientAppService.Update(client, model);
             return ResponsePutPatch();
         }
-
 
         [HttpPatch("{client}")]
         public async Task<ActionResult<ClientViewModel>> PartialUpdate(string client, [FromBody] JsonPatchDocument<Client> model)

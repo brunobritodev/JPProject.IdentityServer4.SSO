@@ -67,6 +67,18 @@ namespace Jp.UI.SSO.Util
                 await context.SaveChangesAsync();
             }
 
+            if (!context.GlobalConfigurationSettings.Any(a => a.Key == "Storage:Service"))
+            {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("UseStorage", configuration.GetSection("Storage:UseStorage").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Service", configuration.GetSection("Storage:Service").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:VirtualPath", configuration.GetSection("Storage:VirtualPath").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Username", configuration.GetSection("Storage:Username").Value, true, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Password", configuration.GetSection("Storage:Password").Value, true, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:StorageName", configuration.GetSection("Storage:StorageName").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:BasePath", configuration.GetSection("Storage:BasePath").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:PhysicalPath", env.WebRootPath, false, false));
+            }
+
             if (!context.Emails.Any())
             {
                 var newUserEmail = File.ReadAllText(Path.Combine(env.ContentRootPath, @"Assets/templates/new-user-email.html"));

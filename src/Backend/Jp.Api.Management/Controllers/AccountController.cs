@@ -82,6 +82,7 @@ namespace Jp.Api.Management.Controllers
             }
 
             model.Id = _systemUser.UserId;
+            model.Filename = $"{_systemUser.UserId}{model.FileType.Replace("image/", ".")}";
             await _userAppService.UpdateProfilePicture(model);
             return ResponsePutPatch();
         }
