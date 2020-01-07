@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jp.UI.SSO", "Frontend\Jp.UI
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5789F9D1-F2EB-471E-AAEE-CCE8EDFC050D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JPProject.Api.Management.Tests", "..\tests\JPProject.Api.Management.Tests\JPProject.Api.Management.Tests.csproj", "{A13A609B-A6A3-4022-8E9A-224432EA91A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JPProject.Api.Management.Tests", "..\tests\JPProject.Api.Management.Tests\JPProject.Api.Management.Tests.csproj", "{A13A609B-A6A3-4022-8E9A-224432EA91A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,7 +38,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F62CA078-A991-4001-A117-1F2726248D4F}
-		RESX_SortFileContentOnSave = True
-		RESX_PrefixTranslations = False
 	EndGlobalSection
 EndGlobal
