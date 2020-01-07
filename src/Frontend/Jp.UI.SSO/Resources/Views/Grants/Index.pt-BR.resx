@@ -138,9 +138,6 @@
   <data name="Body-Identity-Grants" xml:space="preserve">
     <value>Identificação das Permissões </value>
   </data>
-  <data name="Body-Revoke Access" xml:space="preserve">
-    <value>Revogar acesso</value>
-  </data>
   <data name="Body-Revoke-Access" xml:space="preserve">
     <value>Revogar acesso</value>
   </data>
