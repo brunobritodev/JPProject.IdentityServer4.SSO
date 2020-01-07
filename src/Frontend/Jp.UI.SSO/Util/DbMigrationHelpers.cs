@@ -43,7 +43,7 @@ namespace Jp.UI.SSO.Util
                 await DbHealthChecker.TestConnection(ssoContext);
 
                 await ssoContext.Database.MigrateAsync();
-                scope.ServiceProvider.GetRequiredService<EventStoreContext>().Database.Migrate();
+                await scope.ServiceProvider.GetRequiredService<EventStoreContext>().Database.MigrateAsync();
 
 
                 await EnsureSeedIdentityServerData(ssoContext, configuration);

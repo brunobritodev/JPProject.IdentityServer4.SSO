@@ -135,11 +135,11 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(await _userAppService.GetEvents(_systemUser.Username, new PagingViewModel(limit ?? 10, offset ?? 0, search)));
         }
 
-        //[Route("access-denied"), AllowAnonymous]
-        //public ActionResult AccessDenied(string ReturnUrl)
-        //{
-        //    return Unauthorized();
-        //}
+        [Route("access-denied"), AllowAnonymous]
+        protected ActionResult AccessDenied(string ReturnUrl)
+        {
+            return Unauthorized();
+        }
     }
 
 }

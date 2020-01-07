@@ -5,7 +5,7 @@ export class CoreUIPage {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.tagName('footer')).getText();
+  getHeaderText() {
+    return element(by.css('.app-body .card h1')).getText();
   }
 }

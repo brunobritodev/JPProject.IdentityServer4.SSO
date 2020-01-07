@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="28.4.4" />
-    <PackageReference Include="FluentAssertions" Version="5.9.0" />
-    <PackageReference Include="IdentityServer4.Contrib.AspNetCore.Testing" Version="3.1.0" />
+    <PackageReference Include="FluentAssertions" Version="5.10.0" />
+    <PackageReference Include="IdentityServer4.Contrib.AspNetCore.Testing" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />

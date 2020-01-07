@@ -14,11 +14,11 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="JPProject.AspNet.Core" Version="3.1.3" />
+    <PackageReference Include="JPProject.AspNet.Core" Version="3.1.5" />
     <PackageReference Include="JpProject.AspNetCore.PasswordHasher.Argon2" Version="3.0.1" />
-    <PackageReference Include="JPProject.Sso.Application" Version="3.1.3" />
-    <PackageReference Include="JPProject.Sso.Database" Version="3.1.3" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="JPProject.Sso.Application" Version="3.1.5" />
+    <PackageReference Include="JPProject.Sso.Database" Version="3.1.5" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.0" />

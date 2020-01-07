@@ -17,6 +17,7 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
+    "lintfix": "ng lint --fix=true",
     "e2e": "ng e2e"
   },
   "private": true,
