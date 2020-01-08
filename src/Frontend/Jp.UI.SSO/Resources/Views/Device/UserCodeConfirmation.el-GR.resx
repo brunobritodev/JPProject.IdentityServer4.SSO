@@ -117,46 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Body-Configured-login" xml:space="preserve">
-    <value>There are no configured  login for this client.</value>
+  <data name="Body-Application-access" xml:space="preserve">
+    <value>Πρόσβαση σε εφαρμογές</value>
   </data>
-  <data name="Body-Facebook" xml:space="preserve">
-    <value>Facebook</value>
+  <data name="Body-ConfirmAuthCode" xml:space="preserve">
+    <value>Επιβεβαιώστε ότι στην αίτηση εξουσιοδότησης αναφέρεται ο κωδικός</value>
   </data>
-  <data name="Body-Forgot" xml:space="preserve">
-    <value>Forgot password?</value>
+  <data name="Body-Consent" xml:space="preserve">
+    <value>Συγκατάθεση</value>
   </data>
-  <data name="Body-Google+" xml:space="preserve">
-    <value>Google+</value>
+  <data name="Body-grant!" xml:space="preserve">
+    <value>Αποεπιλέξτε τα δικαιώματα που δεν επιθυμείτε να χορηγήσετε!</value>
   </data>
-  <data name="Body-Jp Project" xml:space="preserve">
-    <value>Jp Project is an Open Source Identity Server4 initiative</value>
+  <data name="Body-is requesting your permission" xml:space="preserve">
+    <value>ζητά την άδειά σας</value>
   </data>
-  <data name="Body-Login" xml:space="preserve">
-    <value>Login</value>
+  <data name="Body-No-Do-Not-Allow" xml:space="preserve">
+    <value>Να μην επιτρέπεται</value>
   </data>
-  <data name="Body-Password" xml:space="preserve">
-    <value>Password</value>
+  <data name="Body-Personal-information" xml:space="preserve">
+    <value>Προσωπικές πληροφορίες</value>
   </data>
-  <data name="Body-Register-now" xml:space="preserve">
-    <value>Register Now!</value>
+  <data name="Body-Remember-My-Decision" xml:space="preserve">
+    <value>Θυμήσου την επιλογή μου</value>
   </data>
-  <data name="Body-RememberLogin" xml:space="preserve">
-    <value>Remember Login</value>
+  <data name="Body-Yes-Allow" xml:space="preserve">
+    <value>Ναι επέτρεψε</value>
   </data>
-  <data name="Body-Sign" xml:space="preserve">
-    <value>Sign in to your account</value>
+  <data name="Menu-Authorize-Application" xml:space="preserve">
+    <value>Εξουσιοδότηση εφαρμογής</value>
   </data>
-  <data name="Body-Sign-up" xml:space="preserve">
-    <value>Sign up</value>
+  <data name="Title-Home" xml:space="preserve">
+    <value>Αρχική</value>
   </data>
-  <data name="Body-Twitter" xml:space="preserve">
-    <value>Twitter</value>
-  </data>
-  <data name="Title-Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="Title-Username" xml:space="preserve">
-    <value>Username</value>
+  <data name="Title-User" xml:space="preserve">
+    <value>Χρήστης</value>
   </data>
 </root>

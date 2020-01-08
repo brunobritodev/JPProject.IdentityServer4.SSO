@@ -1,4 +1,5 @@
 ﻿using Jp.Api.Management.Configuration;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,7 +7,7 @@ namespace Jp.Api.Management
 {
     public class StartupTest : Startup
     {
-        public StartupTest(IConfiguration configuration) : base(configuration)
+        public StartupTest(IConfiguration configuration, IWebHostEnvironment environment) : base(configuration, environment)
         {
         }
 

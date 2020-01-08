@@ -118,45 +118,45 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Body-Configured-login" xml:space="preserve">
-    <value>There are no configured  login for this client.</value>
+    <value>Δεν υπάρχουν διαμορφωμένες συνδέσεις για αυτόν τον πελάτη.</value>
   </data>
   <data name="Body-Facebook" xml:space="preserve">
     <value>Facebook</value>
   </data>
   <data name="Body-Forgot" xml:space="preserve">
-    <value>Forgot password?</value>
+    <value>Ξεχάσατε τον κωδικό πρόσβασης;</value>
   </data>
   <data name="Body-Google+" xml:space="preserve">
     <value>Google+</value>
   </data>
   <data name="Body-Jp Project" xml:space="preserve">
-    <value>Jp Project is an Open Source Identity Server4 initiative</value>
+    <value>Το Jp Project είναι μια πρωτοβουλία βασισμένη στον Open Source Identity Server4</value>
   </data>
   <data name="Body-Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Σύνδεση</value>
   </data>
   <data name="Body-Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Κωδικός πρόσβασης</value>
   </data>
   <data name="Body-Register-now" xml:space="preserve">
-    <value>Register Now!</value>
+    <value>Κάνε εγγραφή τώρα!</value>
   </data>
   <data name="Body-RememberLogin" xml:space="preserve">
-    <value>Remember Login</value>
+    <value>Να με θυμάσαι</value>
   </data>
   <data name="Body-Sign" xml:space="preserve">
-    <value>Sign in to your account</value>
+    <value>Συνδεθείτε στον λογαριασμό σας</value>
   </data>
   <data name="Body-Sign-up" xml:space="preserve">
-    <value>Sign up</value>
+    <value>Εγγραφή</value>
   </data>
   <data name="Body-Twitter" xml:space="preserve">
     <value>Twitter</value>
   </data>
   <data name="Title-Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Σύνδεση</value>
   </data>
   <data name="Title-Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Όνομα χρήστη</value>
   </data>
 </root>
