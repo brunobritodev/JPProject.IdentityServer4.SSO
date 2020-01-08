@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="28.4.4" />
+    <PackageReference Include="coverlet.msbuild" Version="2.8.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="FluentAssertions" Version="5.10.0" />
     <PackageReference Include="IdentityServer4.Contrib.AspNetCore.Testing" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.0" />
@@ -26,6 +30,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="XunitXml.TestLogger" Version="2.1.26" />
   </ItemGroup>
 
   <ItemGroup>
