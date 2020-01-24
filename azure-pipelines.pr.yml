@@ -41,6 +41,15 @@ jobs:
         inputs:
           command: 'test'
           projects: './src'
+          publishTestResults: false
+          arguments: '--configuration $(BuildConfiguration) --logger "trx;LogFileName=TestResults.trx" --logger "xunit;LogFileName=TestResults.xml" --results-directory ./BuildReports/UnitTests  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude="[xunit.*]*'          
+
+      - task: PublishTestResults@2
+        displayName: 'Publish .NET Core test results'
+        inputs:
+          testRunTitle: NETCore
+          testResultsFormat: 'XUnit'
+          testResultsFiles: '**/TestResults.xml'          
 
   # Angular APP's
   - job: 'angular'
@@ -55,11 +64,40 @@ jobs:
           workingDir: src/Frontend/Jp.UserManagement
 
       - task: Npm@1
+        displayName: 'NPM - Test - UserManagement'
+        inputs:
+          command: custom
+          customCommand: 'run test -- --watch=false --code-coverage'
+          workingDir: src/Frontend/Jp.UserManagement
+
+      - task: Npm@1
+        displayName: 'NPM - E2E - UserManagement'
+        inputs:
+          command: custom
+          customCommand: 'run e2e'
+          workingDir: src/Frontend/Jp.UserManagement            
+
+      - task: Npm@1
         displayName: 'NPM - Build Prod - UserManagement'
         inputs:
           command: custom
           customCommand: 'run build'
           workingDir: src/Frontend/Jp.UserManagement
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Angular test results'
+        inputs:
+          testRunTitle: Angular
+          testResultsFormat: JUnit
+          testResultsFiles: "**/TESTS*.xml"    
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Angular E2E test results'
+        inputs:
+          testRunTitle: Angular_E2E
+          testResultsFormat: JUnit
+          testResultsFiles: "**/junit*.xml" 
+          
 
   - job: 'docker'
     displayName: 'Docker files'

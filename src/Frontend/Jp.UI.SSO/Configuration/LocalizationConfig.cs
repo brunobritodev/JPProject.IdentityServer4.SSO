@@ -25,6 +25,7 @@ namespace Jp.UI.SSO.Configuration
                                     new CultureInfo("nl"),
                                     new CultureInfo("fr"),
                                     new CultureInfo("ru"),
+                                    new CultureInfo("el-GR"),
                                 };
 
                                 opts.DefaultRequestCulture = new RequestCulture("en");

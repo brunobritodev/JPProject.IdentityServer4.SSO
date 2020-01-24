@@ -44,7 +44,8 @@ namespace Jp.Api.Management.Configuration
                                 {"jp_api.is4", "IS4 Management API - full access"},
                             },
                         }
-                    }
+                    },
+                    Type = SecuritySchemeType.OAuth2
                 });
 
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
