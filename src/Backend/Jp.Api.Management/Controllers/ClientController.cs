@@ -66,7 +66,6 @@ namespace Jp.Api.Management.Controllers
                 client.Logo.VirtualLocation = "images";
                 client.LogoUri = await _storage.Upload(client.Logo);
             }
-            var teste = client.ToJson();
             await _clientAppService.Save(client);
 
             var newClient = await _clientAppService.GetClientDetails(client.ClientId);

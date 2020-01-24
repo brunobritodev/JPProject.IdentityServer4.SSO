@@ -46,6 +46,17 @@ namespace Jp.Api.Management.Configuration
                         }
                     }
                 });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                        },
+                        new[] { "jp_api.is4", "jp_api.user" }
+                    }
+                });
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
