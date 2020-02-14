@@ -11,7 +11,7 @@ namespace Jp.Api.Management
         {
         }
 
-        public override void ConfigureSso(IServiceCollection services)
+        public override void ConfigureApi(IServiceCollection services)
         {
             services.ConfigureDefaultSettings();
         }

@@ -48,7 +48,7 @@ namespace Jp.Api.Management
             services.AddBrotliCompression();
 
             // SSO configuration
-            ConfigureSso(services);
+            ConfigureApi(services);
 
             // Cors request
             services.ConfigureCors();
@@ -70,7 +70,7 @@ namespace Jp.Api.Management
             RegisterServices(services);
         }
 
-        public virtual void ConfigureSso(IServiceCollection services)
+        public virtual void ConfigureApi(IServiceCollection services)
         {
             services.ConfigureSsoApi(Configuration).ConfigureDefaultSettings();
 

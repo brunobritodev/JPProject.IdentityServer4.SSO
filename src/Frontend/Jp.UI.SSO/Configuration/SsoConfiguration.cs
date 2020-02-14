@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
+using Jp.Database;
 using JPProject.AspNet.Core;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.AutoMapper;
-using JPProject.Sso.Database;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,12 +20,13 @@ namespace Jp.UI.SSO.Configuration
             var connString = configuration.GetConnectionString("SSOConnection");
 
             services
-                .ConfigureUserIdentity<AspNetUser>().AddDatabase(database, connString)
+                .ConfigureUserIdentity<AspNetUser>()
+                .ConfigureContext(database, connString)
                 .AddCustomClaimsFactory<ApplicationClaimsIdentityFactory>()
                 .ConfigureIdentityServer()
 
                 .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
-                .AddOAuth2Database(database, connString);
+                .ConfigureOAuth2Context(database, connString);
 
             var configurationExpression = new MapperConfigurationExpression();
             SsoMapperConfig.RegisterMappings().ForEach(p => configurationExpression.AddProfile(p));

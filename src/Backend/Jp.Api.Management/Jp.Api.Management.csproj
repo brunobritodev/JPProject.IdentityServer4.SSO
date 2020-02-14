@@ -34,6 +34,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Jp.Database\Jp.Database.csproj" />
+  </ItemGroup>
+
     <ItemGroup>
         <Content Update="appsettings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
