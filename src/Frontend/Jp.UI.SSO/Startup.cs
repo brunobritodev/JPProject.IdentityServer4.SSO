@@ -50,7 +50,7 @@ namespace Jp.UI.SSO
             services.AddMvcLocalization();
 
             // Configure SSO
-            services.ConfigureSso(Configuration);
+            services.ConfigureSso(Configuration, _env);
 
             // Improve password security
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
