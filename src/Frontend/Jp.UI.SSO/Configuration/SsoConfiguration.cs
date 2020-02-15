@@ -5,6 +5,7 @@ using JPProject.AspNet.Core;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -14,7 +15,7 @@ namespace Jp.UI.SSO.Configuration
 {
     public static class SsoConfiguration
     {
-        public static void ConfigureSso(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureSso(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             var database = configuration.GetValue<DatabaseType>("ApplicationSettings:DatabaseType");
             var connString = configuration.GetConnectionString("SSOConnection");
@@ -24,9 +25,8 @@ namespace Jp.UI.SSO.Configuration
                 .ConfigureContext(database, connString)
                 .AddCustomClaimsFactory<ApplicationClaimsIdentityFactory>()
                 .ConfigureIdentityServer()
-
-                .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"))
-                .ConfigureOAuth2Context(database, connString);
+                .ConfigureOAuth2Context(database, connString)
+                .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"), env);
 
             var configurationExpression = new MapperConfigurationExpression();
             SsoMapperConfig.RegisterMappings().ForEach(p => configurationExpression.AddProfile(p));

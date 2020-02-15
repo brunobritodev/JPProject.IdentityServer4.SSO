@@ -28,11 +28,11 @@ namespace Jp.Api.Management.Configuration
                         Name = "MIT",
                         Url = new Uri("https://github.com/brunohbrito/JPProject.IdentityServer4.AdminUI/blob/master/LICENSE")
                     },
-
                 });
 
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
                 {
+                    Type = SecuritySchemeType.OAuth2,
                     Flows = new OpenApiOAuthFlows()
                     {
                         Implicit = new OpenApiOAuthFlow()
@@ -45,7 +45,6 @@ namespace Jp.Api.Management.Configuration
                             },
                         }
                     },
-                    Type = SecuritySchemeType.OAuth2
                 });
 
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement

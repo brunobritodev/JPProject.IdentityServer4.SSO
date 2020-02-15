@@ -29,6 +29,7 @@
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.4" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Jwks.Manager.IdentityServer4" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>

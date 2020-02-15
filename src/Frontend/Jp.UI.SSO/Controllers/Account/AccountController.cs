@@ -197,7 +197,7 @@ namespace Jp.UI.SSO.Controllers.Account
             if (result.IsLockedOut)
             {
                 ModelState.AddModelError("", AccountOptions.AccountBlocked);
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "account blocked"));
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, AccountOptions.AccountBlocked));
             }
             else
             {
@@ -205,12 +205,12 @@ namespace Jp.UI.SSO.Controllers.Account
                 if (!userIdentity.EmailConfirmed) // In case only e-mail to be confirmed
                 {
                     ModelState.AddModelError("", AccountOptions.AccountNotConfirmedMessage);
-                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "not confirmed account"));
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, AccountOptions.AccountNotConfirmedMessage));
                 }
                 else
                 {
                     ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
-                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, AccountOptions.InvalidCredentialsErrorMessage));
                 }
             }
         }

@@ -12,7 +12,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using ServiceStack;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -63,6 +62,7 @@ namespace Jp.Api.Management.Controllers
 
             if (client.Logo != null)
             {
+                //client.Logo.Normalize();
                 client.Logo.VirtualLocation = "images";
                 client.LogoUri = await _storage.Upload(client.Logo);
             }
@@ -84,7 +84,10 @@ namespace Jp.Api.Management.Controllers
 
             if (model.Logo != null)
             {
-                await _storage.Remove(Path.GetFileName(model.LogoUri), "images");
+                var actualLogo = await _clientAppService.GetClientDetails(client);
+                await _storage.Remove(Path.GetFileName(actualLogo.LogoUri), "images");
+                //model.Logo.Normalize();
+                model.Logo.VirtualLocation = "images";
                 model.LogoUri = await _storage.Upload(model.Logo);
             }
 
