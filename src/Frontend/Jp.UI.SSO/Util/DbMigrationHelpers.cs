@@ -1,4 +1,5 @@
-﻿using IdentityServer4.EntityFramework.Mappers;
+﻿using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Mappers;
 using JPProject.EntityFrameworkCore.Context;
 using JPProject.EntityFrameworkCore.MigrationHelper;
 using JPProject.Sso.Domain.Models;
@@ -55,21 +56,20 @@ namespace Jp.UI.SSO.Util
         private static async Task EnsureSeedGlobalConfigurationData(ApplicationSsoContext context,
             IConfiguration configuration, IWebHostEnvironment env)
         {
+            var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+            var currentVersion = new Version(ssoVersion?.Value ?? "3.1.0");
+
             if (!context.GlobalConfigurationSettings.Any())
             {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SendEmail", configuration.GetSection("EmailConfiguration:SendEmail").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("UseStorage", configuration.GetSection("Storage:UseStorage").Value, false, false));
+
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Server", configuration.GetSection("EmailConfiguration:SmtpServer").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Port", configuration.GetSection("EmailConfiguration:SmtpPort").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:UseSsl", configuration.GetSection("EmailConfiguration:UseSsl").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Username", configuration.GetSection("EmailConfiguration:SmtpUsername").Value, true, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Password", configuration.GetSection("EmailConfiguration:SmtpPassword").Value, true, false));
-                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SendEmail", configuration.GetSection("EmailConfiguration:SendEmail").Value, false, false));
 
-                await context.SaveChangesAsync();
-            }
-
-            if (!context.GlobalConfigurationSettings.Any(a => a.Key == "Storage:Service"))
-            {
-                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("UseStorage", configuration.GetSection("Storage:UseStorage").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Service", configuration.GetSection("Storage:Service").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:VirtualPath", configuration.GetSection("Storage:VirtualPath").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Username", configuration.GetSection("Storage:Username").Value, true, false));
@@ -77,6 +77,9 @@ namespace Jp.UI.SSO.Util
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:StorageName", configuration.GetSection("Storage:StorageName").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:BasePath", configuration.GetSection("Storage:BasePath").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:PhysicalPath", env.WebRootPath, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Region", configuration.GetSection("Storage:Region").Value, false, false));
+
+                await context.SaveChangesAsync();
             }
 
             if (!context.Emails.Any())
@@ -91,6 +94,28 @@ namespace Jp.UI.SSO.Util
 
                 await context.Templates.AddRangeAsync(new Template(template, "JP Team", "default-template", Users.GetEmail(configuration)));
 
+                await context.SaveChangesAsync();
+            }
+
+            if (currentVersion <= Version.Parse("3.1.0"))
+            {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
+
+                var claims = await context.UserClaims.Where(w => w.ClaimType == "username" || w.ClaimType == "email" || w.ClaimType == "picture").ToListAsync();
+                context.UserClaims.RemoveRange(claims);
+
+                if (context.Clients.Include(c => c.AllowedGrantTypes).Any(s => s.ClientId == "IS4-Admin" && s.AllowedGrantTypes.Any(a => a.GrantType == "implicit")))
+                {
+                    var clientAdmin = context.Clients.Include(c => c.AllowedGrantTypes).FirstOrDefault(s => s.ClientId == "IS4-Admin");
+                    clientAdmin.RequireClientSecret = false;
+                    clientAdmin.AllowedGrantTypes.RemoveAll(a => a.ClientId == clientAdmin.Id);
+                    clientAdmin.AllowedGrantTypes.Add(new ClientGrantType()
+                    {
+                        ClientId = clientAdmin.Id,
+                        GrantType = "authorization_code"
+                    });
+                    context.Update(clientAdmin);
+                }
                 await context.SaveChangesAsync();
             }
         }
@@ -117,6 +142,7 @@ namespace Jp.UI.SSO.Util
 
             var user = new UserIdentity
             {
+                Name = Users.GetUser(configuration),
                 UserName = Users.GetUser(configuration),
                 Email = Users.GetEmail(configuration),
                 EmailConfirmed = true,

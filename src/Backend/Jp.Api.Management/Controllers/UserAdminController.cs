@@ -44,9 +44,9 @@ namespace Jp.Api.Management.Controllers
         /// <param name="search">username, e-mail or name</param>
         /// <returns></returns>
         [HttpGet, Route("")]
-        public async Task<ActionResult<ListOf<UserListViewModel>>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 1, string search = null)
+        public async Task<ActionResult<ListOf<UserListViewModel>>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 0, string search = null)
         {
-            var irs = await _userManageAppService.GetUsers(new PagingViewModel(limit ?? 10, offset ?? 0, search));
+            var irs = await _userManageAppService.SearchUsers(new UserFindByEmailNameUsername(search) { Limit = limit, Offset = offset });
             return ResponseGet(irs);
         }
 
@@ -65,7 +65,7 @@ namespace Jp.Api.Management.Controllers
                 NotifyModelStateErrors();
                 return ModelStateErrorResponseError();
             }
-
+            model.UserName = username;
             await _userManageAppService.UpdateUser(model);
             return ResponsePutPatch();
         }
@@ -205,5 +205,26 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
+
+        [HttpPost, Route("")]
+        public async Task<ActionResult<AdminRegisterUserViewModel>> Register([FromBody] AdminRegisterUserViewModel model)
+        {
+            // awating v3.0.2 to uncomment this
+            if (!ModelState.IsValid)
+            {
+                NotifyModelStateErrors();
+                return ModelStateErrorResponseError();
+            }
+
+            //await _userAppService.AdminRegister(model);
+
+            //model.ClearSensitiveData();
+            return ResponsePost("UserData", "Account", null, model);
+        }
+
+    }
+
+    public class AdminRegisterUserViewModel
+    {
     }
 }

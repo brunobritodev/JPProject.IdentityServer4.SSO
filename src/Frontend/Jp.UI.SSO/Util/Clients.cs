@@ -23,8 +23,9 @@ namespace Jp.UI.SSO.Util
                     ClientId = "IS4-Admin",
                     ClientName = "IS4-Admin",
                     ClientUri = configuration["ApplicationSettings:IS4AdminUi"],
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AllowAccessTokensViaBrowser = true,
+                    RequireClientSecret = false,
                     RedirectUris = new[] {
                         $"{configuration["ApplicationSettings:IS4AdminUi"]}/login-callback",
                         $"{configuration["ApplicationSettings:IS4AdminUi"]}/silent-refresh.html"
@@ -51,9 +52,10 @@ namespace Jp.UI.SSO.Util
                     ClientId = "UserManagementUI",
                     ClientName = "User Management UI",
 
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = true,
+                    RequireClientSecret = false,
                     RedirectUris =new[] {
                         $"{configuration["ApplicationSettings:UserManagementURL"]}/login-callback",
                         $"{configuration["ApplicationSettings:UserManagementURL"]}/silent-refresh.html"
