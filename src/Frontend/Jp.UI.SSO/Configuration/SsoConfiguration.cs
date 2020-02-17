@@ -23,8 +23,8 @@ namespace Jp.UI.SSO.Configuration
             services
                 .ConfigureUserIdentity<AspNetUser>()
                 .ConfigureContext(database, connString)
-                .AddCustomClaimsFactory<ApplicationClaimsIdentityFactory>()
                 .ConfigureIdentityServer()
+                .AddProfileService<SsoProfileService>()
                 .ConfigureOAuth2Context(database, connString)
                 .AddSigninCredentialFromConfig(configuration.GetSection("CertificateOptions"), env);
 

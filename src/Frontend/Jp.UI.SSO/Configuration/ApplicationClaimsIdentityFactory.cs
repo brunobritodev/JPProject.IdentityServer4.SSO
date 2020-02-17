@@ -1,8 +1,10 @@
 ﻿using IdentityModel;
+using IdentityServer4.Extensions;
+using IdentityServer4.Models;
+using IdentityServer4.Services;
 using JPProject.Domain.Core.StringUtils;
 using JPProject.Sso.Infra.Identity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -11,21 +13,22 @@ using System.Threading.Tasks;
 
 namespace Jp.UI.SSO.Configuration
 {
-    public class ApplicationClaimsIdentityFactory : UserClaimsPrincipalFactory<UserIdentity>
+    public class SsoProfileService : IProfileService
     {
-        private readonly IOptions<IdentityOptions> _optionsAccessor;
+        private readonly IUserClaimsPrincipalFactory<UserIdentity> _claimsFactory;
+        private readonly UserManager<UserIdentity> _userManager;
 
-        public ApplicationClaimsIdentityFactory(
-            UserManager<UserIdentity> userManager,
-            IOptions<IdentityOptions> optionsAccessor
-            ) : base(userManager, optionsAccessor)
+        public SsoProfileService(UserManager<UserIdentity> userManager,
+            IUserClaimsPrincipalFactory<UserIdentity> claimsFactory)
         {
-            _optionsAccessor = optionsAccessor;
+            _userManager = userManager;
+            _claimsFactory = claimsFactory;
         }
 
-        protected override async Task<ClaimsIdentity> GenerateClaimsAsync(UserIdentity user)
+        public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var identity = await base.GenerateClaimsAsync(user);
+            var sub = context.Subject.GetSubjectId();
+            var user = await _userManager.FindByIdAsync(sub);
             var claims = new List<Claim>();
 
             claims.Add(new Claim("username", user.UserName));
@@ -45,11 +48,21 @@ namespace Jp.UI.SSO.Configuration
             if (user.SocialNumber.IsPresent())
                 claims.Add(new Claim("social_number", user.SocialNumber));
 
-            var roles = await UserManager.GetRolesAsync(user);
+            if (_userManager.SupportsUserRole)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                claims.AddRange(roles.Select(s => new Claim(JwtClaimTypes.Role, s)));
+            }
 
-            claims.AddRange(roles.Select(s => new Claim(JwtClaimTypes.Role, s)));
-            identity.AddClaims(claims);
-            return identity;
+            context.IssuedClaims = claims;
         }
+
+        public async Task IsActiveAsync(IsActiveContext context)
+        {
+            var sub = context.Subject.GetSubjectId();
+            var user = await _userManager.FindByIdAsync(sub);
+            context.IsActive = user != null;
+        }
+
     }
 }
