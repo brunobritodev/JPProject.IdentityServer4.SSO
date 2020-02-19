@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using JPProject.Admin.Application.ViewModels;
 using JPProject.Admin.Application.ViewModels.ClientsViewModels;
+using JPProject.Admin.Domain.Commands;
 using JPProject.Admin.Domain.Commands.Clients;
 
 namespace JPProject.Api.Management.Tests.Fakers.ClientFakers

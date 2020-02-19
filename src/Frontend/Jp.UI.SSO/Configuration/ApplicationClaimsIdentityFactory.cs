@@ -3,7 +3,7 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using JPProject.Domain.Core.StringUtils;
-using JPProject.Sso.Infra.Identity.Models.Identity;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Globalization;

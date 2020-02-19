@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
-using Hellang.Middleware.ProblemDetails;
+﻿using Hellang.Middleware.ProblemDetails;
 using Jp.Api.Management.Configuration;
 using Jp.Api.Management.Configuration.Authorization;
+using Jp.Database.Context;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -49,6 +50,9 @@ namespace Jp.Api.Management
 
             // SSO configuration
             ConfigureApi(services);
+            // Data protection to persiste keys in database. 
+            // It's necessary for Load balance scenarios
+            services.AddDataProtection().SetApplicationName("sso").PersistKeysToDbContext<SsoContext>();
 
             // Cors request
             services.ConfigureCors();
@@ -72,8 +76,9 @@ namespace Jp.Api.Management
 
         public virtual void ConfigureApi(IServiceCollection services)
         {
-            services.ConfigureSsoApi(Configuration).ConfigureDefaultSettings();
-
+            services.ConfigureSsoApi(Configuration);
+            // Adding MediatR for Domain Events and Notifications
+            services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

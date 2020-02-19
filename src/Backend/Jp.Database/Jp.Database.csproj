@@ -5,15 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JPProject.Admin.Domain" Version="3.2.0-prerelease1.02-13-213745" />
-    <PackageReference Include="JPProject.EntityFrameworkCore" Version="3.2.0-prerelease1.02-13-213745" />
-    <PackageReference Include="JPProject.Sso.Infra.Data" Version="3.2.0-prerelease1.02-13-213745" />
+    <PackageReference Include="IdentityServer4.EntityFramework" Version="3.1.1" />
+    <PackageReference Include="JPProject.Domain.Core" Version="3.2.0-prerelease1.02-19-013058" />
+    <PackageReference Include="JPProject.Sso.AspNetIdentity" Version="3.2.0-prerelease1.02-19-013058" />
+    <PackageReference Include="JPProject.Sso.EntityFramework.Repository" Version="3.2.0-prerelease1.02-19-013058" />
     <PackageReference Include="Jwks.Manager.Store.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="3.1.1" />
-    <PackageReference Include="IdentityServer4.EntityFramework" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Label="Databases">
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.0" />

@@ -1,10 +1,9 @@
 ﻿using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.EntityFramework.Mappers;
-using JPProject.EntityFrameworkCore.Context;
+using Jp.Database.Context;
 using JPProject.EntityFrameworkCore.MigrationHelper;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
 using JPProject.Sso.Domain.Models;
-using JPProject.Sso.Infra.Data.Context;
-using JPProject.Sso.Infra.Identity.Models.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,14 +36,13 @@ namespace Jp.UI.SSO.Util
             {
                 var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
                 var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-                var ssoContext = scope.ServiceProvider.GetRequiredService<ApplicationSsoContext>();
+                var ssoContext = scope.ServiceProvider.GetRequiredService<SsoContext>();
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleIdentity>>();
 
                 await DbHealthChecker.TestConnection(ssoContext);
 
                 await ssoContext.Database.MigrateAsync();
-                await scope.ServiceProvider.GetRequiredService<EventStoreContext>().Database.MigrateAsync();
 
 
                 await EnsureSeedIdentityServerData(ssoContext, configuration);
@@ -53,7 +51,7 @@ namespace Jp.UI.SSO.Util
             }
         }
 
-        private static async Task EnsureSeedGlobalConfigurationData(ApplicationSsoContext context,
+        private static async Task EnsureSeedGlobalConfigurationData(SsoContext context,
             IConfiguration configuration, IWebHostEnvironment env)
         {
             var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
@@ -125,14 +123,14 @@ namespace Jp.UI.SSO.Util
         /// </summary>
         private static async Task EnsureSeedIdentityData(
             UserManager<UserIdentity> userManager,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<RoleIdentity> roleManager,
             IConfiguration configuration)
         {
 
             // Create admin role
             if (!await roleManager.RoleExistsAsync("Administrator"))
             {
-                var role = new IdentityRole { Name = "Administrator" };
+                var role = new RoleIdentity { Name = "Administrator" };
 
                 await roleManager.CreateAsync(role);
             }
@@ -163,7 +161,7 @@ namespace Jp.UI.SSO.Util
         /// <summary>
         /// Generate default clients, identity and api resources
         /// </summary>
-        private static async Task EnsureSeedIdentityServerData(ApplicationSsoContext context, IConfiguration configuration)
+        private static async Task EnsureSeedIdentityServerData(SsoContext context, IConfiguration configuration)
         {
             if (!context.Clients.Any())
             {

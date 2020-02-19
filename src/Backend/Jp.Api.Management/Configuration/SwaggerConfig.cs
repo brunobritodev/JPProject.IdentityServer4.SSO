@@ -65,7 +65,7 @@ namespace Jp.Api.Management.Configuration
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
             });
-
+            services.AddSwaggerGenNewtonsoftSupport();
             return services;
         }
     }

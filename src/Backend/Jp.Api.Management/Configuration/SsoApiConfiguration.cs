@@ -1,19 +1,15 @@
-﻿using AutoMapper;
-using AutoMapper.Configuration;
-using JPProject.Admin.Application.AutoMapper;
-using JPProject.Admin.Database;
+﻿using Jp.Database.Context;
 using JPProject.AspNet.Core;
 using JPProject.Domain.Core.ViewModels;
-using JPProject.Sso.Application.AutoMapper;
-using JPProject.Sso.Database;
-using JPProject.Sso.Infra.Identity.Models.Identity;
-using MediatR;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
+using JPProject.Sso.EntityFramework.Repository.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Net;
 using System.Threading.Tasks;
-using Jp.Database;
+using JPProject.Sso.AspNetIdentity.Configuration;
+using Microsoft.AspNetCore.Identity;
+using static Microsoft.Extensions.Configuration.ProviderSelector;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Jp.Api.Management.Configuration
@@ -22,20 +18,33 @@ namespace Jp.Api.Management.Configuration
     {
         public static IServiceCollection ConfigureSsoApi(this IServiceCollection services, IConfiguration configuration)
         {
-            var database = configuration.GetValue<DatabaseType>("ApplicationSettings:DatabaseType");
-            var connString = configuration.GetConnectionString("SSOConnection");
+            services.ConfigureProviderForContext<SsoContext>(DetectDatabase(configuration));
 
+            // IdentityServer4 Admin services
             services
-                .ConfigureUserIdentity<AspNetUser>()
-                .ConfigureContext(database, connString);
+                .ConfigureJpAdmin<AspNetUser>()
+                .AddAdminContext(WithProviderAutoSelection(DetectDatabase(configuration)));
 
-            services.ConfigureJpAdmin<AspNetUser>().AddDatabase(database, connString);
+            // ASP.NET Identity Configuration
+            services
+                .AddIdentity<UserIdentity, RoleIdentity>(AccountOptions.NistAccountOptions)
+                .AddEntityFrameworkStores<SsoContext>()
+                .AddDefaultTokenProviders(); ;
+
+            // SSO Services
+            services
+                .ConfigureSso<AspNetUser>()
+                .AddSsoContext<SsoContext>()
+                .AddDefaultAspNetIdentityServices();
+                
+
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
 
             SetupGeneralAuthorizationSettings(services);
 
             return services;
         }
+
 
         private static void SetupGeneralAuthorizationSettings(IServiceCollection services)
         {
@@ -49,18 +58,12 @@ namespace Jp.Api.Management.Configuration
                 };
             });
         }
-
-        public static void ConfigureDefaultSettings(this IServiceCollection services)
-        {
-            var configurationExpression = new MapperConfigurationExpression();
-            AdminUiMapperConfiguration.RegisterMappings().ForEach(p => configurationExpression.AddProfile(p));
-            SsoMapperConfig.RegisterMappings().ForEach(p => configurationExpression.AddProfile(p));
-            configurationExpression.AddProfile(new CustomMappingProfile());
-            var automapperConfig = new MapperConfiguration(configurationExpression);
-
-            services.TryAddSingleton(automapperConfig.CreateMapper());
-            // Adding MediatR for Domain Events and Notifications
-            services.AddMediatR(typeof(Startup));
-        }
+        /// <summary>
+        /// it's just a tuple. Returns 2 parameters.
+        /// Trying to improve readability at ConfigureServices
+        /// </summary>
+        private static (DatabaseType, string) DetectDatabase(IConfiguration configuration) => (
+            configuration.GetValue<DatabaseType>("ApplicationSettings:DatabaseType"),
+            configuration.GetConnectionString("SSOConnection"));
     }
 }

@@ -13,7 +13,7 @@ using JPProject.Domain.Core.StringUtils;
 using JPProject.Sso.Application.Interfaces;
 using JPProject.Sso.Application.ViewModels;
 using JPProject.Sso.Application.ViewModels.UserViewModels;
-using JPProject.Sso.Infra.Identity.Models.Identity;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -34,16 +34,19 @@ namespace Jp.UI.SSO.Controllers.Account
     {
         private readonly IMediatorHandler Bus;
         private readonly SignInManager<UserIdentity> _signInManager;
+        private readonly UserManager<UserIdentity> _userManager;
         private readonly IUserAppService _userAppService;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly IConfiguration _configuration;
+        private readonly IUserManageAppService _userManageAppService;
         private readonly DomainNotificationHandler _notifications;
 
         public AccountController(
             SignInManager<UserIdentity> signInManager,
+            UserManager<UserIdentity> userManager,
             IUserAppService userAppService,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
@@ -51,16 +54,19 @@ namespace Jp.UI.SSO.Controllers.Account
             IEventService events,
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler bus,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IUserManageAppService userManageAppService)
         {
             Bus = bus;
             _signInManager = signInManager;
+            _userManager = userManager;
             _userAppService = userAppService;
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
             _configuration = configuration;
+            _userManageAppService = userManageAppService;
             _notifications = (DomainNotificationHandler)notifications;
         }
 
@@ -127,11 +133,11 @@ namespace Jp.UI.SSO.Controllers.Account
                 UserViewModel userIdentity;
                 if (model.IsUsernameEmail())
                 {
-                    userIdentity = await _userAppService.FindByEmailAsync(model.Username);
+                    userIdentity = await _userManageAppService.FindByEmailAsync(model.Username);
                 }
                 else
                 {
-                    userIdentity = await _userAppService.FindByUsernameAsync(model.Username);
+                    userIdentity = await _userManageAppService.FindByUsernameAsync(model.Username);
                 }
 
                 if (userIdentity == null)
@@ -161,7 +167,7 @@ namespace Jp.UI.SSO.Controllers.Account
 
         private async Task<IActionResult> SuccessfullLogin(LoginInputModel model, UserViewModel userIdentity, AuthorizationRequest context)
         {
-            await _events.RaiseAsync(new UserLoginSuccessEvent(userIdentity.UserName, userIdentity.Id, userIdentity.UserName));
+            await _events.RaiseAsync(new UserLoginSuccessEvent(userIdentity.UserName, userIdentity.UserName, userIdentity.Name, clientId: context?.ClientId));
 
             if (context != null)
             {
@@ -288,35 +294,14 @@ namespace Jp.UI.SSO.Controllers.Account
             ProcessLoginCallbackForSaml2p(result, additionalLocalClaims, localSignInProps);
 
             // issue authentication cookie for user
-            // we must issue the cookie maually, and can't use the SignInManager because
-            // it doesn't expose an API to issue additional claims from the login workflow
-            // I don't have pride of this.
-            var s = new UserIdentity()
-            {
-                Id = user.Id,
-                Name = user.Name,
-                SecurityStamp = user.SecurityStamp,
-                AccessFailedCount = user.AccessFailedCount,
-                Bio = user.Bio,
-                Company = user.Company,
-                Email = user.Email,
-                EmailConfirmed = user.EmailConfirmed,
-                JobTitle = user.JobTitle,
-                LockoutEnabled = user.LockoutEnabled,
-                LockoutEnd = user.LockoutEnd,
-                PhoneNumber = user.PhoneNumber,
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-                Picture = user.Picture,
-                TwoFactorEnabled = user.TwoFactorEnabled,
-                Url = user.Url,
-                UserName = user.UserName,
-            };
+
+            var s = await _userManager.FindByNameAsync(user.UserName);
             var principal = await _signInManager.CreateUserPrincipalAsync(s);
             additionalLocalClaims.AddRange(principal.Claims);
-            var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? user.Id.ToString();
+            var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? s.Id.ToString();
 
-            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id.ToString(), name));
-            await HttpContext.SignInAsync(user.Id.ToString(), name, provider, localSignInProps, additionalLocalClaims.ToArray());
+            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, s.Id.ToString(), name));
+            await HttpContext.SignInAsync(s.Id.ToString(), name, provider, localSignInProps, additionalLocalClaims.ToArray());
 
             // delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -604,7 +589,7 @@ namespace Jp.UI.SSO.Controllers.Account
             var providerUserId = userIdClaim.Value;
 
             // find external user
-            var user = await _userAppService.FindByProviderAsync(provider, providerUserId);
+            var user = await _userManageAppService.FindByProviderAsync(provider, providerUserId);
 
             return (user, provider, providerUserId, claims);
         }
@@ -668,7 +653,7 @@ namespace Jp.UI.SSO.Controllers.Account
             else
                 await _userAppService.RegisterWithoutPassword(user);
 
-            return await _userAppService.FindByProviderAsync(provider, providerUserId);
+            return await _userManageAppService.FindByProviderAsync(provider, providerUserId);
         }
 
         private void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)

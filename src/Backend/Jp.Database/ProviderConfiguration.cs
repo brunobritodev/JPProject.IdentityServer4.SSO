@@ -30,6 +30,5 @@ namespace Jp.Database
         public Action<DbContextOptionsBuilder> Sqlite =>
             options => options.UseSqlite(_connectionString, sql => sql.MigrationsAssembly(MigrationAssembly));
 
-
     }
 }

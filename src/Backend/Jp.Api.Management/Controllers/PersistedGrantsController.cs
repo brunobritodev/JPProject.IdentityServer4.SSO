@@ -5,13 +5,14 @@ using JPProject.Domain.Core.Notifications;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.Extensions;
 using JPProject.Sso.Application.Interfaces;
+using JPProject.Sso.Domain.ViewModels.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ServiceStack;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using ServiceStack;
 
 namespace Jp.Api.Management.Controllers
 {
@@ -32,15 +33,22 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpGet, Route("")]
-        public async Task<ActionResult<ListOfPersistedGrantViewModel>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 1)
+        public async Task<ActionResult<ListOfPersistedGrantViewModel>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 0)
         {
             var irs = await _persistedGrantAppService.GetPersistedGrants(new PagingViewModel(limit ?? 10, offset ?? 0));
             var usersIds = irs.PersistedGrants.Select(s => s.SubjectId).ToArray();
-            var users = await _userAppService.GetUsersById(usersIds);
+
+            var search = new UserSearch<string>()
+            {
+                Id = usersIds,
+                Limit = limit,
+                Offset = offset
+            };
+            var users = await _userAppService.SearchUsers(search);
 
             foreach (var persistedGrantViewModel in irs.PersistedGrants)
             {
-                var user = users.WithId(persistedGrantViewModel.SubjectId);
+                var user = users.Collection.WithId(persistedGrantViewModel.SubjectId);
                 if (user == null) continue;
 
                 persistedGrantViewModel.Email = user.Email;

@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using IdentityServer4.Models;
 using Xunit;
 
 namespace JPProject.Api.Management.Tests.Controller
@@ -92,7 +93,7 @@ namespace JPProject.Api.Management.Tests.Controller
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
-            var scope = content.FromJson<IEnumerable<ScopeViewModel>>();
+            var scope = content.FromJson<IEnumerable<Scope>>();
             scope.Should().HaveCountGreaterOrEqualTo(1);
         }
 

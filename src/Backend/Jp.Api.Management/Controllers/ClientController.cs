@@ -1,7 +1,6 @@
 ﻿using IdentityServer4.Models;
 using Jp.Api.Management.ViewModel;
 using JPProject.Admin.Application.Interfaces;
-using JPProject.Admin.Application.ViewModels;
 using JPProject.Admin.Application.ViewModels.ClientsViewModels;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
@@ -135,22 +134,22 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpGet("{client}/secrets")]
-        public async Task<ActionResult<IEnumerable<SecretViewModel>>> Secrets(string client)
+        public async Task<ActionResult<IEnumerable<Secret>>> Secrets(string client)
         {
             var clients = await _clientAppService.GetSecrets(client);
             return ResponseGet(clients);
         }
 
-        [HttpDelete("{client}/secrets/{secretId:int}")]
-        public async Task<ActionResult> RemoveSecret(string client, int secretId)
+        [HttpDelete("{client}/secrets")]
+        public async Task<ActionResult> RemoveSecret(string client, string type, string value)
         {
-            var model = new RemoveClientSecretViewModel(client, secretId);
+            var model = new RemoveClientSecretViewModel(client, type, value);
             await _clientAppService.RemoveSecret(model);
             return ResponseDelete();
         }
 
         [HttpPost("{client}/secrets")]
-        public async Task<ActionResult<IEnumerable<SecretViewModel>>> SaveSecret(string client, [FromBody] SaveClientSecretViewModel model)
+        public async Task<ActionResult<IEnumerable<Secret>>> SaveSecret(string client, [FromBody] SaveClientSecretViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -169,10 +168,10 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpDelete("{client}/properties/{propertyId:int}")]
-        public async Task<ActionResult> RemoveProperty(string client, int propertyId)
+        [HttpDelete("{client}/properties/{key}")]
+        public async Task<ActionResult> RemoveProperty(string client, string key)
         {
-            var model = new RemovePropertyViewModel(propertyId, client);
+            var model = new RemovePropertyViewModel(key, client);
             await _clientAppService.RemoveProperty(model);
             return ResponseDelete();
         }
@@ -198,10 +197,10 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpDelete("{client}/claims/{claimId:int}")]
-        public async Task<ActionResult> RemoveClaim(string client, int claimId)
+        [HttpDelete("{client}/claims")]
+        public async Task<ActionResult> RemoveClaim(string client, string type, string value)
         {
-            var model = new RemoveClientClaimViewModel(client, claimId);
+            var model = new RemoveClientClaimViewModel(client, type, value);
             await _clientAppService.RemoveClaim(model);
             return ResponseDelete();
         }

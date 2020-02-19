@@ -1,10 +1,7 @@
-﻿using System;
-using Jp.Database.Context;
-using JPProject.EntityFrameworkCore.Context;
-using JPProject.Sso.Domain.Interfaces;
-using JPProject.Sso.Infra.Data.Configuration;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 
 namespace Jp.Database
 {
@@ -17,20 +14,11 @@ namespace Jp.Database
         /// <summary>
         /// ASP.NET Identity Context config
         /// </summary>
-        public static ISsoConfigurationBuilder SsoStore(this ISsoConfigurationBuilder builder, Action<DbContextOptionsBuilder> databaseConfig)
+        public static IServiceCollection PersistStore<TContext>(this IServiceCollection services, Action<DbContextOptionsBuilder> databaseConfig) where TContext : DbContext
         {
-            builder.Services.AddSsoContext(databaseConfig);
             // Add a DbContext to store Keys. SigningCredentials and DataProtectionKeys
-            builder.Services.AddDbContext<AspNetGeneralContext>(databaseConfig);
-            return builder;
-        }
-
-        /// <summary>
-        /// Eventstore config
-        /// </summary>
-        public static ISsoConfigurationBuilder EventStore(this ISsoConfigurationBuilder services, Action<DbContextOptionsBuilder> databaseConfig)
-        {
-            services.Services.AddDbContext<EventStoreContext>(databaseConfig);
+            if (services.All(x => x.ServiceType != typeof(TContext)))
+                services.AddDbContext<TContext>(databaseConfig);
             return services;
         }
 
@@ -50,16 +38,11 @@ namespace Jp.Database
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
                     //options.TokenCleanupInterval = 15; // frequency in seconds to cleanup stale grants. 15 is useful during debugging
-                }).AddConfigurationStoreCache();
+                });
 
             return builder;
         }
 
-        public static ISsoConfigurationBuilder PersistKeys(this ISsoConfigurationBuilder services, Action<DbContextOptionsBuilder> databaseConfig)
-        {
-            services.Services.AddDbContext<AspNetGeneralContext>(databaseConfig);
-            return services;
-        }
 
     }
 }

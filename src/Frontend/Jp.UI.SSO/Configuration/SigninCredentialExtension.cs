@@ -85,7 +85,7 @@ namespace Jp.UI.SSO.Configuration
         {
             Log.Information("Key Managemet - Auto");
 
-            builder.Services.AddJwksManager().IdentityServer4AutoJwksManager().PersistKeysToDatabaseStore<AspNetGeneralContext>();
+            builder.Services.AddJwksManager().IdentityServer4AutoJwksManager().PersistKeysToDatabaseStore<SsoContext>();
         }
 
         private static void AddCertificateFromFile(IIdentityServerBuilder builder,

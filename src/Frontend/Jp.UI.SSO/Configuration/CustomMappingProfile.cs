@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using JPProject.Sso.Application.ViewModels.UserViewModels;
-using JPProject.Sso.Infra.Identity.Models.Identity;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
 
 namespace Jp.UI.SSO.Configuration
 {

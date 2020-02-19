@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using JPProject.Sso.Domain.ViewModels.User;
 
 namespace Jp.Api.Management.Controllers
 {
@@ -79,7 +80,7 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            var actualUser = await _userAppService.FindByUsernameAsync(username);
+            var actualUser = await _userManageAppService.FindByUsernameAsync(username);
             model.ApplyTo(actualUser);
             await _userManageAppService.UpdateUser(actualUser);
             return ResponsePutPatch();
@@ -222,9 +223,5 @@ namespace Jp.Api.Management.Controllers
             return ResponsePost("UserData", "Account", null, model);
         }
 
-    }
-
-    public class AdminRegisterUserViewModel
-    {
     }
 }
