@@ -6,14 +6,15 @@ using JPProject.Sso.Application.EventSourcedNormalizers;
 using JPProject.Sso.Application.Interfaces;
 using JPProject.Sso.Application.ViewModels.RoleViewModels;
 using JPProject.Sso.Application.ViewModels.UserViewModels;
+using JPProject.Sso.Domain.ViewModels.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using JPProject.Sso.Domain.ViewModels.User;
 
 namespace Jp.Api.Management.Controllers
 {
@@ -86,10 +87,10 @@ namespace Jp.Api.Management.Controllers
             return ResponsePutPatch();
         }
 
-        [HttpDelete, Route("{id:Guid}")]
-        public async Task<ActionResult> RemoveAccount(string id)
+        [HttpDelete, Route("{username}")]
+        public async Task<ActionResult> RemoveAccount(string username)
         {
-            var model = new RemoveAccountViewModel(id);
+            var model = new RemoveAccountViewModel(username);
             await _userManageAppService.RemoveAccount(model);
             return ResponseDelete();
         }
@@ -206,7 +207,9 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-
+        /// <summary>
+        /// Create a new user with admin access to some properties
+        /// </summary>
         [HttpPost, Route("")]
         public async Task<ActionResult<AdminRegisterUserViewModel>> Register([FromBody] AdminRegisterUserViewModel model)
         {
@@ -217,9 +220,9 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            //await _userAppService.AdminRegister(model);
+            await _userAppService.AdminRegister(model);
 
-            //model.ClearSensitiveData();
+            model.ClearSensitiveData();
             return ResponsePost("UserData", "Account", null, model);
         }
 

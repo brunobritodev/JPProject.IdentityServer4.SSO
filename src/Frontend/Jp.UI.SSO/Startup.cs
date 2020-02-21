@@ -38,16 +38,17 @@ namespace Jp.UI.SSO
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.Configure<IISOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
-
             services.AddControllersWithViews()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
                 .AddDataAnnotationsLocalization();
             services.AddRazorPages();
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.Secure = CookieSecurePolicy.SameAsRequest;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
             // The following line enables Application Insights telemetry collection.
             services.AddApplicationInsightsTelemetry();
@@ -67,6 +68,7 @@ namespace Jp.UI.SSO
             // Improve Identity password security
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
 
+
             // IdentityServer4 Configuration
             services
                 .AddIdentityServer(options =>
@@ -82,16 +84,11 @@ namespace Jp.UI.SSO
                 // Unless you really know what are you doing, change it.
                 .SetupKeyMaterial();
 
-
-
             // SSO Configuration
             services
                 .ConfigureSso<AspNetUser>()
                 .AddSsoContext<SsoContext>()
                 .AddDefaultAspNetIdentityServices();
-
-
-
 
             // Configure Federation gateway (external logins), such as Facebook, Google etc
             services.AddFederationGateway(Configuration);

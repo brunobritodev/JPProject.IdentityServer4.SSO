@@ -1,3 +1,4 @@
+@using Jp.UI.SSO.Util
 @using Microsoft.AspNetCore.Builder
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
@@ -53,6 +54,39 @@
                         }
                     </ul>
                 }
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-4">
+        <div class="card">
+            <div class="card-header text-white bg-success"><strong>Server Info</strong></div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-accent-danger">
+                        SSO Version: <strong>@SsoVersion.Current</strong>
+                    </li>
+                    <li class="list-group-item list-group-item-accent-danger">
+                        Now: <strong>@DateTime.Now</strong>
+                    </li>
+                    <li class="list-group-item list-group-item-accent-danger">
+                        UTC: <strong>@DateTime.UtcNow</strong>
+                    </li>
+                    <li class="list-group-item list-group-item-accent-danger">
+                        User Management URL: <strong>@Model.UserManagementUrl</strong>
+                    </li>
+                    <li class="list-group-item list-group-item-accent-danger">
+                        Admin Panel: <strong>@Model.AdminPanelUrl</strong>
+                    </li>
+                    <li class="list-group-item list-group-item-accent-danger">
+                        API Location: <strong>@Model.AdminPanelUrl</strong>
+                    </li>
+                    <li class="list-group-item list-group-item-accent-danger">
+                        OS: <strong>@Environment.OSVersion.VersionString</strong>
+                    </li>
+                    <li class="list-group-item list-group-item-accent-danger">
+                        Machine Name: <strong>@Environment.MachineName</strong>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

@@ -7,7 +7,11 @@ using IdentityServer4.Models;
 using Jp.Api.Management;
 using Jp.Database.Context;
 using JPProject.Api.Management.Tests.Infra;
+using JPProject.Sso.AspNetIdentity.Configuration;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
+using JPProject.Sso.EntityFramework.Repository.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,11 +32,27 @@ namespace JPProject.Api.Management.Tests
 
 
                 services.AddDbContext<SsoContext>(DatabaseOptions);
-                services
-                    .ConfigureJpAdmin<AspNetUserTest>()
-                    .AddEventStore<SsoContext>()
-                    .AddAdminContext(DatabaseOptions);
 
+
+                //// ASP.NET Identity Configuration
+                services
+                    .AddIdentity<UserIdentity, RoleIdentity>(AccountOptions.NistAccountOptions)
+                    .AddEntityFrameworkStores<SsoContext>()
+                    .AddDefaultTokenProviders(); ;
+
+                //// SSO Services
+                services
+                    .ConfigureSso<AspNetUserTest>()
+                    .AddSsoContext<SsoContext>()
+                    .AddDefaultAspNetIdentityServices();
+
+                //// IdentityServer4 Admin services
+                services
+                    .ConfigureJpAdminServices<AspNetUserTest>()
+                    .ConfigureJpAdminStorageServices()
+                    .SetupDefaultIdentityServerContext<SsoContext>();
+
+                services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
                 services.PostConfigureAll<IdentityServerAuthenticationOptions>(options =>
                 {
                     options.Authority = "http://localhost";

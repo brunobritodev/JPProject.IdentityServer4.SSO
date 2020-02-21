@@ -55,7 +55,7 @@ namespace Jp.UI.SSO.Util
             IConfiguration configuration, IWebHostEnvironment env)
         {
             var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
-            var currentVersion = new Version(ssoVersion?.Value ?? "3.1.0");
+            SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.1");
 
             if (!context.GlobalConfigurationSettings.Any())
             {
@@ -95,7 +95,7 @@ namespace Jp.UI.SSO.Util
                 await context.SaveChangesAsync();
             }
 
-            if (currentVersion <= Version.Parse("3.1.0"))
+            if (SsoVersion.Current <= Version.Parse("3.1.0"))
             {
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
 
@@ -115,6 +115,15 @@ namespace Jp.UI.SSO.Util
                     context.Update(clientAdmin);
                 }
                 await context.SaveChangesAsync();
+            }
+
+
+            if (SsoVersion.Current == Version.Parse("3.1.1"))
+            {
+                ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+                ssoVersion.Update("3.2.0", true, false);
+                context.GlobalConfigurationSettings.Update(ssoVersion);
+                SsoVersion.Current = new Version(ssoVersion.Value);
             }
         }
 

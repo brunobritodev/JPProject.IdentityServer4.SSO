@@ -1,14 +1,14 @@
 ﻿using Jp.Database.Context;
 using JPProject.AspNet.Core;
 using JPProject.Domain.Core.ViewModels;
+using JPProject.Sso.AspNetIdentity.Configuration;
 using JPProject.Sso.AspNetIdentity.Models.Identity;
 using JPProject.Sso.EntityFramework.Repository.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Threading.Tasks;
-using JPProject.Sso.AspNetIdentity.Configuration;
-using Microsoft.AspNetCore.Identity;
 using static Microsoft.Extensions.Configuration.ProviderSelector;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
@@ -20,23 +20,26 @@ namespace Jp.Api.Management.Configuration
         {
             services.ConfigureProviderForContext<SsoContext>(DetectDatabase(configuration));
 
-            // IdentityServer4 Admin services
-            services
-                .ConfigureJpAdmin<AspNetUser>()
-                .AddAdminContext(WithProviderAutoSelection(DetectDatabase(configuration)));
 
-            // ASP.NET Identity Configuration
+
+            //// ASP.NET Identity Configuration
             services
                 .AddIdentity<UserIdentity, RoleIdentity>(AccountOptions.NistAccountOptions)
                 .AddEntityFrameworkStores<SsoContext>()
                 .AddDefaultTokenProviders(); ;
 
-            // SSO Services
+            //// SSO Services
             services
                 .ConfigureSso<AspNetUser>()
                 .AddSsoContext<SsoContext>()
                 .AddDefaultAspNetIdentityServices();
-                
+
+            //// IdentityServer4 Admin services
+            services
+                .ConfigureJpAdminServices<AspNetUser>()
+                .ConfigureJpAdminStorageServices()
+                .SetupDefaultIdentityServerContext<SsoContext>();
+
 
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
 

@@ -214,7 +214,7 @@ namespace JPProject.Api.Management.Tests.Controller
             var secrets = stringResponse.FromJson<IEnumerable<Secret>>();
 
 
-            httpResponse = await _client.DeleteAsync($"/clients/{newClient.ClientId}/secrets?type={secrets.First().Type}&value={secrets.First().Value}");
+            httpResponse = await _client.DeleteAsync($"/clients/{newClient.ClientId}/secrets?type={secrets.First().Type.UrlEncode()}&value={secrets.First().Value.UrlEncode()}");
             try { httpResponse.EnsureSuccessStatusCode(); } catch { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
         }
 
@@ -340,7 +340,7 @@ namespace JPProject.Api.Management.Tests.Controller
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
             var claims = stringResponse.FromJson<IEnumerable<ClaimViewModel>>();
 
-            claims.Should().HaveCountGreaterThan(0);
+            claims.Should().HaveCountGreaterOrEqualTo(1);
         }
 
 

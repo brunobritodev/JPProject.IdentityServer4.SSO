@@ -20,10 +20,10 @@ using System.Threading.Tasks;
 namespace Jp.Database.Context
 {
     public class SsoContext : IdentityDbContext<UserIdentity, RoleIdentity, string>,
-       IPersistedGrantDbContext,
-       IConfigurationDbContext,
-       ISsoContext,
-       IEventStoreContext,
+       IPersistedGrantDbContext,// IdentityServer4 Context
+       IConfigurationDbContext, // IdentityServer4 Context
+       ISsoContext, // Sso context
+       IEventStoreContext, // sso context
        IDataProtectionKeyContext,
        ISecurityKeyContext
     {

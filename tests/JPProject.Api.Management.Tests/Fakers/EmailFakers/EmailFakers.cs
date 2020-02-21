@@ -28,9 +28,7 @@ namespace JPProject.Api.Management.Tests.Fakers.EmailFakers
 
         public static Faker<Sender> GenerateSender()
         {
-            return new Faker<Sender>()
-                .RuleFor(s => s.Address, f => f.Internet.Email())
-                .RuleFor(s => s.Name, f => f.Company.CompanyName());
+            return new Faker<Sender>().CustomInstantiator(s => new Sender(s.Person.Email, s.Person.FullName));
         }
     }
 }

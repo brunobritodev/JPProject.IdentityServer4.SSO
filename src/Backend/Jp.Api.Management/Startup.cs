@@ -30,14 +30,12 @@ namespace Jp.Api.Management
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvcCore(options =>
-                {
-
-                })
+                .AddControllers(options => { options.RespectBrowserAcceptHeader = true; })
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                }).AddApiExplorer();
+                    options.AllowInputFormatterExceptionMessages = true;
+                });
 
 
             services.AddProblemDetails(setup =>

@@ -214,6 +214,8 @@ namespace Jp.Api.Management.Controllers
                 NotifyModelStateErrors();
                 return ModelStateErrorResponseError();
             }
+
+            model.ClientId = client;
             await _clientAppService.SaveClaim(model);
             var claims = await _clientAppService.GetClaims(client);
             return ResponsePost(nameof(Claims), new { client }, claims);
