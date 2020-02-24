@@ -1,13 +1,21 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SettingsService } from './settings/settings.service';
-import { TranslatorService } from './translator/translator.service';
-import { AuthConfig, OAuthModuleConfig, ValidationHandler, OAuthStorage, JwksValidationHandler, OAuthModule } from 'angular-oauth2-oidc';
-import { authModuleConfig } from './auth/auth-module-config';
-import { OAuthenticationService } from "./auth/auth.service";
+import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import {
+    AuthConfig,
+    JwksValidationHandler,
+    OAuthModule,
+    OAuthModuleConfig,
+    OAuthStorage,
+    ValidationHandler,
+} from 'angular-oauth2-oidc';
+
+import { authProdConfig } from './auth/auth-config.prod';
 import { AuthGuardWithForcedLogin } from './auth/auth-guard-with-forced-login.service';
 import { AuthGuard } from './auth/auth-guard.service';
-import { authProdConfig } from './auth/auth-config.prod';
+import { authModuleConfig } from './auth/auth-module-config';
+import { AuthService } from './auth/auth.service';
+import { SettingsService } from './settings/settings.service';
+import { TranslatorService } from './translator/translator.service';
 
 export function storageFactory(): OAuthStorage {
     return localStorage;
@@ -23,7 +31,7 @@ export function storageFactory(): OAuthStorage {
     providers: [
         TranslatorService,
         SettingsService,
-        OAuthenticationService,
+        AuthService,
         AuthGuard,
         AuthGuardWithForcedLogin,
     ]

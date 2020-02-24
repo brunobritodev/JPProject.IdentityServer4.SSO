@@ -8,7 +8,9 @@ using JPProject.Domain.Core.Notifications;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -23,22 +25,26 @@ namespace Jp.Api.Management.Controllers
         private readonly IClientAppService _clientAppService;
         private readonly ISystemUser _user;
         private readonly IStorage _storage;
+        private readonly IHttpContextAccessor _httpContext;
 
         public ClientsController(
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
             IClientAppService clientAppService,
             ISystemUser user,
-            IStorage storage) : base(notifications, mediator)
+            IStorage storage,
+            IHttpContextAccessor httpContext) : base(notifications, mediator)
         {
             _clientAppService = clientAppService;
             _user = user;
             _storage = storage;
+            _httpContext = httpContext;
         }
 
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<ClientListViewModel>>> ListClients()
         {
+            var at = await _httpContext.HttpContext.GetTokenAsync("access_token");
             var clients = await _clientAppService.GetClients();
             return ResponseGet(clients);
         }

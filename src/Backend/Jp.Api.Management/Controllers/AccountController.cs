@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using JPProject.Domain.Core.Bus;
+﻿using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using JPProject.Domain.Core.ViewModels;
@@ -23,18 +22,15 @@ namespace Jp.Api.Management.Controllers
     public class AccountController : ApiController
     {
         private readonly IUserManageAppService _userAppService;
-        private readonly IMapper _mapper;
         private readonly ISystemUser _systemUser;
 
         public AccountController(
             IUserManageAppService userAppService,
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
-            IMapper mapper,
             ISystemUser systemUser) : base(notifications, mediator)
         {
             _userAppService = userAppService;
-            this._mapper = mapper;
             _systemUser = systemUser;
         }
 
@@ -44,7 +40,8 @@ namespace Jp.Api.Management.Controllers
         [HttpGet("profile")]
         public async Task<ActionResult<UserViewModel>> UserData()
         {
-            var user = await _userAppService.FindByEmailAsync(_systemUser.Username);
+            
+            var user = await _userAppService.FindByUsernameAsync(_systemUser.Username);
             return ResponseGet(user);
         }
 

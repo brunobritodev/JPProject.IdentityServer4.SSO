@@ -48,6 +48,7 @@ namespace Jp.Api.Management
 
             // SSO configuration
             ConfigureApi(services);
+            // Key material for API.
             // Data protection to persiste keys in database. 
             // It's necessary for Load balance scenarios
             services.AddDataProtection().SetApplicationName("sso").PersistKeysToDbContext<SsoContext>();

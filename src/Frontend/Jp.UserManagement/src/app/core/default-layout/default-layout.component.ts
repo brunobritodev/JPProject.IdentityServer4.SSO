@@ -1,12 +1,13 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { navItems } from "../../_nav";
-import { SettingsService } from "../settings/settings.service";
-import { tap } from "rxjs/operators";
-import { environment } from "@env/environment";
-import { Router } from "@angular/router";
-import { TranslatorService } from "../translator/translator.service";
-import { OAuthenticationService } from "../auth/auth.service";
-import { Observable } from "rxjs";
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from '@env/environment';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+import { navItems } from '../../_nav';
+import { AuthService } from '../auth/auth.service';
+import { SettingsService } from '../settings/settings.service';
+import { TranslatorService } from '../translator/translator.service';
 
 @Component({
     selector: "app-dashboard",
@@ -21,7 +22,7 @@ export class DefaultLayoutComponent implements OnInit {
     public element: HTMLElement = document.body;
     public userProfile$: Observable<object>;
     constructor(public settingsService: SettingsService,
-        public authService: OAuthenticationService,
+        public authService: AuthService,
         private router: Router,
         public translator: TranslatorService) {
         this.changes = new MutationObserver((mutations) => {

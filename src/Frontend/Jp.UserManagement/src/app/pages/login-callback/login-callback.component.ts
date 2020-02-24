@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
-import { SettingsService } from "../../core/settings/settings.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '@core/auth/auth.service';
 import { TranslatorService } from '@core/translator/translator.service';
-import { OAuthenticationService } from "@core/auth/auth.service";
-import { Subscription } from "rxjs";
+import { Subscription } from 'rxjs';
+
+import { SettingsService } from '../../core/settings/settings.service';
 
 @Component({
     selector: "app-dashboard",
@@ -14,9 +15,8 @@ export class LoginCallbackComponent implements OnInit, OnDestroy {
     stream: Subscription;
 
     constructor(
-        private authService: OAuthenticationService,
+        private authService: AuthService,
         private router: Router,
-        private settingsService: SettingsService,
         public translator: TranslatorService) { }
 
     public ngOnInit() {

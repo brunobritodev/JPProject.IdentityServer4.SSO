@@ -24,17 +24,18 @@ namespace Jp.UI.SSO.Util
                     ClientName = "IS4-Admin",
                     ClientUri = configuration["ApplicationSettings:IS4AdminUi"],
                     AllowedGrantTypes = GrantTypes.Code,
-                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = true,
+                    AllowAccessTokensViaBrowser = false,
                     RequireClientSecret = false,
+                    RequirePkce = true,
+                    AllowPlainTextPkce = false,
                     RedirectUris = new[] {
                         $"{configuration["ApplicationSettings:IS4AdminUi"]}/login-callback",
                         $"{configuration["ApplicationSettings:IS4AdminUi"]}/silent-refresh.html"
                     },
                     AllowedCorsOrigins = { configuration.GetValue<string>("ApplicationSettings:IS4AdminUi")},
-                    IdentityTokenLifetime = 3600,
-                    LogoUri = "https://jpproject.blob.core.windows.net/images/jplogo.png",
-                    AuthorizationCodeLifetime = 3600,
                     PostLogoutRedirectUris = {$"{configuration["ApplicationSettings:IS4AdminUi"]}",},
+                    LogoUri = "https://jpproject.blob.core.windows.net/images/jplogo.png",
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -51,10 +52,12 @@ namespace Jp.UI.SSO.Util
                 new Client {
                     ClientId = "UserManagementUI",
                     ClientName = "User Management UI",
-
+                    ClientUri = configuration["ApplicationSettings:UserManagementURL"],
                     AllowedGrantTypes = GrantTypes.Code,
-                    AllowAccessTokensViaBrowser = true,
+                    AllowAccessTokensViaBrowser = false,
                     RequireConsent = true,
+                    RequirePkce = true,
+                    AllowPlainTextPkce = false,
                     RequireClientSecret = false,
                     RedirectUris =new[] {
                         $"{configuration["ApplicationSettings:UserManagementURL"]}/login-callback",
@@ -63,8 +66,6 @@ namespace Jp.UI.SSO.Util
                     AllowedCorsOrigins = { configuration["ApplicationSettings:UserManagementURL"] },
                     PostLogoutRedirectUris =  { $"{configuration["ApplicationSettings:UserManagementURL"]}" },
                     LogoUri = "https://jpproject.blob.core.windows.net/images/usermanagement.jpg",
-                    IdentityTokenLifetime = 3600,
-                    AuthorizationCodeLifetime = 3600,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

@@ -40,7 +40,7 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "angular-6-social-login-v2": "^1.0.5",
-    "angular-oauth2-oidc": "^8.0.2",
+    "angular-oauth2-oidc": "^8.0.4",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.7.2",
     "core-js": "^3.1.4",

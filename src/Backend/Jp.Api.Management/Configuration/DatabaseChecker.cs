@@ -3,7 +3,6 @@ using Jp.Database.Context;
 using JPProject.EntityFrameworkCore.MigrationHelper;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System;
 using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Configuration
@@ -19,14 +18,11 @@ namespace Jp.Api.Management.Configuration
             await DbHealthChecker.TestConnection(ssoContext);
             Log.Information("Connection successfull");
 
-
             Log.Information("Check if database contains Client (ConfigurationDbStore) table");
-            if (!await DbHealthChecker.CheckTableExists<Client>(ssoContext))
-                throw new Exception("IdentityServer4 database doesn't exist or wrong connection string");
+            await DbHealthChecker.WaitForTable<Client>(ssoContext);
 
             Log.Information("Check if database contains PersistedGrant (PersistedGrantDbStore) table");
-            if (!await DbHealthChecker.CheckTableExists<PersistedGrant>(ssoContext))
-                throw new Exception("IdentityServer4 database doesn't exist or wrong connection string");
+            await DbHealthChecker.WaitForTable<PersistedGrant>(ssoContext);
             Log.Information("Checks done");
         }
     }

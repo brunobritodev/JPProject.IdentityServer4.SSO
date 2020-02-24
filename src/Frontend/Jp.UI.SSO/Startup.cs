@@ -62,6 +62,7 @@ namespace Jp.UI.SSO
             // ASP.NET Identity Configuration
             services
                 .AddIdentity<UserIdentity, RoleIdentity>(AccountOptions.NistAccountOptions)
+                .AddClaimsPrincipalFactory<ApplicationClaimsIdentityFactory>()
                 .AddEntityFrameworkStores<SsoContext>()
                 .AddDefaultTokenProviders();
 
@@ -79,7 +80,8 @@ namespace Jp.UI.SSO
                     options.Events.RaiseSuccessEvents = true;
                 })
                 .AddAspNetIdentity<UserIdentity>()
-                .ConfigureContext(DetectDatabase)
+                .ConfigureContext(DetectDatabase, _env)
+                .AddProfileService<SsoProfileService>()
                 // Configure key material. By default it supports load balance scenarios and have a key managemente close to Key Management from original IdentityServer4
                 // Unless you really know what are you doing, change it.
                 .SetupKeyMaterial();

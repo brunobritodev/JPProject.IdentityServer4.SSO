@@ -55,7 +55,7 @@ namespace Jp.UI.SSO.Util
             IConfiguration configuration, IWebHostEnvironment env)
         {
             var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
-            SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.1");
+            SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.0");
 
             if (!context.GlobalConfigurationSettings.Any())
             {
@@ -98,7 +98,7 @@ namespace Jp.UI.SSO.Util
             if (SsoVersion.Current <= Version.Parse("3.1.0"))
             {
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
-
+                SsoVersion.Current = Version.Parse("3.1.1");
                 var claims = await context.UserClaims.Where(w => w.ClaimType == "username" || w.ClaimType == "email" || w.ClaimType == "picture").ToListAsync();
                 context.UserClaims.RemoveRange(claims);
 

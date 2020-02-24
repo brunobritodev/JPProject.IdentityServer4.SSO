@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
 import { OAuthErrorEvent, OAuthService } from 'angular-oauth2-oidc';
 import { BehaviorSubject, combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { environment } from '@env/environment';
 
 @Injectable({ providedIn: 'root' })
-export class OAuthenticationService {
+export class AuthService {
 
     private isAuthenticatedSubject$ = new BehaviorSubject<boolean>(false);
     public isAuthenticated$ = this.isAuthenticatedSubject$.asObservable();
@@ -129,7 +129,7 @@ export class OAuthenticationService {
                             // enter credentials.
                             //
                             // Enable this to ALWAYS force a user to login.
-                            // this.oauthService.initImplicitFlow();
+                            this.oauthService.initLoginFlow();
                             //
                             // Instead, we'll now do this:
                             console.warn('User interaction is needed to log in, we will wait for the user to manually log in.');
@@ -157,7 +157,7 @@ export class OAuthenticationService {
     }
 
     public login(targetUrl?: string) {
-        this.oauthService.initImplicitFlow(encodeURIComponent(targetUrl || this.router.url));
+        this.oauthService.initLoginFlow(targetUrl || this.router.url);
     }
 
     public logout() { this.oauthService.logOut(); }

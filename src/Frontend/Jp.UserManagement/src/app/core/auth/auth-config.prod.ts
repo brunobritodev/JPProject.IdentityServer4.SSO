@@ -4,6 +4,7 @@ import { AuthConfig } from 'angular-oauth2-oidc';
 export const authProdConfig: AuthConfig = {
     issuer: environment.AuthorityUri,
     clientId: "UserManagementUI",
+    responseType: "code",
     requireHttps: environment.RequireHttps,
     redirectUri: environment.Uri + "/login-callback",
     silentRefreshRedirectUri: environment.Uri + '/silent-refresh.html',

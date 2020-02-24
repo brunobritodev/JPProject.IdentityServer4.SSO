@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
-import { SettingsService } from "../../core/settings/settings.service";
+import { Component } from '@angular/core';
+import { AuthService } from '@core/auth/auth.service';
 import { TranslatorService } from '@core/translator/translator.service';
-import { OAuthenticationService } from "@core/auth/auth.service";
+
+import { SettingsService } from '../../core/settings/settings.service';
 
 @Component({
   selector: "app-dashboard",
@@ -10,7 +11,7 @@ import { OAuthenticationService } from "@core/auth/auth.service";
 })
 export class UnauthorizedComponent {
     constructor(
-        public authService: OAuthenticationService,
+        public authService: AuthService,
         public translator: TranslatorService){
         
     }

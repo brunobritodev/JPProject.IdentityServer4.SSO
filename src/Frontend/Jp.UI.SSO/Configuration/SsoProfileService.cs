@@ -52,13 +52,11 @@ namespace Jp.UI.SSO.Configuration
             else
                 subjectClaims.AddIfDontExist(new Claim(JwtClaimTypes.Name, user.UserName));
 
-
             if (user.Picture.IsPresent())
                 subjectClaims.AddIfDontExist(new Claim(JwtClaimTypes.Picture, user.Picture));
 
             if (user.SocialNumber.IsPresent())
                 subjectClaims.AddIfDontExist(new Claim("social_number", user.SocialNumber));
-
 
             if (subjectClaims.All(a => a.Type != JwtClaimTypes.Role))
             {

@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
-import { SettingsService } from "../../core/settings/settings.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '@core/auth/auth.service';
 import { TranslatorService } from '@core/translator/translator.service';
-import { OAuthenticationService } from "@core/auth/auth.service";
-import { Subscription } from "rxjs";
+import { Subscription } from 'rxjs';
+
+import { SettingsService } from '../../core/settings/settings.service';
 
 @Component({
     selector: "app-dashboard",
@@ -12,9 +13,9 @@ import { Subscription } from "rxjs";
 })
 export class LoginComponent implements OnInit, OnDestroy {
     stream: Subscription;
-
+    public loading: boolean = false;
     constructor(
-        private authService: OAuthenticationService,
+        private authService: AuthService,
         private router: Router,
         public translator: TranslatorService) {
 
@@ -24,13 +25,16 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.stream = this.authService.canActivateProtectedRoutes$.subscribe(yes => {
             if (yes)
                 return this.router.navigate(['/home']);
-            else
-                this.authService.login('/login-callback');
         });
     }
 
     public ngOnDestroy() {
         this.stream.unsubscribe();
+    }
+
+    public login() {
+        this.loading = true;
+        this.authService.login('/login-callback');
     }
 
 }
