@@ -27,14 +27,15 @@ Linux users:
   - [Consent page](#consent-page)
   - [Profile](#profile)
 - [How to start?](#how-to-start)
-  - [Demo](#demo)
+  - [Already have an ASP.NET Identity?](#already-have-an-aspnet-identity)
+- [Demo](#demo)
   - [We are online](#we-are-online)
   - [Wanna go production?](#wanna-go-production)
 - [Technologies](#technologies)
   - [Architecture](#architecture)
   - [Key Material](#key-material)
   - [Data protection Keys (ASP.NET Core)](#data-protection-keys-aspnet-core)
-  - [Give a Star! ⭐](#give-a-star-%e2%ad%90)
+- [Give a Star! ⭐](#give-a-star-%e2%ad%90)
   - [Development Scenario](#development-scenario)
 - [Docs](#docs)
   - [Contributors](#contributors)
@@ -48,13 +49,11 @@ Linux users:
 
 # Presentation
 
-The main goal of JP Project is to be a Management Ecosystem for IdentityServer4 and ASP.NET Identity. 
-
-Helping Startup's and Organization to Speed Up Microservices Environment. Providing tools for an OAuth2 Server and User Management. 
+The main goal of JP Project is to be a Management Ecosystem for IdentityServer4 and ASP.NET Identity. Helping Startup's and companies to Speed Up Microservices Environment. Providing tools for an OAuth 2.0 Server and User Management. It's highly modular and easy to change for .NET teams.
 
 Built with IdentityServer4. An OpenID Connect and OAuth 2.0 framework for ASP.NET Core.
 
-SSO has some flows:
+SSO Features:
 * Single Sign On
 * Register users
 * Recover password flow
@@ -63,6 +62,8 @@ SSO has some flows:
 * Argon2 password hashing
 * CSP Headers
 * Event monitoring (For compliance scenarios)
+* Key Material Management
+* ASP.NET Core Dataprotection keys management
 
 Admin UI is an administrative panel where it's possible to manage both OAuth2 Server and Identities. 
 
@@ -105,7 +106,12 @@ First you need to choose.
 
 * You already have an IdentityServer4 Up and running? Go to [Admin Panel - Light version](https://github.com/brunohbrito/JPProject.IdentityServer4.AdminUI)
 
-## Demo 
+
+## Already have an ASP.NET Identity? 
+
+These options above requires almost no code. If you already have an ASP.NET IdentitySystem it's possible to connect SSO to use your users, but requires some modifications: Some required users fields from SSO, configure ASP.NET Identity in SSO project.
+
+# Demo 
 
 Check our demo online.
 
@@ -177,7 +183,7 @@ The Cryptography Keys (JWKS) are stored within Database and auto refresh it ever
 
 The dataprotection keys are stored with database, like Key Material. 
 
-## Give a Star! ⭐
+# Give a Star! ⭐
 
 Do you love it? give us a Star!
 
@@ -244,11 +250,11 @@ Check [Changelog.md](https://github.com/brunohbrito/JPProject.IdentityServer4.SS
 
 # What comes next?
 
+* An easy way to insert Client, IdentityResources and Api Resources by JSON - Aiming teams who needs to take data from Staging to past it to production
+* Key Material Management from Admin UI
 * Code coverage
 * UI for Device codes 
 * CI with SonarCloud
-* E-mail template management
-* Blob service management
 
 
 # License
