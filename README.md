@@ -32,12 +32,15 @@ Linux users:
   - [Wanna go production?](#wanna-go-production)
 - [Technologies](#technologies)
   - [Architecture](#architecture)
+  - [Key Material](#key-material)
+  - [Data protection Keys (ASP.NET Core)](#data-protection-keys-aspnet-core)
   - [Give a Star! ⭐](#give-a-star-%e2%ad%90)
   - [Development Scenario](#development-scenario)
 - [Docs](#docs)
   - [Contributors](#contributors)
   - [Contributing](#contributing)
   - [Free](#free)
+- [3.2.0](#320)
   - [3.0.1](#301)
   - [v1.4.5](#v145)
 - [What comes next?](#what-comes-next)
@@ -63,13 +66,19 @@ SSO has some flows:
 
 Admin UI is an administrative panel where it's possible to manage both OAuth2 Server and Identities. 
 
-From OAuth2 panel it's possible to manage:
+From OAuth 2.0 panel it's possible to manage:
 * `Clients`
 * `Identity Resources`
 * `Api Resources`
 * `Persisted Grants`
 
-From Identity panel it's possible to manage `Users` and `Roles`
+For Identity panel it's possible to manage 
+* `Users` 
+* `Roles` 
+* Events
+* Server Settings:
+  * Create custom e-mail for Confirm Account and Forgot Password. It's also possible to configure E-mail settings and a blob Storage to store Users pictures (Azure Blob, AWS S3 and Filesystem).
+
 
 It's open source and free. From community to community.
 
@@ -122,7 +131,7 @@ Check [docs](https://jp-project.readthedocs.io/en/latest/) to see how to and som
 
 Check below how it was developed.
 
-Written in ASP.NET Core and Angular 8.
+Written in ASP.NET Core 3.1 and Angular 8.
 
 - Angular 8
 - Rich UI interface
@@ -147,8 +156,12 @@ Written in ASP.NET Core and Angular 8.
 
 ## Architecture
 
+It respect the IdentityServer4 base classes and was built in the same way, for better compatibility and minimize impacts for future versions.
+
+![Dependencies](https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/DependenciesGraph.png?raw=true)
+
 - Architecture with responsibility separation concerns, SOLID and Clean Code
-- Domain Driven Design (Layers and Domain Model Pattern)
+- Hexagonal architecture (Layers and Domain Model Pattern)
 - Domain Events
 - Domain Notification
 - CQRS (Imediate Consistency)
@@ -156,15 +169,23 @@ Written in ASP.NET Core and Angular 8.
 - Unit of Work
 - Repository and Generic Repository
 
+## Key Material
+
+The Cryptography Keys (JWKS) are stored within Database and auto refresh it every 90 days. It uses ECDSA using P-256 and SHA-256 (ES256) by default.
+
+## Data protection Keys (ASP.NET Core)
+
+The dataprotection keys are stored with database, like Key Material. 
+
 ## Give a Star! ⭐
 
 Do you love it? give us a Star!
 
 ## Development Scenario
 
-Jp Project is built against ASP.NET Core 3.0.
+Jp Project is built against ASP.NET Core 3.1.
 
-* [Install](https://www.microsoft.com/net/download/core#/current) the latest .NET Core 3.0 SDK
+* [Install](https://www.microsoft.com/net/download/core#/current) the latest .NET Core 3.10 SDK
 
 `src/JPProject.SSO.sln` Contains SSO and API
 
@@ -193,6 +214,17 @@ We'll love it! Please [Read the docs](https://jp-project.readthedocs.io/en/lates
 
 If you need help building or running your Jp Project platform
 There are several ways we can help you out.
+
+# 3.2.0
+
+1. ASP.NET Identity - Now you can plug your running Identity to use SSO. It need to made some changes at you IdentityUser with more data, like Name, Url, Bio.
+2. Changes in Events - Now all events are attached at his Aggregate Roots. Now events are very strong source of analisys.
+3. Event search at Admin Panel
+4. OAuth 2.0 Best practices
+   1. Jwa with Elliptic Curves
+   2. Jwk using ECDSA using P-256 and SHA-256 (ES256) by default
+   3. Changed how clients are created by default. Using Authorization Code with PKCE or Client Credentials only.
+5. Key Material management - Key material now available at Database. Now it's possible to Scale Horizontal without any "Unprocted ticket failed" error
 
 ## 3.0.1
 
