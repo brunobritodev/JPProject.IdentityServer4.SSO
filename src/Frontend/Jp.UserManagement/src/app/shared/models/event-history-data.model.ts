@@ -5,4 +5,5 @@ export class EventHistoryData {
     public who: string;
     public details: string;
     public category: string;
+    public show: boolean;
 }

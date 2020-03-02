@@ -21,7 +21,6 @@ namespace Jp.Api.Management.Configuration
             services.ConfigureProviderForContext<SsoContext>(DetectDatabase(configuration));
 
 
-
             //// ASP.NET Identity Configuration
             services
                 .AddIdentity<UserIdentity, RoleIdentity>(AccountOptions.NistAccountOptions)

@@ -2,7 +2,7 @@
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Jp.UI.SSO.Util;
-using JPProject.Domain.Core.StringUtils;
+using JPProject.Domain.Core.Util;
 using JPProject.Sso.AspNetIdentity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -76,11 +76,11 @@ namespace Jp.UI.SSO.Configuration
             var user = await UserManager.GetUserAsync(context.Subject);
 
             // In case admin is accidentally blocked.
-            var active = user.LockoutEnabled && user.LockoutEnd.GetValueOrDefault(DateTimeOffset.UtcNow.Date) > DateTimeOffset.UtcNow;
-            if (!active)
-                active = await UserManager.IsInRoleAsync(user, "Administrator");
+            var isBlocked = user.LockoutEnabled && user.LockoutEnd.GetValueOrDefault(DateTimeOffset.UtcNow.Date) > DateTimeOffset.UtcNow;
+            if (isBlocked)
+                isBlocked = await UserManager.IsInRoleAsync(user, "Administrator");
 
-            context.IsActive = active;
+            context.IsActive = !isBlocked;
         }
     }
 }

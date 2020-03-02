@@ -4,7 +4,7 @@
             <div class="card-header bg-primary text-bold">
                 <i class="fa fa-align-justify"></i> {{ 'user.history.TITLE' | translate }}</div>
             <div class="card-body">
-                <table class="table table-responsive-sm table-bordered">
+                <table class="table table-responsive-sm table-bordered" id="user-events">
                     <thead>
                         <tr>
                             <th>{{ 'user.history.CATEGORY' | translate }}</th>
@@ -15,31 +15,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let history of historyData">
+                        <tr *ngFor="let history of historyData; index as i">
                             <td>{{history.category}}</td>
                             <td>{{history.action}}</td>
                             <td>{{history.when}}</td>
                             <td>{{history.who}}</td>
                             <td>
-                                <button class="btn btn-primary" (click)="history.show = !history.show"><i class="fa fa-clock-o"></i></button>
-                                <div *ngIf="history.show"><br>
-                                    <pre>{{ parse(history.details) | json}}</pre>
-                                </div>
+                                <button class="btn btn-primary" (click)="addRow(i, 'user-events')"><i class="nav-icon icon-clock"></i></button>
                             </td>
                         </tr>
-
                     </tbody>
                 </table>
                 <ng-template #loading>
                     <div class="progress mb-3">
-                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                            aria-valuemax="100"></div>
+                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </ng-template>
             </div>
             <div class="card-footer">
                 <div class="d-flex">
-                    
+
                     <div class="ml-auto">
                         <div class="input-group">
                             <label class="col-form-label">Items per page:&nbsp;</label>
@@ -50,8 +45,7 @@
                                 <option value="40">40</option>
                                 <option value="50">50</option>
                             </select>
-                            <ngb-pagination [collectionSize]="total" [(page)]="page" [maxSize]="5" [rotate]="true"
-                                [ellipses]="false" [boundaryLinks]="true" [pageSize]="quantity" (pageChange)="loadResources()">
+                            <ngb-pagination [collectionSize]="total" [(page)]="page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" [pageSize]="quantity" (pageChange)="loadResources()">
                             </ngb-pagination>
                         </div>
                     </div>

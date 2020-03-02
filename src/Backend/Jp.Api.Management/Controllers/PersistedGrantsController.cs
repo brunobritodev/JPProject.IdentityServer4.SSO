@@ -2,7 +2,9 @@
 using JPProject.Admin.Application.Interfaces;
 using JPProject.Admin.Application.ViewModels;
 using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
+using JPProject.Domain.Core.Util;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.AspNetIdentity.Models.Identity;
 using JPProject.Sso.Domain.ViewModels.User;
@@ -22,15 +24,18 @@ namespace Jp.Api.Management.Controllers
     public class PersistedGrantsController : ApiController
     {
         private readonly IPersistedGrantAppService _persistedGrantAppService;
+        private readonly ISystemUser _systemUser;
         private readonly UserManager<UserIdentity> _manager;
 
         public PersistedGrantsController(
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
             IPersistedGrantAppService persistedGrantAppService,
+            ISystemUser systemUser,
             UserManager<UserIdentity> manager) : base(notifications, mediator)
         {
             _persistedGrantAppService = persistedGrantAppService;
+            _systemUser = systemUser;
             _manager = manager;
         }
 
@@ -58,7 +63,19 @@ namespace Jp.Api.Management.Controllers
                 var user = users.FirstOrDefault(u => u.Id == persistedGrantViewModel.SubjectId);
                 if (user == null) continue;
 
-                persistedGrantViewModel.UpdateUserInfo(user.Email, user.Picture);
+                persistedGrantViewModel.UpdateUserInfo(user.UserName, user.Picture);
+            }
+
+            if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager"))
+            {
+                foreach (var persistedGrantViewModel in collection)
+                {
+                    if (persistedGrantViewModel.Email == _systemUser.Username)
+                        continue;
+
+                    persistedGrantViewModel.Email = persistedGrantViewModel.Email?.TruncateSensitiveInformation();
+                    persistedGrantViewModel.Data = persistedGrantViewModel.Data?.TruncateSensitiveInformation();
+                }
             }
 
             return ResponseGet(new ListOf<PersistedGrantViewModel>(collection, collection.Count));

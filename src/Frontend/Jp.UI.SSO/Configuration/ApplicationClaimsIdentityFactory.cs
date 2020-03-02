@@ -1,6 +1,6 @@
 ﻿using IdentityModel;
 using Jp.UI.SSO.Util;
-using JPProject.Domain.Core.StringUtils;
+using JPProject.Domain.Core.Util;
 using JPProject.Sso.AspNetIdentity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;

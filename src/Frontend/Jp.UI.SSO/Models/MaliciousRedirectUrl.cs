@@ -7,12 +7,13 @@ namespace Jp.UI.SSO.Models
         public string Url { get; }
 
         public const int MaliciousUriFailure = 1022;
-        public MaliciousRedirectUrlEvent(string url) : base(EventCategories.Authentication,
+        public MaliciousRedirectUrlEvent(string url, string username) : base(EventCategories.Authentication,
         "Malicious Url",
         EventTypes.Failure,
         MaliciousUriFailure)
         {
             Url = url;
+            Name = username;
         }
     }
 }

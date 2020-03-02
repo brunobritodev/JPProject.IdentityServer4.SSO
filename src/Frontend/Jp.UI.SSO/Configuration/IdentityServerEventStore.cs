@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Events;
 using IdentityServer4.Services;
+using Jp.UI.SSO.Models;
 using JPProject.Domain.Core.Events;
 using JPProject.Domain.Core.Interfaces;
 using System.Threading.Tasks;
@@ -89,6 +90,9 @@ namespace Jp.UI.SSO.Configuration
                     break;
                 case UserLogoutSuccessEvent userLogoutSuccessEvent:
                     es.SetAggregate(userLogoutSuccessEvent.SubjectId);
+                    break;
+                case MaliciousRedirectUrlEvent maliciousRedirect:
+                    es.SetAggregate(maliciousRedirect.Name);
                     break;
             }
 

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace Jp.UI.SSO.Util
             using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+
                 var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
                 var ssoContext = scope.ServiceProvider.GetRequiredService<SsoContext>();
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
@@ -42,8 +44,10 @@ namespace Jp.UI.SSO.Util
 
                 await DbHealthChecker.TestConnection(ssoContext);
 
-                await ssoContext.Database.MigrateAsync();
+                if (!env.IsDevelopment())
+                    return;
 
+                ssoContext.Database.EnsureCreated();
 
                 await EnsureSeedIdentityServerData(ssoContext, configuration);
                 await EnsureSeedIdentityData(userManager, roleManager, configuration);
@@ -51,8 +55,7 @@ namespace Jp.UI.SSO.Util
             }
         }
 
-        private static async Task EnsureSeedGlobalConfigurationData(SsoContext context,
-            IConfiguration configuration, IWebHostEnvironment env)
+        private static async Task EnsureSeedGlobalConfigurationData(SsoContext context, IConfiguration configuration, IWebHostEnvironment env)
         {
             var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
             SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.0");
@@ -122,8 +125,8 @@ namespace Jp.UI.SSO.Util
             {
                 ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
                 ssoVersion.Update("3.2.0", true, false);
-                context.GlobalConfigurationSettings.Update(ssoVersion);
                 SsoVersion.Current = new Version(ssoVersion.Value);
+                await context.SaveChangesAsync();
             }
         }
 

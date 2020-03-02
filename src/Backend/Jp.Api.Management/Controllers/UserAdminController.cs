@@ -1,6 +1,7 @@
 ﻿using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
+using JPProject.Domain.Core.Util;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.EventSourcedNormalizers;
 using JPProject.Sso.Application.Interfaces;
@@ -11,7 +12,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -49,6 +49,18 @@ namespace Jp.Api.Management.Controllers
         public async Task<ActionResult<ListOf<UserListViewModel>>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 0, string search = null)
         {
             var irs = await _userManageAppService.SearchUsers(new UserFindByEmailNameUsername(search) { Limit = limit, Offset = offset });
+
+            if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager"))
+            {
+                foreach (var ir in irs.Collection)
+                {
+                    if (_user.Username == ir.UserName)
+                        continue;
+                    ir.Email = ir.Email?.TruncateEmail();
+                    ir.UserName = ir.UserName?.TruncateSensitiveInformation();
+                }
+            }
+
             return ResponseGet(irs);
         }
 
@@ -56,6 +68,14 @@ namespace Jp.Api.Management.Controllers
         public async Task<ActionResult<UserViewModel>> Details(string username)
         {
             var irs = await _userManageAppService.GetUserDetails(username);
+
+            if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager") && _user.Username != username)
+            {
+                irs.Email = irs.Email?.TruncateEmail();
+                irs.UserName = irs.UserName?.TruncateSensitiveInformation();
+                irs.PhoneNumber = irs.PhoneNumber?.TruncateSensitiveInformation();
+            }
+
             return ResponseGet(irs);
         }
 

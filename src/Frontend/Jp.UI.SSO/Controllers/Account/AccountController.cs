@@ -8,8 +8,9 @@ using IdentityServer4.Stores;
 using Jp.UI.SSO.Models;
 using Jp.UI.SSO.Util;
 using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
-using JPProject.Domain.Core.StringUtils;
+using JPProject.Domain.Core.Util;
 using JPProject.Sso.Application.Interfaces;
 using JPProject.Sso.Application.ViewModels;
 using JPProject.Sso.Application.ViewModels.UserViewModels;
@@ -42,6 +43,7 @@ namespace Jp.UI.SSO.Controllers.Account
         private readonly IEventService _events;
         private readonly IConfiguration _configuration;
         private readonly IUserManageAppService _userManageAppService;
+        private readonly ISystemUser _user;
         private readonly DomainNotificationHandler _notifications;
 
         public AccountController(
@@ -55,7 +57,8 @@ namespace Jp.UI.SSO.Controllers.Account
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler bus,
             IConfiguration configuration,
-            IUserManageAppService userManageAppService)
+            IUserManageAppService userManageAppService,
+            ISystemUser user)
         {
             Bus = bus;
             _signInManager = signInManager;
@@ -67,6 +70,7 @@ namespace Jp.UI.SSO.Controllers.Account
             _events = events;
             _configuration = configuration;
             _userManageAppService = userManageAppService;
+            _user = user;
             _notifications = (DomainNotificationHandler)notifications;
         }
 
@@ -167,7 +171,7 @@ namespace Jp.UI.SSO.Controllers.Account
 
         private async Task<IActionResult> SuccessfullLogin(LoginInputModel model, UserViewModel userIdentity, AuthorizationRequest context)
         {
-            await _events.RaiseAsync(new UserLoginSuccessEvent(userIdentity.UserName, userIdentity.UserName, userIdentity.Name, clientId: context?.ClientId));
+            await _events.RaiseAsync(new UserLoginSuccessEvent(userIdentity.UserName, userIdentity.UserName, userIdentity.Name, clientId: context == null ? userIdentity.UserName : context.ClientId));
 
             if (context != null)
             {
@@ -194,7 +198,7 @@ namespace Jp.UI.SSO.Controllers.Account
             }
 
             // user might have clicked on a malicious link - should be logged
-            await _events.RaiseAsync(new MaliciousRedirectUrlEvent(model.ReturnUrl));
+            await _events.RaiseAsync(new MaliciousRedirectUrlEvent(model.ReturnUrl, model.Username));
             throw new Exception("invalid return URL");
         }
 
@@ -359,7 +363,7 @@ namespace Jp.UI.SSO.Controllers.Account
                 await _signInManager.SignOutAsync();
 
                 // raise the logout event
-                await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+                await _events.RaiseAsync(new UserLogoutSuccessEvent(_user.Username, User.GetDisplayName()));
             }
 
             // check if we need to trigger sign-out at an upstream identity provider
