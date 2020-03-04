@@ -38,26 +38,30 @@ Screenshots
 
 Admin UI
 ^^^^^^^^
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-adminui.gif"  width="480" />
+.. image:: https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/jp-adminui.gif?raw=true
+    :width 480
 
 Login page
 ^^^^^^^^^^
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/login.JPG?raw=true" width="480" />
+.. image:: https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/login.JPG?raw=true
+    :width 480
 
 Consent page
 ^^^^^^^^^^^^
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/consent-page.JPG?raw=true" width="480" />
+.. image:: https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/consent-page.JPG?raw=true
+    :width 480
+
 
 Profile
 ^^^^^^^
-<img src="https://github.com/brunohbrito/JP-Project/blob/master/docs/images/jp-usermanagement.gif" width="480" />
-
+.. image:: https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/jp-usermanagement.gif?raw=true
+    :width 480
 
 
 Demo online
 ===========
 
-Now we are online! `See it in action <https://jpproject.azurewebsites.net/admin-ui>`_
+Now we are online! `See it in action <https://admin.jpproject.net>`_
 
 Below an intro video!
 
@@ -85,7 +89,24 @@ But remember to check the `Contributing Section <intro/contributing.html>`_
 
 Take a special place in our heart!
 
-All contributors has a heart💓! See them in `Contributor list <https://github.com/brunohbrito/JP-Project/blob/master/CONTRIBUTORS.md>`_
+|image0|\ |image1|\ |image2|\ |image3|\ |image4|\ |image5|\ |image6|\ |image7|
+
+.. |image0| image:: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/images/0
+   :target: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/links/0
+.. |image1| image:: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/images/1
+   :target: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/links/1
+.. |image2| image:: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/images/2
+   :target: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/links/2
+.. |image3| image:: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/images/3
+   :target: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/links/3
+.. |image4| image:: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/images/4
+   :target: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/links/4
+.. |image5| image:: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/images/5
+   :target: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/links/5
+.. |image6| image:: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/images/6
+   :target: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/links/6
+.. |image7| image:: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/images/7
+   :target: https://sourcerer.io/fame/brunohbrito/brunohbrito/JPProject.IdentityServer4.SSO/links/7
 
 Free
 ^^^^
@@ -100,9 +121,11 @@ There are several ways we can help you out.
 
    intro/big_picture
    intro/architecture
+   intro/dataprotection_keys
+   intro/key_material
    intro/contributing
    intro/code_of_conduct
-   intro/contributors.md
+   intro/contributors
    intro/stresstest_results
 
 .. toctree::
