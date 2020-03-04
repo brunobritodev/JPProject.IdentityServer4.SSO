@@ -10,7 +10,7 @@ The ASP.NET Core Architecture was based on `Equinox Project <https://github.com/
 Angular 8
 ---------
 
-To manage existing user and new one's a SPA Angular 8 was built.
+Admin UI and User management was built with Angular 8.
 
 
 Technologies
@@ -22,7 +22,7 @@ Written in ASP.NET Core and Angular 8.
 
 - Angular 8
 - Rich UI interface
-- ASP.NET Core 3.0
+- ASP.NET Core 3.1
 - ASP.NET MVC Core 
 - ASP.NET WebApi Core
 - ASP.NET Identity Core
@@ -43,6 +43,9 @@ Written in ASP.NET Core and Angular 8.
 
 Architecture
 ^^^^^^^^^^^^
+
+.. image:: https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/DependenciesGraph.png?raw=true
+    :width 480
 
 - Architecture with responsibility separation concerns, SOLID and Clean Code
 - Domain Driven Design (Layers and Domain Model Pattern)

@@ -34,10 +34,10 @@ SSO Variables
      - Something like 762FAF25-9480-4AF7-8821-06875ED9266C
      - To create an Application Insights on Azure go to `docs <https://docs.microsoft.com/en-us/azure/bot-service/bot-service-resources-app-insights-keys?view=azure-bot-service-3.0>`_
    * - CERTIFICATE_TYPE
-     - Temporary
-     - Temporary
+     - Auto
+     - Auto
      - File
-     - Can be Temporary / File / Store / Environment
+     - Can be Temporary / File / Auto / Environment
    * - USER_MANAGEMENT_URI
      - http://localhost:4200
      - http://localhost:4200
@@ -59,7 +59,7 @@ SSO Variables
      - 
      - Database Connection String Specially made for Azure App Service
    * - DATABASE_TYPE
-     - ``MySql`` or ``SqlServer``
+     - ``MySql``, ``SqlServer``, ``Postgre``, ``Sqlite``
      - ``MySql``
      - 
      - Which database will be used.
