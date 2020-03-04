@@ -70,12 +70,12 @@ jobs:
           customCommand: 'run test -- --watch=false --code-coverage'
           workingDir: src/Frontend/Jp.UserManagement
 
-      - task: Npm@1
-        displayName: 'NPM - E2E - UserManagement'
-        inputs:
-          command: custom
-          customCommand: 'run e2e'
-          workingDir: src/Frontend/Jp.UserManagement            
+      # - task: Npm@1
+      #   displayName: 'NPM - E2E - UserManagement'
+      #   inputs:
+      #     command: custom
+      #     customCommand: 'run e2e'
+      #     workingDir: src/Frontend/Jp.UserManagement            
 
       - task: Npm@1
         displayName: 'NPM - Build Prod - UserManagement'
