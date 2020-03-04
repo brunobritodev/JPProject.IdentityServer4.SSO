@@ -1,14 +1,15 @@
-﻿using IdentityServer4.EntityFramework.Mappers;
-using JPProject.EntityFrameworkCore.Context;
+﻿using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Mappers;
+using Jp.Database.Context;
 using JPProject.EntityFrameworkCore.MigrationHelper;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
 using JPProject.Sso.Domain.Models;
-using JPProject.Sso.Infra.Data.Context;
-using JPProject.Sso.Infra.Identity.Models.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
 using System.Linq;
@@ -35,16 +36,18 @@ namespace Jp.UI.SSO.Util
             using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+
                 var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-                var ssoContext = scope.ServiceProvider.GetRequiredService<ApplicationSsoContext>();
+                var ssoContext = scope.ServiceProvider.GetRequiredService<SsoContext>();
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleIdentity>>();
 
                 await DbHealthChecker.TestConnection(ssoContext);
 
-                await ssoContext.Database.MigrateAsync();
-                await scope.ServiceProvider.GetRequiredService<EventStoreContext>().Database.MigrateAsync();
+                if (!env.IsDevelopment())
+                    return;
 
+                ssoContext.Database.EnsureCreated();
 
                 await EnsureSeedIdentityServerData(ssoContext, configuration);
                 await EnsureSeedIdentityData(userManager, roleManager, configuration);
@@ -52,17 +55,30 @@ namespace Jp.UI.SSO.Util
             }
         }
 
-        private static async Task EnsureSeedGlobalConfigurationData(ApplicationSsoContext context,
-            IConfiguration configuration, IWebHostEnvironment env)
+        private static async Task EnsureSeedGlobalConfigurationData(SsoContext context, IConfiguration configuration, IWebHostEnvironment env)
         {
+            var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+            SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.0");
+
             if (!context.GlobalConfigurationSettings.Any())
             {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SendEmail", configuration.GetSection("EmailConfiguration:SendEmail").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("UseStorage", configuration.GetSection("Storage:UseStorage").Value, false, false));
+
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Server", configuration.GetSection("EmailConfiguration:SmtpServer").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Port", configuration.GetSection("EmailConfiguration:SmtpPort").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:UseSsl", configuration.GetSection("EmailConfiguration:UseSsl").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Username", configuration.GetSection("EmailConfiguration:SmtpUsername").Value, true, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Smtp:Password", configuration.GetSection("EmailConfiguration:SmtpPassword").Value, true, false));
-                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SendEmail", configuration.GetSection("EmailConfiguration:SendEmail").Value, false, false));
+
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Service", configuration.GetSection("Storage:Service").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:VirtualPath", configuration.GetSection("Storage:VirtualPath").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Username", configuration.GetSection("Storage:Username").Value, true, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Password", configuration.GetSection("Storage:Password").Value, true, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:StorageName", configuration.GetSection("Storage:StorageName").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:BasePath", configuration.GetSection("Storage:BasePath").Value, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:PhysicalPath", env.WebRootPath, false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Storage:Region", configuration.GetSection("Storage:Region").Value, false, false));
 
                 await context.SaveChangesAsync();
             }
@@ -81,6 +97,37 @@ namespace Jp.UI.SSO.Util
 
                 await context.SaveChangesAsync();
             }
+
+            if (SsoVersion.Current <= Version.Parse("3.1.0"))
+            {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
+                SsoVersion.Current = Version.Parse("3.1.1");
+                var claims = await context.UserClaims.Where(w => w.ClaimType == "username" || w.ClaimType == "email" || w.ClaimType == "picture").ToListAsync();
+                context.UserClaims.RemoveRange(claims);
+
+                if (context.Clients.Include(c => c.AllowedGrantTypes).Any(s => s.ClientId == "IS4-Admin" && s.AllowedGrantTypes.Any(a => a.GrantType == "implicit")))
+                {
+                    var clientAdmin = context.Clients.Include(c => c.AllowedGrantTypes).FirstOrDefault(s => s.ClientId == "IS4-Admin");
+                    clientAdmin.RequireClientSecret = false;
+                    clientAdmin.AllowedGrantTypes.RemoveAll(a => a.ClientId == clientAdmin.Id);
+                    clientAdmin.AllowedGrantTypes.Add(new ClientGrantType()
+                    {
+                        ClientId = clientAdmin.Id,
+                        GrantType = "authorization_code"
+                    });
+                    context.Update(clientAdmin);
+                }
+                await context.SaveChangesAsync();
+            }
+
+
+            if (SsoVersion.Current == Version.Parse("3.1.1"))
+            {
+                ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+                ssoVersion.Update("3.2.0", true, false);
+                SsoVersion.Current = new Version(ssoVersion.Value);
+                await context.SaveChangesAsync();
+            }
         }
 
         /// <summary>
@@ -88,14 +135,14 @@ namespace Jp.UI.SSO.Util
         /// </summary>
         private static async Task EnsureSeedIdentityData(
             UserManager<UserIdentity> userManager,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<RoleIdentity> roleManager,
             IConfiguration configuration)
         {
 
             // Create admin role
             if (!await roleManager.RoleExistsAsync("Administrator"))
             {
-                var role = new IdentityRole { Name = "Administrator" };
+                var role = new RoleIdentity { Name = "Administrator" };
 
                 await roleManager.CreateAsync(role);
             }
@@ -105,6 +152,7 @@ namespace Jp.UI.SSO.Util
 
             var user = new UserIdentity
             {
+                Name = Users.GetUser(configuration),
                 UserName = Users.GetUser(configuration),
                 Email = Users.GetEmail(configuration),
                 EmailConfirmed = true,
@@ -125,7 +173,7 @@ namespace Jp.UI.SSO.Util
         /// <summary>
         /// Generate default clients, identity and api resources
         /// </summary>
-        private static async Task EnsureSeedIdentityServerData(ApplicationSsoContext context, IConfiguration configuration)
+        private static async Task EnsureSeedIdentityServerData(SsoContext context, IConfiguration configuration)
         {
             if (!context.Clients.Any())
             {

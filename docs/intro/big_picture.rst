@@ -5,6 +5,10 @@ An overview about current devlopment
 
 .. image:: ../images/bigpicture.JPG
 
+Dependency Diagram
+
+.. image:: ../images/DependenciesGraph.png
+
 SSO
 ---
 
@@ -25,4 +29,4 @@ API to serve UI's.
 
 Admin UI
 --------
-It's the Admin user interface to manage identity Server 4.
+It's the Admin user interface to manage identity Server 4 and ASP.NET Identity. It also provide another SSO features, like configure Blob Storage, E-mail settings. Event viewer.

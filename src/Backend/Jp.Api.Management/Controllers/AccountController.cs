@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using JPProject.Domain.Core.Bus;
+﻿using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using JPProject.Domain.Core.ViewModels;
@@ -16,32 +15,39 @@ using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {
+    /// <summary>
+    /// A set of services for users to self manage themselves
+    /// </summary>
     [Route("accounts"), Authorize(Policy = "UserManagement")]
     public class AccountController : ApiController
     {
         private readonly IUserManageAppService _userAppService;
-        private readonly IMapper _mapper;
         private readonly ISystemUser _systemUser;
 
         public AccountController(
             IUserManageAppService userAppService,
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
-            IMapper mapper,
             ISystemUser systemUser) : base(notifications, mediator)
         {
             _userAppService = userAppService;
-            this._mapper = mapper;
             _systemUser = systemUser;
         }
 
+        /// <summary>
+        /// User get his own profile
+        /// </summary>
         [HttpGet("profile")]
         public async Task<ActionResult<UserViewModel>> UserData()
         {
-            var user = await _userAppService.GetUserAsync(_systemUser.UserId);
+            
+            var user = await _userAppService.FindByUsernameAsync(_systemUser.Username);
             return ResponseGet(user);
         }
 
+        /// <summary>
+        /// Update profile
+        /// </summary>
         [HttpPut("profile")]
         public async Task<ActionResult> UpdateProfile([FromBody] UserViewModel model)
         {
@@ -51,11 +57,14 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            model.Id = _systemUser.UserId;
+            model.UserName = _systemUser.Username;
             await _userAppService.UpdateProfile(model);
             return ResponsePutPatch();
         }
 
+        /// <summary>
+        /// Partial update profile
+        /// </summary>
         [HttpPatch, Route("profile")]
         public async Task<ActionResult> PartialUpdate([FromBody] JsonPatchDocument<UserViewModel> model)
         {
@@ -71,7 +80,9 @@ namespace Jp.Api.Management.Controllers
             return ResponsePutPatch();
         }
 
-
+        /// <summary>
+        /// Update profile picture
+        /// </summary>
         [HttpPut("profile/picture")]
         public async Task<ActionResult<bool>> UpdateProfilePicture([FromBody] ProfilePictureViewModel model)
         {
@@ -81,20 +92,29 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            model.Id = _systemUser.UserId;
+            model.Username = _systemUser.Username;
+            model.Filename = $"{_systemUser.Username}{model.FileType.Replace("image/", ".")}";
             await _userAppService.UpdateProfilePicture(model);
             return ResponsePutPatch();
         }
 
-
+        /// <summary>
+        /// User can auto remove from system.
+        /// </summary>
+        /// <returns></returns>
         [HttpDelete("")]
         public async Task<ActionResult<bool>> RemoveAccount()
         {
-            var model = new RemoveAccountViewModel(_systemUser.UserId);
+            var model = new RemoveAccountViewModel(_systemUser.Username);
             await _userAppService.RemoveAccount(model);
             return ResponseDelete();
         }
 
+        /// <summary>
+        /// User can update his own password
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut("password")]
         public async Task<ActionResult<bool>> ChangePassword([FromBody] ChangePasswordViewModel model)
         {
@@ -104,11 +124,16 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            model.Id = _systemUser.UserId;
+            model.Username = _systemUser.Username;
             await _userAppService.ChangePassword(model);
             return ResponsePutPatch();
         }
 
+        /// <summary>
+        /// Create password for users who don't have one. E.g Ferated registration.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("password")]
         public async Task<ActionResult<bool>> CreatePassword([FromBody] SetPasswordViewModel model)
         {
@@ -118,15 +143,20 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            model.Id = _systemUser.UserId;
+            model.Username = _systemUser.Username;
             await _userAppService.CreatePassword(model);
             return Ok();
         }
 
+        /// <summary>
+        /// Check if current logged user has a password
+        /// When it register by Federation Gateway there is no need to create a password. Then it can update it later.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("password")]
         public async Task<ActionResult<bool>> HasPassword()
         {
-            return ResponseGet(await _userAppService.HasPassword(_systemUser.UserId));
+            return ResponseGet(await _userAppService.HasPassword(_systemUser.Username));
         }
 
         [HttpGet, Route("logs")]

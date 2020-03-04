@@ -19,8 +19,6 @@ namespace Jp.Api.Management.Controllers
             _mediator = mediator;
         }
 
-        protected IEnumerable<DomainNotification> Notifications => _notifications.GetNotifications();
-
         protected bool IsValidOperation()
         {
             return (!_notifications.HasNotifications());

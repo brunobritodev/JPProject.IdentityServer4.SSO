@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace Jp.Api.Management.Configuration
 {
@@ -28,11 +30,11 @@ namespace Jp.Api.Management.Configuration
                         Name = "MIT",
                         Url = new Uri("https://github.com/brunohbrito/JPProject.IdentityServer4.AdminUI/blob/master/LICENSE")
                     },
-
                 });
 
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
                 {
+                    Type = SecuritySchemeType.OAuth2,
                     Flows = new OpenApiOAuthFlows()
                     {
                         Implicit = new OpenApiOAuthFlow()
@@ -45,11 +47,25 @@ namespace Jp.Api.Management.Configuration
                             },
                         }
                     },
-                    Type = SecuritySchemeType.OAuth2
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                        },
+                        new[] { "jp_api.is4", "jp_api.user" }
+                    }
                 });
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
             });
-
+            services.AddSwaggerGenNewtonsoftSupport();
             return services;
         }
     }

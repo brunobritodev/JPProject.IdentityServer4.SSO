@@ -1,3 +1,15 @@
+# v3.2
+
+1. ASP.NET Identity - Now you can plug your running Identity to use SSO. It need to made some changes at you IdentityUser with more data, like Name, Url, Bio.
+2. Changes in Events - Now all events are attached at his Aggregate Roots. Now events are very strong source of analisys.
+3. Event search at Admin Panel
+4. OAuth 2.0 Best practices
+   1. Jwa with Elliptic Curves
+   2. Jwk using ECDSA using P-256 and SHA-256 (ES256) by default
+   3. Changed how clients are created by default. Using Authorization Code with PKCE or Client Credentials only.
+5. Key Material management - Key material now available at Database. Now it's possible to Scale Horizontal without any "Unprocted ticket failed" error
+
+
 # v3.1
 
 1. Now AdminUI and SSO are completely separated projects

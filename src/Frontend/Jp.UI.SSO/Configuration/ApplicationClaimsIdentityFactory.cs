@@ -1,6 +1,7 @@
 ﻿using IdentityModel;
-using JPProject.Domain.Core.StringUtils;
-using JPProject.Sso.Infra.Identity.Models.Identity;
+using Jp.UI.SSO.Util;
+using JPProject.Domain.Core.Util;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
@@ -20,17 +21,28 @@ namespace Jp.UI.SSO.Configuration
         {
             var identity = await base.GenerateClaimsAsync(user);
             var claims = new List<Claim>();
+
+            claims.AddIfDontExist(new Claim(JwtClaimTypes.Name, user.UserName));
+
             if (user.Birthdate.HasValue)
-                claims.Add(new Claim(JwtClaimTypes.BirthDate, user.Birthdate.Value.ToString("yyyy-MM-dd")));
+                claims.AddIfDontExist(new Claim(JwtClaimTypes.BirthDate, user.Birthdate.Value.ToString("yyyy-MM-dd")));
 
             if (user.Name.IsPresent())
-                claims.Add(new Claim(JwtClaimTypes.GivenName, user.Name));
+                claims.AddIfDontExist(new Claim(JwtClaimTypes.GivenName, user.Name));
             else
-                claims.Add(new Claim(JwtClaimTypes.GivenName, user.UserName));
+                claims.AddIfDontExist(new Claim(JwtClaimTypes.GivenName, user.UserName));
+
+            if (user.Picture.IsPresent())
+                claims.AddIfDontExist(new Claim(JwtClaimTypes.Picture, user.Picture));
+
+            if (user.SocialNumber.IsPresent())
+                claims.AddIfDontExist(new Claim("social_number", user.SocialNumber));
 
             var roles = await UserManager.GetRolesAsync(user);
 
-            claims.AddRange(roles.Select(s => new Claim(JwtClaimTypes.Role, s)));
+            if (identity.Claims.All(c => c.Type != JwtClaimTypes.Role))
+                claims.AddRange(roles.Select(s => new Claim(JwtClaimTypes.Role, s)));
+
             identity.AddClaims(claims);
             return identity;
         }

@@ -1,13 +1,18 @@
-﻿using JPProject.Admin.Application.Interfaces;
+﻿using AspNetCore.IQueryable.Extensions;
+using JPProject.Admin.Application.Interfaces;
 using JPProject.Admin.Application.ViewModels;
 using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
+using JPProject.Domain.Core.Util;
 using JPProject.Domain.Core.ViewModels;
-using JPProject.Sso.Application.Extensions;
-using JPProject.Sso.Application.Interfaces;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
+using JPProject.Sso.Domain.ViewModels.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ServiceStack;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,35 +24,61 @@ namespace Jp.Api.Management.Controllers
     public class PersistedGrantsController : ApiController
     {
         private readonly IPersistedGrantAppService _persistedGrantAppService;
-        private readonly IUserManageAppService _userAppService;
+        private readonly ISystemUser _systemUser;
+        private readonly UserManager<UserIdentity> _manager;
 
         public PersistedGrantsController(
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
             IPersistedGrantAppService persistedGrantAppService,
-            IUserManageAppService userAppService) : base(notifications, mediator)
+            ISystemUser systemUser,
+            UserManager<UserIdentity> manager) : base(notifications, mediator)
         {
             _persistedGrantAppService = persistedGrantAppService;
-            _userAppService = userAppService;
+            _systemUser = systemUser;
+            _manager = manager;
         }
 
         [HttpGet, Route("")]
-        public async Task<ActionResult<ListOfPersistedGrantViewModel>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 1)
+        public async Task<ActionResult<ListOf<PersistedGrantViewModel>>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 0)
         {
-            var irs = await _persistedGrantAppService.GetPersistedGrants(new PagingViewModel(limit ?? 10, offset ?? 0));
-            var usersIds = irs.PersistedGrants.Select(s => s.SubjectId).ToArray();
-            var users = await _userAppService.GetUsersById(usersIds);
-
-            foreach (var persistedGrantViewModel in irs.PersistedGrants)
+            var searchPersisted = new PersistedGrantSearch()
             {
-                var user = users.WithId(persistedGrantViewModel.SubjectId);
+                Limit = limit,
+                Offset = offset
+            };
+            var irs = await _persistedGrantAppService.GetPersistedGrants(searchPersisted);
+            var usersIds = irs.Collection.Select(s => s.SubjectId).ToArray();
+
+            var search = new UserSearch<string>()
+            {
+                Id = usersIds,
+                Limit = limit,
+                Offset = offset
+            };
+            var users = await _manager.Users.Apply(search).ToListAsync();
+            var collection = irs.Collection.ToList();
+            foreach (var persistedGrantViewModel in collection)
+            {
+                var user = users.FirstOrDefault(u => u.Id == persistedGrantViewModel.SubjectId);
                 if (user == null) continue;
 
-                persistedGrantViewModel.Email = user.Email;
-                persistedGrantViewModel.Picture = user.Picture;
+                persistedGrantViewModel.UpdateUserInfo(user.UserName, user.Picture);
             }
 
-            return ResponseGet(irs);
+            if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager"))
+            {
+                foreach (var persistedGrantViewModel in collection)
+                {
+                    if (persistedGrantViewModel.Email == _systemUser.Username)
+                        continue;
+
+                    persistedGrantViewModel.Email = persistedGrantViewModel.Email?.TruncateSensitiveInformation();
+                    persistedGrantViewModel.Data = persistedGrantViewModel.Data?.TruncateSensitiveInformation();
+                }
+            }
+
+            return ResponseGet(new ListOf<PersistedGrantViewModel>(collection, collection.Count));
         }
 
         [HttpDelete, Route("{id}")]

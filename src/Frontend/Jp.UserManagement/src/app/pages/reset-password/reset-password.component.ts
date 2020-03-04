@@ -4,13 +4,13 @@ import { TranslatorService } from '@core/translator/translator.service';
 import { Subscription } from 'rxjs';
 
 import { UserService } from '../../shared/services/user.service';
-import { DefaultResponse } from '../../shared/view-model/default-response.model';
+import { ProblemDetails } from '../../shared/view-model/default-response.model';
 import { ResetPassword } from '../../shared/view-model/reset-password.model';
 
 @Component({
     selector: "app-dashboard",
     templateUrl: "./reset-password.component.html",
-    providers: [UserService,TranslatorService]
+    providers: [UserService, TranslatorService]
 })
 export class ResetPasswordComponent implements OnInit, OnDestroy {
 
@@ -57,23 +57,18 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
     public async reset() {
         this.showButtonLoading = true;
-        try {
-            this.authService.resetPassword(this.email, this.model).subscribe(
-                registerResult => {
-                    this.router.navigate(["/login"]);
-                    this.showButtonLoading = false;
-                },
-                response => {
-                    this.errors = [];
-                    this.errors = DefaultResponse.GetErrors(response).map(a => a.value);
-                    this.showButtonLoading = false;
-                }
-            );
 
-        } catch (error) {
-            this.errors = [];
-            this.errors.push("Unknown error while trying to reset password");
-            this.showButtonLoading = false;
-        }
+        this.authService.resetPassword(this.email, this.model).subscribe(
+            registerResult => {
+                this.router.navigate(["/login"]);
+                this.showButtonLoading = false;
+            },
+            response => {
+                this.errors = [];
+                this.errors = ProblemDetails.GetErrors(response).map(a => a.value);
+                this.showButtonLoading = false;
+            }
+        );
+
     }
 }

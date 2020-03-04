@@ -2,8 +2,8 @@
     <div class="unwrap">
         <div class="bg-cover" style="background-image: url(assets/img/profile/profile-bg.jpg);">
             <div class="p-4 text-center text-white">
-                <img *ngIf="user?.picture" class="img-thumbnail rounded-circle thumb128" [src]="user?.picture" alt="user?.name" />
-                <img *ngIf="!user?.picture" class="img-thumbnail rounded-circle thumb128" src="/assets/img/dummy.png" alt="user?.name" />
+                <img *ngIf="user?.picture" class="img-avatar rounded-circle thumb128" [src]="user?.picture" alt="user?.name" />
+                <img *ngIf="!user?.picture" class="img-avatar rounded-circle thumb128" src="/assets/img/dummy.png" alt="user?.name" />
                 <h3 class="m-0">{{user?.name}}</h3>
                 <p>{{user?.jobTitle}} - {{user?.url}}</p>
                 <p>{{user?.bio}}</p>
@@ -36,8 +36,7 @@
                         <button class="btn btn-primary" type="button" (click)="changePassword()" *ngIf="!changingPassword">{{ 'user.account.UPDATE-PASSWORD' | translate }}
                         </button>
                         <div class="progress mb-3" *ngIf="changingPassword">
-                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                                aria-valuemax="100"></div>
+                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                     <div *ngIf="!hasPassword">
@@ -53,8 +52,7 @@
                         <button class="btn btn-primary" type="button" (click)="createPassword()" *ngIf="!changingPassword">{{ 'user.account.CREATE-PASSWORD' | translate }}
                         </button>
                         <div class="progress mb-3" *ngIf="changingPassword">
-                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                                aria-valuemax="100"></div>
+                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                 </div>
@@ -88,9 +86,12 @@
                 <p>{{ 'user.account.ARE-YOU-SURE' | translate }}&hellip;</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="dangerModal.hide()">{{ 'user.account.NO' | translate }}</button>
-                <button type="button" class="btn btn-danger" (click)="removeAccount()">{{ 'user.account.YES' | translate }}</button>
+                <button type="button" class="btn btn-secondary" (click)="dangerModal.hide()">{{ 'general.NO' | translate }}</button>
+                <button type="button" class="btn btn-danger" (click)="removeAccount()">{{ 'general.YES' | translate }}</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

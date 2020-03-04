@@ -1,11 +1,13 @@
 ﻿using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
+using JPProject.Domain.Core.Util;
 using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.EventSourcedNormalizers;
 using JPProject.Sso.Application.Interfaces;
 using JPProject.Sso.Application.ViewModels.RoleViewModels;
 using JPProject.Sso.Application.ViewModels.UserViewModels;
+using JPProject.Sso.Domain.ViewModels.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
@@ -44,9 +46,21 @@ namespace Jp.Api.Management.Controllers
         /// <param name="search">username, e-mail or name</param>
         /// <returns></returns>
         [HttpGet, Route("")]
-        public async Task<ActionResult<ListOf<UserListViewModel>>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 1, string search = null)
+        public async Task<ActionResult<ListOf<UserListViewModel>>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 0, string search = null)
         {
-            var irs = await _userManageAppService.GetUsers(new PagingViewModel(limit ?? 10, offset ?? 0, search));
+            var irs = await _userManageAppService.SearchUsers(new UserFindByEmailNameUsername(search) { Limit = limit, Offset = offset });
+
+            if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager"))
+            {
+                foreach (var ir in irs.Collection)
+                {
+                    if (_user.Username == ir.UserName)
+                        continue;
+                    ir.Email = ir.Email?.TruncateEmail();
+                    ir.UserName = ir.UserName?.TruncateSensitiveInformation();
+                }
+            }
+
             return ResponseGet(irs);
         }
 
@@ -54,6 +68,14 @@ namespace Jp.Api.Management.Controllers
         public async Task<ActionResult<UserViewModel>> Details(string username)
         {
             var irs = await _userManageAppService.GetUserDetails(username);
+
+            if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager") && _user.Username != username)
+            {
+                irs.Email = irs.Email?.TruncateEmail();
+                irs.UserName = irs.UserName?.TruncateSensitiveInformation();
+                irs.PhoneNumber = irs.PhoneNumber?.TruncateSensitiveInformation();
+            }
+
             return ResponseGet(irs);
         }
 
@@ -65,7 +87,7 @@ namespace Jp.Api.Management.Controllers
                 NotifyModelStateErrors();
                 return ModelStateErrorResponseError();
             }
-
+            model.UserName = username;
             await _userManageAppService.UpdateUser(model);
             return ResponsePutPatch();
         }
@@ -79,16 +101,16 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            var actualUser = await _userAppService.FindByUsernameAsync(username);
+            var actualUser = await _userManageAppService.FindByUsernameAsync(username);
             model.ApplyTo(actualUser);
             await _userManageAppService.UpdateUser(actualUser);
             return ResponsePutPatch();
         }
 
-        [HttpDelete, Route("{id:Guid}")]
-        public async Task<ActionResult> RemoveAccount(string id)
+        [HttpDelete, Route("{username}")]
+        public async Task<ActionResult> RemoveAccount(string username)
         {
-            var model = new RemoveAccountViewModel(id);
+            var model = new RemoveAccountViewModel(username);
             await _userManageAppService.RemoveAccount(model);
             return ResponseDelete();
         }
@@ -203,6 +225,25 @@ namespace Jp.Api.Management.Controllers
             var data = new PagingViewModel(limit ?? 10, offset ?? 0, search);
             var clients = await _userManageAppService.GetEvents(username, data);
             return ResponseGet(clients);
+        }
+
+        /// <summary>
+        /// Create a new user with admin access to some properties
+        /// </summary>
+        [HttpPost, Route("")]
+        public async Task<ActionResult<AdminRegisterUserViewModel>> Register([FromBody] AdminRegisterUserViewModel model)
+        {
+            // awating v3.0.2 to uncomment this
+            if (!ModelState.IsValid)
+            {
+                NotifyModelStateErrors();
+                return ModelStateErrorResponseError();
+            }
+
+            await _userAppService.AdminRegister(model);
+
+            model.ClearSensitiveData();
+            return ResponsePost("UserData", "Account", null, model);
         }
 
     }

@@ -12,6 +12,7 @@ import { AccountManagementService } from '../account-management.service';
 
 @Component({
     templateUrl: 'profile.component.html',
+    styleUrls: ["./profile.component.scss"],
     providers: [AccountManagementService,TranslatorService],
 
 })

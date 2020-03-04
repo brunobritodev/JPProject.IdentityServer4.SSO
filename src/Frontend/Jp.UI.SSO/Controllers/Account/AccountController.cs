@@ -8,18 +8,20 @@ using IdentityServer4.Stores;
 using Jp.UI.SSO.Models;
 using Jp.UI.SSO.Util;
 using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
-using JPProject.Domain.Core.StringUtils;
+using JPProject.Domain.Core.Util;
 using JPProject.Sso.Application.Interfaces;
 using JPProject.Sso.Application.ViewModels;
 using JPProject.Sso.Application.ViewModels.UserViewModels;
-using JPProject.Sso.Infra.Identity.Models.Identity;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,16 +36,21 @@ namespace Jp.UI.SSO.Controllers.Account
     {
         private readonly IMediatorHandler Bus;
         private readonly SignInManager<UserIdentity> _signInManager;
+        private readonly UserManager<UserIdentity> _userManager;
         private readonly IUserAppService _userAppService;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly IConfiguration _configuration;
+        private readonly IUserManageAppService _userManageAppService;
+        private readonly ISystemUser _user;
+        private readonly ILogger<AccountController> _logger;
         private readonly DomainNotificationHandler _notifications;
 
         public AccountController(
             SignInManager<UserIdentity> signInManager,
+            UserManager<UserIdentity> userManager,
             IUserAppService userAppService,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
@@ -51,16 +58,23 @@ namespace Jp.UI.SSO.Controllers.Account
             IEventService events,
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler bus,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IUserManageAppService userManageAppService,
+            ISystemUser user,
+            ILogger<AccountController> logger)
         {
             Bus = bus;
             _signInManager = signInManager;
+            _userManager = userManager;
             _userAppService = userAppService;
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
             _configuration = configuration;
+            _userManageAppService = userManageAppService;
+            _user = user;
+            _logger = logger;
             _notifications = (DomainNotificationHandler)notifications;
         }
 
@@ -127,11 +141,11 @@ namespace Jp.UI.SSO.Controllers.Account
                 UserViewModel userIdentity;
                 if (model.IsUsernameEmail())
                 {
-                    userIdentity = await _userAppService.FindByEmailAsync(model.Username);
+                    userIdentity = await _userManageAppService.FindByEmailAsync(model.Username);
                 }
                 else
                 {
-                    userIdentity = await _userAppService.FindByUsernameAsync(model.Username);
+                    userIdentity = await _userManageAppService.FindByUsernameAsync(model.Username);
                 }
 
                 if (userIdentity == null)
@@ -161,7 +175,7 @@ namespace Jp.UI.SSO.Controllers.Account
 
         private async Task<IActionResult> SuccessfullLogin(LoginInputModel model, UserViewModel userIdentity, AuthorizationRequest context)
         {
-            await _events.RaiseAsync(new UserLoginSuccessEvent(userIdentity.UserName, userIdentity.Id, userIdentity.UserName));
+            await _events.RaiseAsync(new UserLoginSuccessEvent(userIdentity.UserName, userIdentity.UserName, userIdentity.Name, clientId: context == null ? userIdentity.UserName : context.ClientId));
 
             if (context != null)
             {
@@ -179,17 +193,33 @@ namespace Jp.UI.SSO.Controllers.Account
             // request for a local page
             if (Url.IsLocalUrl(model.ReturnUrl))
             {
+                _logger.LogInformation($"Redirecting to ReturnUrl: {model.ReturnUrl}");
                 return Redirect(model.ReturnUrl);
             }
 
-            if (model.ReturnUrl.IsMissing())
+            if (!ValidateUrl(model.ReturnUrl))
             {
-                return RedirectToAction("Index", "Home");
+                _logger.LogInformation($"Invalid return URL Redirecting to: {model.ReturnUrl}");
+                return RedirectToAction("Index", "Grants");
             }
 
             // user might have clicked on a malicious link - should be logged
-            await _events.RaiseAsync(new MaliciousRedirectUrlEvent(model.ReturnUrl));
+            await _events.RaiseAsync(new MaliciousRedirectUrlEvent(model.ReturnUrl, model.Username));
             throw new Exception("invalid return URL");
+        }
+        /// <summary>
+        /// Validates a URL.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private bool ValidateUrl(string url)
+        {
+            if (Uri.TryCreate(url, UriKind.Absolute, out Uri validatedUri)) //.NET URI validation.
+            {
+                //If true: validatedUri contains a valid Uri. Check for the scheme in addition.
+                return (validatedUri.Scheme == Uri.UriSchemeHttp || validatedUri.Scheme == Uri.UriSchemeHttps);
+            }
+            return false;
         }
 
         private async Task FailedLogin(LoginInputModel model, SignInResult result, UserViewModel userIdentity)
@@ -197,7 +227,7 @@ namespace Jp.UI.SSO.Controllers.Account
             if (result.IsLockedOut)
             {
                 ModelState.AddModelError("", AccountOptions.AccountBlocked);
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "account blocked"));
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, AccountOptions.AccountBlocked));
             }
             else
             {
@@ -205,12 +235,12 @@ namespace Jp.UI.SSO.Controllers.Account
                 if (!userIdentity.EmailConfirmed) // In case only e-mail to be confirmed
                 {
                     ModelState.AddModelError("", AccountOptions.AccountNotConfirmedMessage);
-                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "not confirmed account"));
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, AccountOptions.AccountNotConfirmedMessage));
                 }
                 else
                 {
                     ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
-                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, AccountOptions.InvalidCredentialsErrorMessage));
                 }
             }
         }
@@ -288,35 +318,14 @@ namespace Jp.UI.SSO.Controllers.Account
             ProcessLoginCallbackForSaml2p(result, additionalLocalClaims, localSignInProps);
 
             // issue authentication cookie for user
-            // we must issue the cookie maually, and can't use the SignInManager because
-            // it doesn't expose an API to issue additional claims from the login workflow
-            // I don't have pride of this.
-            var s = new UserIdentity()
-            {
-                Id = user.Id,
-                Name = user.Name,
-                SecurityStamp = user.SecurityStamp,
-                AccessFailedCount = user.AccessFailedCount,
-                Bio = user.Bio,
-                Company = user.Company,
-                Email = user.Email,
-                EmailConfirmed = user.EmailConfirmed,
-                JobTitle = user.JobTitle,
-                LockoutEnabled = user.LockoutEnabled,
-                LockoutEnd = user.LockoutEnd,
-                PhoneNumber = user.PhoneNumber,
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-                Picture = user.Picture,
-                TwoFactorEnabled = user.TwoFactorEnabled,
-                Url = user.Url,
-                UserName = user.UserName,
-            };
+
+            var s = await _userManager.FindByNameAsync(user.UserName);
             var principal = await _signInManager.CreateUserPrincipalAsync(s);
             additionalLocalClaims.AddRange(principal.Claims);
-            var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? user.Id.ToString();
+            var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? s.Id.ToString();
 
-            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id.ToString(), name));
-            await HttpContext.SignInAsync(user.Id.ToString(), name, provider, localSignInProps, additionalLocalClaims.ToArray());
+            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, s.Id.ToString(), name));
+            await HttpContext.SignInAsync(s.Id.ToString(), name, provider, localSignInProps, additionalLocalClaims.ToArray());
 
             // delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -374,7 +383,7 @@ namespace Jp.UI.SSO.Controllers.Account
                 await _signInManager.SignOutAsync();
 
                 // raise the logout event
-                await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+                await _events.RaiseAsync(new UserLogoutSuccessEvent(_user.Username, User.GetDisplayName()));
             }
 
             // check if we need to trigger sign-out at an upstream identity provider
@@ -604,7 +613,7 @@ namespace Jp.UI.SSO.Controllers.Account
             var providerUserId = userIdClaim.Value;
 
             // find external user
-            var user = await _userAppService.FindByProviderAsync(provider, providerUserId);
+            var user = await _userManageAppService.FindByProviderAsync(provider, providerUserId);
 
             return (user, provider, providerUserId, claims);
         }
@@ -668,7 +677,7 @@ namespace Jp.UI.SSO.Controllers.Account
             else
                 await _userAppService.RegisterWithoutPassword(user);
 
-            return await _userAppService.FindByProviderAsync(provider, providerUserId);
+            return await _userManageAppService.FindByProviderAsync(provider, providerUserId);
         }
 
         private void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)

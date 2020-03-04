@@ -32,7 +32,7 @@ namespace Jp.Api.Management.Controllers
         [HttpGet("{type}")]
         public async Task<ActionResult<EmailViewModel>> GetEmail(EmailType type)
         {
-            var email = await _emailAppService.FindByType(type);
+            var email = await _emailAppService.FindByType(type) ?? new EmailViewModel();
             return ResponseGet(email);
         }
 

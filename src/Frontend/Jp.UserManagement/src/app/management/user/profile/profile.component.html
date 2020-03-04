@@ -2,8 +2,8 @@
     <div class="unwrap">
         <div class="bg-cover" style="background-image: url(assets/img/profile/profile-bg.jpg);">
             <div class="p-4 text-center text-white">
-                <img *ngIf="user?.picture" class="img-thumbnail rounded-circle thumb128" [src]="user?.picture" alt="user?.name" />
-                <img *ngIf="!user?.picture" class="img-thumbnail rounded-circle thumb128" src="/assets/img/dummy.png" alt="user?.name" />
+                <img *ngIf="user?.picture" class="img-avatar rounded-circle thumb128" [src]="user?.picture" [alt]="user?.name" />
+                <img *ngIf="!user?.picture" class="img-avatar rounded-circle thumb128" src="/assets/img/dummy.png" [alt]="user?.name" />
                 <h3 class="m-0">{{user?.name}}</h3>
                 <p>{{user?.jobTitle}} - {{user?.company}}</p>
                 <p>{{user?.url}}</p>
@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-lg-5 col-md-5" >
+        <div class="col-lg-5 col-md-5">
 
             <div class="card b">
                 <div class="card-header bg-primary text-bold">{{ 'user.profile.PROFILE' | translate }}</div>
@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label>{{ 'user.profile.PHONE NUMBER' | translate }}</label>
-                        <input class="form-control" name="phoneNumber" mask="(000) 000-0000}"  autocomplete="tel" [(ngModel)]="user.phoneNumber" type="text" />
+                        <input class="form-control" name="phoneNumber" mask="(000) 000-0000}" autocomplete="tel" [(ngModel)]="user.phoneNumber" type="text" />
                     </div>
                     <div class="form-group">
                         <label>{{ 'user.profile.BIO' | translate }}</label>
@@ -43,8 +43,7 @@
                     <button class="btn btn-primary" type="button" (click)="updateProfile()" *ngIf="!updatingProfile">{{ 'user.profile.UPDATE-SETTINGS' | translate }}
                     </button>
                     <div class="progress mb-3" *ngIf="updatingProfile">
-                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                            aria-valuemax="100"></div>
+                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
@@ -60,16 +59,14 @@
                             <img [src]="croppedImage" class="img-thumbnail rounded-circle thumb128" />
                         </div>
                         <div class="col-lg-9 col-md-12">
-                            <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1" [resizeToWidth]="128"
-                                format="png" (imageCroppedBase64)="imageCropped($event)" (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                            <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1" [resizeToWidth]="128" format="png" (imageCroppedBase64)="imageCropped($event)" (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
 
                         </div>
                     </div>
                     <div class="progress mb-3" *ngIf="uploadingImage">
-                        
-                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                                aria-valuemax="100"></div>
-                        </div>
+
+                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                     <div class="form-group">
 
                         <div class="input-group mb-3">
@@ -85,9 +82,8 @@
                         <button class="btn btn-outline-info" (click)="uploadImage()" type="button">{{ 'user.profile.UPLOAD' | translate }}</button>
                     </div>
                     <div class="progress mb-3" *ngIf="updatingImage">
-                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                                aria-valuemax="100"></div>
-                        </div>
+                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -30,9 +30,7 @@ namespace Jp.Api.Management.Controllers
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<ConfigurationViewModel>>> List()
         {
-            var userAdmin = _systemUser.IsInRole("Administrator");
-            var settings = await _globalConfigurationSettingsAppService.ListSettings();
-            return ResponseGet(settings);
+            return ResponseGet(result: await _globalConfigurationSettingsAppService.ListSettings());
         }
 
         [HttpPut("")]

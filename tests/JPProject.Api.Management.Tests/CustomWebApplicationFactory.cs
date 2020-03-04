@@ -5,10 +5,13 @@ using IdentityServer4.Contrib.AspNetCore.Testing.Configuration;
 using IdentityServer4.Contrib.AspNetCore.Testing.Services;
 using IdentityServer4.Models;
 using Jp.Api.Management;
+using Jp.Database.Context;
 using JPProject.Api.Management.Tests.Infra;
-using JPProject.EntityFrameworkCore.Context;
-using JPProject.Sso.EntityFrameworkCore.SqlServer.Configuration;
+using JPProject.Sso.AspNetIdentity.Configuration;
+using JPProject.Sso.AspNetIdentity.Models.Identity;
+using JPProject.Sso.EntityFramework.Repository.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,10 +30,29 @@ namespace JPProject.Api.Management.Tests
                 // Add a database context (AppDbContext) using an in-memory database for testing.
                 void DatabaseOptions(DbContextOptionsBuilder opt) => opt.UseInMemoryDatabase("JpTests").EnableSensitiveDataLogging();
 
-                services.ConfigureUserIdentity<AspNetUserTest>().WithSqlServer(DatabaseOptions);
-                services.AddDbContext<EventStoreContext>(DatabaseOptions);
-                services.ConfigureJpAdmin<AspNetUserTest>().WithSqlServer(DatabaseOptions);
 
+                services.AddDbContext<SsoContext>(DatabaseOptions);
+
+
+                //// ASP.NET Identity Configuration
+                services
+                    .AddIdentity<UserIdentity, RoleIdentity>(AccountOptions.NistAccountOptions)
+                    .AddEntityFrameworkStores<SsoContext>()
+                    .AddDefaultTokenProviders(); ;
+
+                //// SSO Services
+                services
+                    .ConfigureSso<AspNetUserTest>()
+                    .AddSsoContext<SsoContext>()
+                    .AddDefaultAspNetIdentityServices();
+
+                //// IdentityServer4 Admin services
+                services
+                    .ConfigureJpAdminServices<AspNetUserTest>()
+                    .ConfigureJpAdminStorageServices()
+                    .SetupDefaultIdentityServerContext<SsoContext>();
+
+                services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
                 services.PostConfigureAll<IdentityServerAuthenticationOptions>(options =>
                 {
                     options.Authority = "http://localhost";

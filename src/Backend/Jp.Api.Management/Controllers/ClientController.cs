@@ -1,16 +1,20 @@
 ﻿using IdentityServer4.Models;
+using Jp.Api.Management.ViewModel;
 using JPProject.Admin.Application.Interfaces;
-using JPProject.Admin.Application.ViewModels;
 using JPProject.Admin.Application.ViewModels.ClientsViewModels;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using JPProject.Domain.Core.ViewModels;
+using JPProject.Sso.Application.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
@@ -20,19 +24,27 @@ namespace Jp.Api.Management.Controllers
     {
         private readonly IClientAppService _clientAppService;
         private readonly ISystemUser _user;
+        private readonly IStorage _storage;
+        private readonly IHttpContextAccessor _httpContext;
 
         public ClientsController(
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
-            IClientAppService clientAppService, ISystemUser user) : base(notifications, mediator)
+            IClientAppService clientAppService,
+            ISystemUser user,
+            IStorage storage,
+            IHttpContextAccessor httpContext) : base(notifications, mediator)
         {
             _clientAppService = clientAppService;
             _user = user;
+            _storage = storage;
+            _httpContext = httpContext;
         }
 
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<ClientListViewModel>>> ListClients()
         {
+            var at = await _httpContext.HttpContext.GetTokenAsync("access_token");
             var clients = await _clientAppService.GetClients();
             return ResponseGet(clients);
         }
@@ -45,7 +57,7 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpPost("")]
-        public async Task<ActionResult<Client>> Post([FromBody] SaveClientViewModel client)
+        public async Task<ActionResult<Client>> Post([FromBody] SaveClientWithLogoViewModel client)
         {
             if (!ModelState.IsValid)
             {
@@ -53,6 +65,12 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
+            if (client.Logo != null)
+            {
+                //client.Logo.Normalize();
+                client.Logo.VirtualLocation = "images";
+                client.LogoUri = await _storage.Upload(client.Logo);
+            }
             await _clientAppService.Save(client);
 
             var newClient = await _clientAppService.GetClientDetails(client.ClientId);
@@ -61,7 +79,7 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpPut("{client}")]
-        public async Task<ActionResult<ClientViewModel>> Update(string client, [FromBody] Client model)
+        public async Task<ActionResult<ClientViewModel>> Update(string client, [FromBody] UpdateClientWithLogoViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -69,11 +87,18 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
+            if (model.Logo != null)
+            {
+                var actualLogo = await _clientAppService.GetClientDetails(client);
+                await _storage.Remove(Path.GetFileName(actualLogo.LogoUri), "images");
+                //model.Logo.Normalize();
+                model.Logo.VirtualLocation = "images";
+                model.LogoUri = await _storage.Upload(model.Logo);
+            }
 
             await _clientAppService.Update(client, model);
             return ResponsePutPatch();
         }
-
 
         [HttpPatch("{client}")]
         public async Task<ActionResult<ClientViewModel>> PartialUpdate(string client, [FromBody] JsonPatchDocument<Client> model)
@@ -115,22 +140,22 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpGet("{client}/secrets")]
-        public async Task<ActionResult<IEnumerable<SecretViewModel>>> Secrets(string client)
+        public async Task<ActionResult<IEnumerable<Secret>>> Secrets(string client)
         {
             var clients = await _clientAppService.GetSecrets(client);
             return ResponseGet(clients);
         }
 
-        [HttpDelete("{client}/secrets/{secretId:int}")]
-        public async Task<ActionResult> RemoveSecret(string client, int secretId)
+        [HttpDelete("{client}/secrets")]
+        public async Task<ActionResult> RemoveSecret(string client, string type, string value)
         {
-            var model = new RemoveClientSecretViewModel(client, secretId);
+            var model = new RemoveClientSecretViewModel(client, type, value);
             await _clientAppService.RemoveSecret(model);
             return ResponseDelete();
         }
 
         [HttpPost("{client}/secrets")]
-        public async Task<ActionResult<IEnumerable<SecretViewModel>>> SaveSecret(string client, [FromBody] SaveClientSecretViewModel model)
+        public async Task<ActionResult<IEnumerable<Secret>>> SaveSecret(string client, [FromBody] SaveClientSecretViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -149,10 +174,10 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpDelete("{client}/properties/{propertyId:int}")]
-        public async Task<ActionResult> RemoveProperty(string client, int propertyId)
+        [HttpDelete("{client}/properties/{key}")]
+        public async Task<ActionResult> RemoveProperty(string client, string key)
         {
-            var model = new RemovePropertyViewModel(propertyId, client);
+            var model = new RemovePropertyViewModel(key, client);
             await _clientAppService.RemoveProperty(model);
             return ResponseDelete();
         }
@@ -178,10 +203,10 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(clients);
         }
 
-        [HttpDelete("{client}/claims/{claimId:int}")]
-        public async Task<ActionResult> RemoveClaim(string client, int claimId)
+        [HttpDelete("{client}/claims")]
+        public async Task<ActionResult> RemoveClaim(string client, string type, string value)
         {
-            var model = new RemoveClientClaimViewModel(client, claimId);
+            var model = new RemoveClientClaimViewModel(client, type, value);
             await _clientAppService.RemoveClaim(model);
             return ResponseDelete();
         }
@@ -195,6 +220,8 @@ namespace Jp.Api.Management.Controllers
                 NotifyModelStateErrors();
                 return ModelStateErrorResponseError();
             }
+
+            model.ClientId = client;
             await _clientAppService.SaveClaim(model);
             var claims = await _clientAppService.GetClaims(client);
             return ResponsePost(nameof(Claims), new { client }, claims);

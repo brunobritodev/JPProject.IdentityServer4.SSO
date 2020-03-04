@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Jp.Api.Management.Configuration;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.Threading.Tasks;
 
 namespace Jp.Api.Management
 {
@@ -23,7 +26,11 @@ namespace Jp.Api.Management
                 .WriteTo.Console()
                 .CreateLogger();
 
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            Task.WaitAll(DatabaseChecker.EnsureDatabaseIsReady(host.Services.CreateScope()));
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

@@ -3,14 +3,14 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angul
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 
-import { OAuthenticationService } from './auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthGuardWithForcedLogin implements CanActivate {
   private isAuthenticated: boolean;
 
   constructor(
-    private authService: OAuthenticationService,
+    private authService: AuthService,
   ) {
     this.authService.isAuthenticated$.subscribe(i => this.isAuthenticated = i);
   }

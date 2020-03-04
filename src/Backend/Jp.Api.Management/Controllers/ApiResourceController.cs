@@ -1,6 +1,5 @@
 ﻿using IdentityServer4.Models;
 using JPProject.Admin.Application.Interfaces;
-using JPProject.Admin.Application.ViewModels;
 using JPProject.Admin.Application.ViewModels.ApiResouceViewModels;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Notifications;
@@ -96,23 +95,23 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpGet("{resource}/secrets")]
-        public async Task<ActionResult<IEnumerable<SecretViewModel>>> Secrets(string resource)
+        public async Task<ActionResult<IEnumerable<Secret>>> Secrets(string resource)
         {
             var clients = await _apiResourceAppService.GetSecrets(resource);
             return ResponseGet(clients);
         }
 
-        [HttpDelete("{resource}/secrets/{secretId:int}")]
-        public async Task<ActionResult<bool>> RemoveSecret(string resource, int secretId)
+        [HttpDelete("{resource}/secrets")]
+        public async Task<ActionResult<bool>> RemoveSecret(string resource, string type, string value)
         {
-            var model = new RemoveApiSecretViewModel(resource, secretId);
+            var model = new RemoveApiSecretViewModel(resource, type, value);
             await _apiResourceAppService.RemoveSecret(model);
             return ResponseDelete();
         }
 
 
         [HttpPost("{resource}/secrets")]
-        public async Task<ActionResult<IEnumerable<SecretViewModel>>> SaveSecret(string resource, [FromBody] SaveApiSecretViewModel model)
+        public async Task<ActionResult<IEnumerable<Secret>>> SaveSecret(string resource, [FromBody] SaveApiSecretViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -127,23 +126,23 @@ namespace Jp.Api.Management.Controllers
         }
 
         [HttpGet("{resource}/scopes")]
-        public async Task<ActionResult<IEnumerable<ScopeViewModel>>> Scopes(string resource)
+        public async Task<ActionResult<IEnumerable<Scope>>> Scopes(string resource)
         {
             var clients = await _apiResourceAppService.GetScopes(resource);
             return ResponseGet(clients);
         }
 
-        [HttpDelete("{resource}/scopes/{scopeId:int}")]
-        public async Task<ActionResult> RemoveScope(string resource, int scopeId)
+        [HttpDelete("{resource}/scopes/{scope}")]
+        public async Task<ActionResult> RemoveScope(string resource, string scope)
         {
-            var model = new RemoveApiScopeViewModel(resource, scopeId);
+            var model = new RemoveApiScopeViewModel(resource, scope);
             await _apiResourceAppService.RemoveScope(model);
             return ResponseDelete();
         }
 
 
         [HttpPost("{resource}/scopes")]
-        public async Task<ActionResult<IEnumerable<ScopeViewModel>>> SaveScope(string resource, [FromBody] SaveApiScopeViewModel model)
+        public async Task<ActionResult<IEnumerable<Scope>>> SaveScope(string resource, [FromBody] SaveApiScopeViewModel model)
         {
             if (!ModelState.IsValid)
             {

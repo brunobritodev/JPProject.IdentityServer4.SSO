@@ -1,4 +1,5 @@
 ﻿using Jp.Api.Management.Configuration;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,9 +12,10 @@ namespace Jp.Api.Management
         {
         }
 
-        public override void ConfigureSso(IServiceCollection services)
+        public override void ConfigureApi(IServiceCollection services)
         {
-            services.ConfigureDefaultSettings();
+            // Adding MediatR for Domain Events and Notifications
+            services.AddMediatR(typeof(Startup));
         }
     }
 }
