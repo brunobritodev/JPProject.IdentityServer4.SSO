@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Jp.UI.SSO.Util;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 namespace Jp.UI.SSO.Configuration
 {
     public static class SecurityHeadersConfiguration
     {
-        public static void UseSecurityHeaders(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static void UseSecurityHeaders(this IApplicationBuilder app, IWebHostEnvironment env, IConfiguration config)
         {
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions()
@@ -30,7 +32,7 @@ namespace Jp.UI.SSO.Configuration
                     // this custom source can be removed in your build
                     .CustomSources("https://ghbtns.com"));
 
-                if (env.IsProduction())
+                if (env.IsProduction() && !env.IsBehindReverseProxy(config))
                 {
                     options.UpgradeInsecureRequests();
                     // You can set your custom domains here

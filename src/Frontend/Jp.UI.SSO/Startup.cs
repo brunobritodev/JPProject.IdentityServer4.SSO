@@ -117,7 +117,7 @@ namespace Jp.UI.SSO
             }
 
             app.UseSerilogRequestLogging();
-            app.UseSecurityHeaders(env);
+            app.UseSecurityHeaders(env, Configuration);
             app.UseStaticFiles();
 
             var fordwardedHeaderOptions = new ForwardedHeadersOptions

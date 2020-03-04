@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,7 @@ namespace Jp.UI.SSO.Controllers.Account
         private readonly IConfiguration _configuration;
         private readonly IUserManageAppService _userManageAppService;
         private readonly ISystemUser _user;
+        private readonly ILogger<AccountController> _logger;
         private readonly DomainNotificationHandler _notifications;
 
         public AccountController(
@@ -58,7 +60,8 @@ namespace Jp.UI.SSO.Controllers.Account
             IMediatorHandler bus,
             IConfiguration configuration,
             IUserManageAppService userManageAppService,
-            ISystemUser user)
+            ISystemUser user,
+            ILogger<AccountController> logger)
         {
             Bus = bus;
             _signInManager = signInManager;
@@ -71,6 +74,7 @@ namespace Jp.UI.SSO.Controllers.Account
             _configuration = configuration;
             _userManageAppService = userManageAppService;
             _user = user;
+            _logger = logger;
             _notifications = (DomainNotificationHandler)notifications;
         }
 
@@ -189,17 +193,33 @@ namespace Jp.UI.SSO.Controllers.Account
             // request for a local page
             if (Url.IsLocalUrl(model.ReturnUrl))
             {
+                _logger.LogInformation($"Redirecting to ReturnUrl: {model.ReturnUrl}");
                 return Redirect(model.ReturnUrl);
             }
 
-            if (model.ReturnUrl.IsMissing())
+            if (!ValidateUrl(model.ReturnUrl))
             {
-                return RedirectToAction("Index", "Home");
+                _logger.LogInformation($"Invalid return URL Redirecting to: {model.ReturnUrl}");
+                return RedirectToAction("Index", "Grants");
             }
 
             // user might have clicked on a malicious link - should be logged
             await _events.RaiseAsync(new MaliciousRedirectUrlEvent(model.ReturnUrl, model.Username));
             throw new Exception("invalid return URL");
+        }
+        /// <summary>
+        /// Validates a URL.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private bool ValidateUrl(string url)
+        {
+            if (Uri.TryCreate(url, UriKind.Absolute, out Uri validatedUri)) //.NET URI validation.
+            {
+                //If true: validatedUri contains a valid Uri. Check for the scheme in addition.
+                return (validatedUri.Scheme == Uri.UriSchemeHttp || validatedUri.Scheme == Uri.UriSchemeHttps);
+            }
+            return false;
         }
 
         private async Task FailedLogin(LoginInputModel model, SignInResult result, UserViewModel userIdentity)
