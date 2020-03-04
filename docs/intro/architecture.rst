@@ -44,8 +44,7 @@ Written in ASP.NET Core and Angular 8.
 Architecture
 ^^^^^^^^^^^^
 
-.. image:: https://github.com/brunohbrito/JPProject.IdentityServer4.SSO/blob/master/docs/images/DependenciesGraph.png?raw=true
-    :width 480
+.. image:: ../images/DependenciesGraph.png
 
 - Architecture with responsibility separation concerns, SOLID and Clean Code
 - Domain Driven Design (Layers and Domain Model Pattern)

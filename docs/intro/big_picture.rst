@@ -5,6 +5,10 @@ An overview about current devlopment
 
 .. image:: ../images/bigpicture.JPG
 
+Dependency Diagram
+
+.. image:: ../images/DependenciesGraph.png
+
 SSO
 ---
 

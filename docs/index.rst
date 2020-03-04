@@ -25,6 +25,7 @@ Features of SSO:
 Admin UI is an administrative panel where it's possible to manage the OAuth2 Server, Users and Roles. 
 
 From OAuth2 panel it's possible to manage:
+
 * `Clients`
 * `Identity Resources`
 * `Api Resources`
