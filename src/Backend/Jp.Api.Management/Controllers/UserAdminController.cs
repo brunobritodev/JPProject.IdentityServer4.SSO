@@ -56,7 +56,7 @@ namespace Jp.Api.Management.Controllers
             var usersFinal = users.Collection.ToList();
             usersFinal.AddRange(usersByClaims.Collection);
 
-            var collectionOfUsers = new ListOf<UserListViewModel>(usersFinal, usersFinal.Count);
+            var collectionOfUsers = new ListOf<UserListViewModel>(usersFinal, users.Total + usersByClaims.Total);
 
             // Truncate data for non admins
             if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager"))
