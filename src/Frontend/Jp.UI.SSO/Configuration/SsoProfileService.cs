@@ -2,12 +2,10 @@
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Jp.UI.SSO.Util;
-using JPProject.Domain.Core.Util;
 using JPProject.Sso.AspNetIdentity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -41,22 +39,7 @@ namespace Jp.UI.SSO.Configuration
             subjectClaims.Merge(claimsUser);
             subjectClaims.AddIfDontExist(new Claim("username", user.UserName));
 
-            // Email is loaded default by IdentityServer4
-            //claims.Add(new Claim(JwtClaimTypes.Email, user.Email, ClaimValueTypes.Email));
-
-            if (user.Birthdate.HasValue)
-                subjectClaims.AddIfDontExist(new Claim(JwtClaimTypes.BirthDate, user.Birthdate.Value.ToString(CultureInfo.CurrentCulture), ClaimValueTypes.Date));
-
-            if (user.Name.IsPresent())
-                subjectClaims.AddIfDontExist(new Claim(JwtClaimTypes.Name, user.Name));
-            else
-                subjectClaims.AddIfDontExist(new Claim(JwtClaimTypes.Name, user.UserName));
-
-            if (user.Picture.IsPresent())
-                subjectClaims.AddIfDontExist(new Claim(JwtClaimTypes.Picture, user.Picture));
-
-            if (user.SocialNumber.IsPresent())
-                subjectClaims.AddIfDontExist(new Claim("social_number", user.SocialNumber));
+            subjectClaims.AddIfDontExist(new Claim(JwtClaimTypes.Name, user.UserName));
 
             if (subjectClaims.All(a => a.Type != JwtClaimTypes.Role))
             {
