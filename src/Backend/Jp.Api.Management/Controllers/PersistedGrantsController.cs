@@ -42,14 +42,16 @@ namespace Jp.Api.Management.Controllers
         [HttpGet, Route("")]
         public async Task<ActionResult<ListOf<PersistedGrantViewModel>>> List([Range(1, 50)] int? limit = 10, [Range(1, int.MaxValue)] int? offset = 0)
         {
+            // Search for grants
             var searchPersisted = new PersistedGrantSearch()
             {
                 Limit = limit,
                 Offset = offset
             };
-            var irs = await _persistedGrantAppService.GetPersistedGrants(searchPersisted);
-            var usersIds = irs.Collection.Select(s => s.SubjectId).ToArray();
+            var persistedGrants = await _persistedGrantAppService.GetPersistedGrants(searchPersisted);
 
+            // Get additional data from users
+            var usersIds = persistedGrants.Collection.Select(s => s.SubjectId).ToArray();
             var search = new UserSearch<string>()
             {
                 Id = usersIds,
@@ -57,18 +59,20 @@ namespace Jp.Api.Management.Controllers
                 Offset = offset
             };
             var users = await _manager.Users.Apply(search).ToListAsync();
-            var collection = irs.Collection.ToList();
-            foreach (var persistedGrantViewModel in collection)
+
+            // Update addional data
+            foreach (var persistedGrantViewModel in persistedGrants.Collection)
             {
                 var user = users.FirstOrDefault(u => u.Id == persistedGrantViewModel.SubjectId);
                 if (user == null) continue;
 
-                persistedGrantViewModel.UpdateUserInfo(user.UserName, user.Picture);
+                persistedGrantViewModel.UpdateUserInfo(user.UserName);
             }
 
+            // truncate data for non administration users
             if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager"))
             {
-                foreach (var persistedGrantViewModel in collection)
+                foreach (var persistedGrantViewModel in persistedGrants.Collection)
                 {
                     if (persistedGrantViewModel.Email == _systemUser.Username)
                         continue;
@@ -78,7 +82,7 @@ namespace Jp.Api.Management.Controllers
                 }
             }
 
-            return ResponseGet(new ListOf<PersistedGrantViewModel>(collection, collection.Count));
+            return ResponseGet(new ListOf<PersistedGrantViewModel>(persistedGrants.Collection, persistedGrants.Total));
         }
 
         [HttpDelete, Route("{id}")]

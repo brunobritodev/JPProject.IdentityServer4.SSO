@@ -1,6 +1,5 @@
 ﻿using IdentityModel;
 using Jp.UI.SSO.Util;
-using JPProject.Domain.Core.Util;
 using JPProject.Sso.AspNetIdentity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -23,21 +22,7 @@ namespace Jp.UI.SSO.Configuration
             var claims = new List<Claim>();
 
             claims.AddIfDontExist(new Claim(JwtClaimTypes.Name, user.UserName));
-
-            if (user.Birthdate.HasValue)
-                claims.AddIfDontExist(new Claim(JwtClaimTypes.BirthDate, user.Birthdate.Value.ToString("yyyy-MM-dd")));
-
-            if (user.Name.IsPresent())
-                claims.AddIfDontExist(new Claim(JwtClaimTypes.GivenName, user.Name));
-            else
-                claims.AddIfDontExist(new Claim(JwtClaimTypes.GivenName, user.UserName));
-
-            if (user.Picture.IsPresent())
-                claims.AddIfDontExist(new Claim(JwtClaimTypes.Picture, user.Picture));
-
-            if (user.SocialNumber.IsPresent())
-                claims.AddIfDontExist(new Claim("social_number", user.SocialNumber));
-
+            claims.AddIfDontExist(new Claim(JwtClaimTypes.GivenName, user.UserName));
             var roles = await UserManager.GetRolesAsync(user);
 
             if (identity.Claims.All(c => c.Type != JwtClaimTypes.Role))

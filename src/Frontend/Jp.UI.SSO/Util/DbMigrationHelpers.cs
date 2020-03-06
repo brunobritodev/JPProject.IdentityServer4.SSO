@@ -152,7 +152,6 @@ namespace Jp.UI.SSO.Util
 
             var user = new UserIdentity
             {
-                Name = Users.GetUser(configuration),
                 UserName = Users.GetUser(configuration),
                 Email = Users.GetEmail(configuration),
                 EmailConfirmed = true,
