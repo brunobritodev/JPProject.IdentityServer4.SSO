@@ -128,6 +128,14 @@ namespace Jp.UI.SSO.Util
                 SsoVersion.Current = new Version(ssoVersion.Value);
                 await context.SaveChangesAsync();
             }
+
+            if (SsoVersion.Current == Version.Parse("3.2.0"))
+            {
+                ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+                ssoVersion.Update("3.2.2", true, false);
+                SsoVersion.Current = new Version(ssoVersion.Value);
+                await context.SaveChangesAsync();
+            }
         }
 
         /// <summary>
