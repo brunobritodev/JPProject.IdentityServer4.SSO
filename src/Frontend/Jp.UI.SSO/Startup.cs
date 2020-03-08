@@ -90,6 +90,8 @@ namespace Jp.UI.SSO
             services
                 .ConfigureSso<AspNetUser>()
                 .AddSsoContext<SsoContext>()
+                // If your ASP.NET Identity has additional fields, you can remove this line and implement IIdentityFactory<TUser> and IRoleFactory<TUser>
+                // theses interfaces will able you to intercept Register / Update Flows from User and Roles
                 .AddDefaultAspNetIdentityServices();
 
             // Configure Federation gateway (external logins), such as Facebook, Google etc
