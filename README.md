@@ -109,7 +109,12 @@ First you need to choose.
 
 ## Already have an ASP.NET Identity? 
 
-These options above requires almost no code. If you already have an ASP.NET IdentitySystem it's possible to connect SSO to use your users, but requires some modifications: Some required users fields from SSO, configure ASP.NET Identity in SSO project.
+These options above requires almost no code. If you already have an ASP.NET IdentitySystem it's possible to connect SSO to use your users, but requires some modifications:
+
+* Check Argon2 impl at `Startup.cs`
+* You UserIdentity must implement IDomainUser (No additional fields will be added to your current ASP.NET Identity)
+  * All additional fields will be added as claims
+* If you have special fields, you can implement `IIdentityFactory<TUser>` and `IRoleFactory<TUser>` this classes will help you in Register / Update user flow. You an implementation it will intercept the request before add user / role to database.
 
 # Demo 
 
