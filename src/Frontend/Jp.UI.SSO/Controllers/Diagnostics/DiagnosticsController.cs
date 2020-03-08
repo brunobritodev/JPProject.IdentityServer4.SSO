@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using JPProject.Sso.Application.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,12 @@ namespace Jp.UI.SSO.Controllers.Diagnostics
     public class DiagnosticsController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly IGlobalConfigurationAppService _globalConfigurationAppService;
 
-        public DiagnosticsController(IConfiguration configuration)
+        public DiagnosticsController(IConfiguration configuration, IGlobalConfigurationAppService globalConfigurationAppService)
         {
             _configuration = configuration;
+            _globalConfigurationAppService = globalConfigurationAppService;
         }
         public async Task<IActionResult> Index()
         {
@@ -26,7 +29,6 @@ namespace Jp.UI.SSO.Controllers.Diagnostics
             //{
             //    return NotFound();
             //}
-
             var model = new DiagnosticsViewModel(HttpContext, await HttpContext.AuthenticateAsync(), _configuration);
             return View(model);
         }
