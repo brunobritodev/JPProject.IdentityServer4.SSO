@@ -102,9 +102,14 @@ Screenshots
 
 First you need to choose.
 
-* You need everything (Best choice)? JP Project provide a complete SSO with an Administration panel. Check it at [SSO - Full Version](https://github.com/brunohbrito/JPProject.IdentityServer4.SSO)
+* You need everything (Best choice)? JP Project provide a complete SSO with an Administration panel. Check it at [SSO - Full Version](https://github.com/brunohbrito/JPProject.IdentityServer4.SSO). This version has some additional Tables:
+  * Template - store e-mail template
+  * Email - An instance of template with e-mail settings
+  * GlobalSettings - It store settings like E-mail credentials, S3 / Azure Blob settings. Logo / Version settings
+  * StoredEvent and EventDetails - Store everything that is happening in your SSO.
+  * DataProtectionKeys and SecurityKeys - Special tables to store Key Material (JWK) and ASP.NET Dataprotection Keys
 
-* You already have an IdentityServer4 Up and running? Go to [Admin Panel - Light version](https://github.com/brunohbrito/JPProject.IdentityServer4.AdminUI)
+* You already have an IdentityServer4 Up and running and don't wanna any changes to your current model. Only the admin panel? Go to [Admin Panel - Light version](https://github.com/brunohbrito/JPProject.IdentityServer4.AdminUI)
 
 
 ## Already have an ASP.NET Identity? 
