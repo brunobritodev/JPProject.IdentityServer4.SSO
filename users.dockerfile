@@ -1,3 +1,4 @@
+ARG environment=docker
 # base image
 FROM node:12.7-alpine as builder
 
@@ -17,7 +18,7 @@ COPY ["src/Frontend/Jp.UserManagement/", "/app"]
 # rebuild node
 RUN npm rebuild node-sass
 # generate build
-RUN npm run ng build -- --configuration=docker
+RUN npm run ng build -- --configuration=environment
 
 ##################
 ### production ###
