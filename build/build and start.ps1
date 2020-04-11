@@ -1,7 +1,7 @@
 $currentPath = (Get-Item -Path "./" -Verbose).FullName;
 $src = (Get-Item -Path "../src" -Verbose).FullName;
 $sso = (Get-Item -Path ($src + "/Frontend/Jp.UI.SSO") -Verbose).FullName
-$api = (Get-Item -Path ($src + "/Backend/Jp.UserManagement") -Verbose).FullName
+$api = (Get-Item -Path ($src + "/Backend/Jp.Api.Management") -Verbose).FullName
 $ui = (Get-Item -Path ($src + "/Frontend/Jp.UserManagement") -Verbose).FullName
 $adminui = (Get-Item -Path ($src + "/Frontend/Jp.AdminUI") -Verbose).FullName
 
