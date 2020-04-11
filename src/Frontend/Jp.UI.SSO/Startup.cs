@@ -19,7 +19,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-
+using Jp.UI.SSO.Configuration.TicketStore;
+using Microsoft.Extensions.Caching.Redis;
 
 namespace Jp.UI.SSO
 {
@@ -42,6 +43,7 @@ namespace Jp.UI.SSO
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
                 .AddDataAnnotationsLocalization();
             services.AddRazorPages();
+            services.AddServerSideBlazor();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -69,6 +71,35 @@ namespace Jp.UI.SSO
             // Improve Identity password security
             services.UpgradePasswordSecurity().UseArgon2<UserIdentity>();
 
+            services.ConfigureExternalCookie(options =>
+            {
+                if (Configuration.GetSection("Redis").Exists())
+                {
+                    options.SessionStore = new RedisCacheTicketStore(new RedisCacheOptions()
+                    {
+                        Configuration = Configuration.GetSection("Redis:ConnectionString").Value
+                    });
+                }
+                else
+                {
+                    options.SessionStore = new MemoryCacheTicketStore();
+                }
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                if (Configuration.GetSection("Redis").Exists())
+                {
+                    options.SessionStore = new RedisCacheTicketStore(new RedisCacheOptions()
+                    {
+                        Configuration = Configuration.GetSection("Redis:ConnectionString").Value
+                    });
+                }
+                else
+                {
+                    options.SessionStore = new MemoryCacheTicketStore();
+                }
+            });
 
             // IdentityServer4 Configuration
             services
@@ -132,6 +163,7 @@ namespace Jp.UI.SSO
             app.UseForwardedHeaders(fordwardedHeaderOptions);
 
             app.UseIdentityServer();
+
             app.UseLocalization();
 
             app.UseRouting();
