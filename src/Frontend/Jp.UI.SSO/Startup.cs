@@ -19,6 +19,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Microsoft.Extensions.Caching.Redis;
+using Jp.UI.SSO.Configuration.TicketStore;
 
 
 namespace Jp.UI.SSO
@@ -85,6 +87,36 @@ namespace Jp.UI.SSO
                 // Configure key material. By default it supports load balance scenarios and have a key managemente close to Key Management from original IdentityServer4
                 // Unless you really know what are you doing, change it.
                 .SetupKeyMaterial();
+
+            services.ConfigureExternalCookie(options =>
+            {
+                if (Configuration.GetSection("Redis").Exists())
+                {
+                    options.SessionStore = new RedisCacheTicketStore(new RedisCacheOptions()
+                    {
+                        Configuration = Configuration.GetSection("Redis:ConnectionString").Value
+                    });
+                }
+                else
+                {
+                    options.SessionStore = new MemoryCacheTicketStore();
+                }
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                if (Configuration.GetSection("Redis").Exists())
+                {
+                    options.SessionStore = new RedisCacheTicketStore(new RedisCacheOptions()
+                    {
+                        Configuration = Configuration.GetSection("Redis:ConnectionString").Value
+                    });
+                }
+                else
+                {
+                    options.SessionStore = new MemoryCacheTicketStore();
+                }
+            });
 
             // SSO Configuration
             services
