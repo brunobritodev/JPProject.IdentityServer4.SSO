@@ -61,7 +61,8 @@ namespace Jp.Api.Management.Controllers
             var users = await _manager.Users.Apply(search).ToListAsync();
 
             // Update addional data
-            foreach (var persistedGrantViewModel in persistedGrants.Collection)
+            var collection = persistedGrants.Collection.ToList();
+            foreach (var persistedGrantViewModel in collection)
             {
                 var user = users.FirstOrDefault(u => u.Id == persistedGrantViewModel.SubjectId);
                 if (user == null) continue;
@@ -69,6 +70,7 @@ namespace Jp.Api.Management.Controllers
                 persistedGrantViewModel.UpdateUserInfo(user.UserName);
             }
 
+            persistedGrants.Collection = collection;
             // truncate data for non administration users
             if (!User.IsInRole("Administrator") && !User.HasClaim(c => c.Type == "is4-manager"))
             {
