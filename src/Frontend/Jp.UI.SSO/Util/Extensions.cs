@@ -47,9 +47,19 @@ namespace Jp.UI.SSO.Util
             foreach (var claim in newClaim)
             {
                 if (claims.Any(c => c.Type == claim.Type))
-                    return;
+                    continue;
 
                 claims.Add(claim);
+            }
+        }
+        public static void Merge(this List<string> items, IEnumerable<string> content)
+        {
+            foreach (var claim in content)
+            {
+                if (items.Contains(claim))
+                    continue;
+
+                items.Add(claim);
             }
         }
     }
