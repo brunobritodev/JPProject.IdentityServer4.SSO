@@ -38,10 +38,7 @@ namespace Jp.Api.Management
                 });
 
 
-            services.AddProblemDetails(setup =>
-            {
-                setup.IncludeExceptionDetails = _ => Environment.IsDevelopment();
-            });
+            services.AddProblemDetails(options => options.IncludeExceptionDetails = (context, exception) => Environment.IsDevelopment());
 
             // Response compression
             services.AddBrotliCompression();
@@ -113,6 +110,7 @@ namespace Jp.Api.Management
 
         private void RegisterServices(IServiceCollection services)
         {
+            //services.AddScoped<IUserService, MyUserService<UserIdentity, RoleIdentity, string>>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // Adding dependencies from another layers (isolated from Presentation)
         }

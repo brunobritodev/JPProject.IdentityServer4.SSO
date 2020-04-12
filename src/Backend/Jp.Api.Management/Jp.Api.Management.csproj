@@ -9,32 +9,31 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="4.2.0" />
+    <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.0.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-    <PackageReference Include="JPProject.Admin.Application" Version="3.2.2" />
-    <PackageReference Include="JPProject.Admin.EntityFramework.Repository" Version="3.2.2" />
-    <PackageReference Include="JPProject.Sso.Application" Version="3.2.2" />
-    <PackageReference Include="JPProject.AspNet.Core" Version="3.2.2" />
-    <PackageReference Include="JpProject.AspNetCore.PasswordHasher.Argon2" Version="3.0.2" />
-    <PackageReference Include="JPProject.Sso.EntityFramework.Repository" Version="3.2.2" />
+    <PackageReference Include="JPProject.Admin.Application" Version="3.2.5" />
+    <PackageReference Include="JPProject.Admin.EntityFramework.Repository" Version="3.2.5" />
+    <PackageReference Include="JPProject.Sso.Application" Version="3.2.5" />
+    <PackageReference Include="JPProject.AspNet.Core" Version="3.2.5" />
+    <PackageReference Include="JpProject.AspNetCore.PasswordHasher.Argon2" Version="3.0.3" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="3.1.2" />
+	  <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="3.1.3" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="ServiceStack.Text" Version="5.8.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.1" />
   </ItemGroup>
 
   <ItemGroup Label="Tools">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

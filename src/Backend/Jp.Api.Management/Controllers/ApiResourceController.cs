@@ -1,14 +1,20 @@
 ﻿using IdentityServer4.Models;
 using JPProject.Admin.Application.Interfaces;
 using JPProject.Admin.Application.ViewModels.ApiResouceViewModels;
+using JPProject.Admin.Domain.CommandHandlers;
+using JPProject.Admin.Domain.Commands.ApiResource;
+using JPProject.Admin.Domain.Interfaces;
 using JPProject.Domain.Core.Bus;
+using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using ServiceStack;
 
 namespace Jp.Api.Management.Controllers
 {
@@ -16,13 +22,18 @@ namespace Jp.Api.Management.Controllers
     public class ApiResourcesController : ApiController
     {
         private readonly IApiResourceAppService _apiResourceAppService;
+        private readonly ApiResourceCommandHandler _command;
 
         public ApiResourcesController(
             INotificationHandler<DomainNotification> notifications,
             IMediatorHandler mediator,
-            IApiResourceAppService apiResourceAppService) : base(notifications, mediator)
+            IApiResourceAppService apiResourceAppService,
+            IUnitOfWork uow,
+            IMediatorHandler bus,
+            IApiResourceRepository apiRepository) : base(notifications, mediator)
         {
             _apiResourceAppService = apiResourceAppService;
+            _command = new ApiResourceCommandHandler(uow, bus, notifications, apiRepository);
         }
 
         [HttpGet("")]
@@ -104,7 +115,8 @@ namespace Jp.Api.Management.Controllers
         [HttpDelete("{resource}/secrets")]
         public async Task<ActionResult<bool>> RemoveSecret(string resource, string type, string value)
         {
-            var model = new RemoveApiSecretViewModel(resource, type, value);
+            var model = new RemoveApiSecretViewModel(resource, type, value.UrlDecode());
+
             await _apiResourceAppService.RemoveSecret(model);
             return ResponseDelete();
         }
