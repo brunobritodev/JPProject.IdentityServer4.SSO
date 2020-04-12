@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using ServiceStack;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -149,7 +150,7 @@ namespace Jp.Api.Management.Controllers
         [HttpDelete("{client}/secrets")]
         public async Task<ActionResult> RemoveSecret(string client, string type, string value)
         {
-            var model = new RemoveClientSecretViewModel(client, type, value);
+            var model = new RemoveClientSecretViewModel(client, type, value.UrlDecode());
             await _clientAppService.RemoveSecret(model);
             return ResponseDelete();
         }

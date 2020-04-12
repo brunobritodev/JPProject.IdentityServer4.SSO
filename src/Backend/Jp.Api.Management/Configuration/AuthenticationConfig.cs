@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
+using IdentityModel;
 
 namespace Jp.Api.Management.Configuration
 {
@@ -23,6 +24,8 @@ namespace Jp.Api.Management.Configuration
                         options.RequireHttpsMetadata = false;
                         options.ApiSecret = "Q&tGrEQMypEk.XxPU:%bWDZMdpZeJiyMwpLv4F7d**w9x:7KuJ#fy,E8KPHpKz++";
                         options.ApiName = "jp_api";
+                        options.RoleClaimType = JwtClaimTypes.Role;
+                        options.NameClaimType = JwtClaimTypes.Name;
                     });
         }
     }
