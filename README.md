@@ -158,7 +158,7 @@ Written in ASP.NET Core 3.1 and Angular 8.
 - Argon2 Password Hashing
 - MySql Ready
 - Sql Ready
-- Postgree Ready
+- Postgres Ready
 - SQLite Ready
 - Entity Framework Core
 - .NET Core Native DI
