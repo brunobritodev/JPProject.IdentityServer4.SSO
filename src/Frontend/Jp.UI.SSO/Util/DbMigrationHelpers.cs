@@ -44,13 +44,8 @@ namespace Jp.UI.SSO.Util
 
                 await DbHealthChecker.TestConnection(ssoContext);
 
-                var ssoVersion = ssoContext.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
-                SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.0");
-
-                if (!env.IsDevelopment())
-                    return;
-
-                ssoContext.Database.EnsureCreated();
+                if (env.IsDevelopment())
+                    ssoContext.Database.EnsureCreated();
 
                 await EnsureSeedIdentityServerData(ssoContext, configuration);
                 await EnsureSeedIdentityData(userManager, roleManager, configuration);
@@ -60,6 +55,15 @@ namespace Jp.UI.SSO.Util
 
         private static async Task EnsureSeedGlobalConfigurationData(SsoContext context, IConfiguration configuration, IWebHostEnvironment env)
         {
+
+            var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+            if (ssoVersion == null)
+            {
+                SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.1");
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
+                await context.SaveChangesAsync();
+            }
+
             if (!context.GlobalConfigurationSettings.Any())
             {
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SendEmail", configuration.GetSection("EmailConfiguration:SendEmail").Value, false, false));
@@ -123,7 +127,7 @@ namespace Jp.UI.SSO.Util
 
             if (SsoVersion.Current == Version.Parse("3.1.1"))
             {
-                var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+                ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
                 ssoVersion.Update("3.2.0", true, false);
                 SsoVersion.Current = new Version(ssoVersion.Value);
                 await context.SaveChangesAsync();
@@ -131,7 +135,7 @@ namespace Jp.UI.SSO.Util
 
             if (SsoVersion.Current == Version.Parse("3.2.0"))
             {
-                var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+                ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
                 ssoVersion.Update("3.2.2", true, false);
                 SsoVersion.Current = new Version(ssoVersion.Value);
                 await context.SaveChangesAsync();

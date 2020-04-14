@@ -1,6 +1,7 @@
+
 # base image
 FROM node:12.7-alpine as builder
-
+ARG ENVIRONMENT=docker
 # install and cache app dependencies
 COPY ["src/Frontend/Jp.UserManagement/package.json", "./"]
 COPY ["src/Frontend/Jp.UserManagement/package-lock.json", "./"]
@@ -17,7 +18,7 @@ COPY ["src/Frontend/Jp.UserManagement/", "/app"]
 # rebuild node
 RUN npm rebuild node-sass
 # generate build
-RUN npm run ng build -- --configuration=docker
+RUN npm run ng build -- --configuration=${ENVIRONMENT}
 
 ##################
 ### production ###
