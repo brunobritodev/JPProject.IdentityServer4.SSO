@@ -215,7 +215,7 @@ namespace JPProject.Api.Management.Tests.Controller
             var secrets = stringResponse.FromJson<IEnumerable<Secret>>();
 
 
-            httpResponse = await _client.DeleteAsync($"/clients/{newClient.ClientId}/secrets?type={secrets.First().Type.UrlEncode()}&value={Uri.EscapeDataString(secrets.First().Value)}");
+            httpResponse = await _client.DeleteAsync($"/clients/{newClient.ClientId}/secrets?type={secrets.First().Type.UrlEncode()}&value={Uri.EscapeDataString(secrets.First().Value.UrlEncode())}");
             try { httpResponse.EnsureSuccessStatusCode(); } catch { _output.WriteLine(await httpResponse.Content.ReadAsStringAsync()); throw; };
         }
 

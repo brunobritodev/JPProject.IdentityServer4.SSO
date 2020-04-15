@@ -47,7 +47,7 @@ namespace Jp.UI.SSO.Configuration
 
             // Merge ASP.NET Identity claims
             subjectClaims.Merge(claimsUser);
-
+            
             subjectClaims.AddIfDontExist(new Claim("username", user.UserName));
             subjectClaims.AddIfDontExist(new Claim(JwtClaimTypes.Name, user.UserName));
 
