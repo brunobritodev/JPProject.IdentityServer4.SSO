@@ -289,7 +289,7 @@ namespace Jp.UI.SSO.Controllers.Account
         public async Task<IActionResult> ExternalLoginCallback()
         {
             // read external identity from the temporary cookie
-            var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
             if (result?.Succeeded != true)
             {
                 throw new Exception("External authentication error");
@@ -625,6 +625,9 @@ namespace Jp.UI.SSO.Controllers.Account
 
             // user's display name
             var name = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name)?.Value ?? claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+
+            var username = claims.FirstOrDefault(x => x.Type == "user_name" || x.Type == "username")?.Value ?? claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid)?.Value;
+
             if (name != null)
             {
                 filtered.Add(new Claim(JwtClaimTypes.Name, name));
@@ -661,7 +664,7 @@ namespace Jp.UI.SSO.Controllers.Account
 
             var user = new SocialViewModel()
             {
-                Username = email,
+                Username = username == null ? username : email,
                 Name = name,
                 Email = email,
                 Picture = picture,

@@ -67,6 +67,8 @@ services:
         build: 
           context: .
           dockerfile: users.dockerfile
+          args: 
+            ENVIRONMENT: docker
 
           
     #############################
