@@ -5,6 +5,7 @@ using IdentityServer4.Contrib.AspNetCore.Testing.Configuration;
 using IdentityServer4.Contrib.AspNetCore.Testing.Services;
 using IdentityServer4.Models;
 using Jp.Api.Management;
+using Jp.Api.Management.Interfaces;
 using Jp.Database.Context;
 using JPProject.Api.Management.Tests.Infra;
 using JPProject.Sso.AspNetIdentity.Configuration;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace JPProject.Api.Management.Tests
 {
@@ -29,7 +31,6 @@ namespace JPProject.Api.Management.Tests
             {
                 // Add a database context (AppDbContext) using an in-memory database for testing.
                 void DatabaseOptions(DbContextOptionsBuilder opt) => opt.UseInMemoryDatabase("JpTests").EnableSensitiveDataLogging();
-
 
                 services.AddDbContext<SsoContext>(DatabaseOptions);
 
@@ -58,6 +59,9 @@ namespace JPProject.Api.Management.Tests
                     options.Authority = "http://localhost";
                     options.JwtBackChannelHandler = IdentityServerClient.IdentityServer.CreateHandler();
                 });
+
+
+                services.AddScoped<IReCaptchaService, RecaptchaMock>();
 
 
             }).UseStartup<StartupTest>();
@@ -128,5 +132,13 @@ namespace JPProject.Api.Management.Tests
         }
 
         public IdentityServerProxy IdentityServerClient { get; set; }
+    }
+
+    public class RecaptchaMock : IReCaptchaService
+    {
+        public Task<bool> IsCaptchaPassed()
+        {
+            return Task.FromResult(true);
+        }
     }
 }

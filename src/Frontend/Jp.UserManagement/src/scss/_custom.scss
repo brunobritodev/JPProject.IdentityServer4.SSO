@@ -2,6 +2,13 @@
 .app-header .navbar-brand {
     width: 200px!important;
 }
-.pointer{
- cursor: pointer;   
+
+.pointer {
+    cursor: pointer;
 }
+
+.ng-invalid.ng-touched {
+    border-color: #f05050;
+}
+
+div.ng-invalid.ng-touched {}

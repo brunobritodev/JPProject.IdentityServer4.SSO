@@ -58,14 +58,11 @@ namespace Jp.UI.SSO.Util
 
             var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
             if (ssoVersion == null)
-            {
                 SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.1");
-                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
-                await context.SaveChangesAsync();
-            }
 
             if (!context.GlobalConfigurationSettings.Any())
             {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SendEmail", configuration.GetSection("EmailConfiguration:SendEmail").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("UseStorage", configuration.GetSection("Storage:UseStorage").Value, false, false));
 

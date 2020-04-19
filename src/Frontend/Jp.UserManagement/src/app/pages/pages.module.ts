@@ -1,20 +1,24 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { LoginComponent } from "./login/login.component";
-import { RegisterComponent } from "./register/register.component";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { UserService } from "../shared/services/user.service";
-import { CommonModule } from "@angular/common";
-import { AlertModule } from "ngx-bootstrap/alert";
-import { UnauthorizedComponent } from "./unauthorized/unauthorized.component";
-import { LoginCallbackComponent } from "./login-callback/login-callback.component";
-import { RecoverComponent } from "./recover/recover.component";
-import { ResetPasswordComponent } from "./reset-password/reset-password.component";
-import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
-import { P404Component } from "./error/404.component";
-import { P500Component } from "./error/500.component";
-import { NgxMaskModule } from "ngx-mask";
-import { TranslateModule } from "@ngx-translate/core";
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { environment } from '@env/environment';
+import { TranslateModule } from '@ngx-translate/core';
+import { InputValidationComponent } from '@shared/components/input-validation/input-validation';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { NgxMaskModule } from 'ngx-mask';
+
+import { UserService } from '../shared/services/user.service';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { P404Component } from './error/404.component';
+import { P500Component } from './error/500.component';
+import { LoginCallbackComponent } from './login-callback/login-callback.component';
+import { LoginComponent } from './login/login.component';
+import { RecoverComponent } from './recover/recover.component';
+import { RegisterComponent } from './register/register.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 const routes: Routes = [
     { path: "login", component: LoginComponent, data: { title: "Login Page" } },
@@ -38,9 +42,11 @@ const routes: Routes = [
         ReactiveFormsModule,
         AlertModule.forRoot(),
         NgxMaskModule.forRoot(),
+        RecaptchaV3Module,
     ],
     providers: [
         UserService,
+        { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.RecaptchaV3 },
     ],
     declarations: [
         LoginComponent,
@@ -51,7 +57,8 @@ const routes: Routes = [
         ResetPasswordComponent,
         ConfirmEmailComponent,
         P404Component,
-        P500Component
+        P500Component,
+        InputValidationComponent
     ],
     exports: [
         RouterModule

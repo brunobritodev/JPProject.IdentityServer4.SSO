@@ -1,6 +1,7 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using Jp.Api.Management.Configuration;
 using Jp.Api.Management.Configuration.Authorization;
+using Jp.Api.Management.Interfaces;
 using Jp.Database.Context;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -37,7 +38,6 @@ namespace Jp.Api.Management
                     options.AllowInputFormatterExceptionMessages = true;
                 });
 
-
             services.AddProblemDetails(options => options.IncludeExceptionDetails = (context, exception) => Environment.IsDevelopment());
 
             // Response compression
@@ -62,10 +62,11 @@ namespace Jp.Api.Management
             // configure openapi
             services.AddSwagger(Configuration);
 
-
             // Adding MediatR for Domain Events and Notifications
             services.AddMediatR(typeof(Startup));
 
+            // For Recaptcha service
+            services.AddHttpClient();
             // .NET Native DI Abstraction
             RegisterServices(services);
         }
@@ -95,7 +96,7 @@ namespace Jp.Api.Management
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SSO Api Management");
+                c.SwaggerEndpoint("swagger/v1/swagger.json", "SSO Api Management");
                 c.OAuthClientId("Swagger");
                 c.OAuthClientSecret("swagger");
                 c.OAuthAppName("SSO Management Api");
@@ -107,11 +108,12 @@ namespace Jp.Api.Management
             });
         }
 
-
         private void RegisterServices(IServiceCollection services)
         {
             //services.AddScoped<IUserService, MyUserService<UserIdentity, RoleIdentity, string>>();
+
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton<IReCaptchaService, ReCaptchaService>();
             // Adding dependencies from another layers (isolated from Presentation)
         }
     }

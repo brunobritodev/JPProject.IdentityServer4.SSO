@@ -6,9 +6,10 @@
 export const environment = {
   production: false,
   GoogleClientId: "27416902506-r7o9rfmcma3m6gnuck7q5vf1939o3003.apps.googleusercontent.com",
-  FacebookClientId: "2205593199670245",
+  FacebookClientId: "2842956135792618",
   ResourceServer: "https://localhost:5002/",
   AuthorityUri:  "https://localhost:5000",
   RequireHttps: false,
-  Uri: "http://localhost:4200"
+  Uri: "http://localhost:4200",
+  RecaptchaV3: "6LetvuoUAAAAAD7tTfL3007qcbNLpnhCZELh7rFs"
 };
