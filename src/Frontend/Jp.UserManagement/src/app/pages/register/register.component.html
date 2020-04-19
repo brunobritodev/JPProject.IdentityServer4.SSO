@@ -61,6 +61,11 @@
                                     </div>
                                     <input type="password" class="form-control" placeholder="Repeat password" name="confirmPassword" autocomplete="new-password" [formControl]="registerForm.controls.confirmPassword" required>
                                 </div>
+
+                                <div *ngIf="useCaptcha" class="mb-4 text-center">
+                                    <re-captcha [(ngModel)]="token" name="captcha" required [siteKey]="siteKey" #captchaControl="ngModel"></re-captcha>
+                                </div>
+
                                 <button type="button" class="btn btn-block btn-success" (click)="register()" *ngIf="!showButtonLoading">{{ 'register.CREATE-ACCOUNT' | translate }}</button>
                                 <button class="btn btn-block btn-success" type="button" *ngIf="showButtonLoading"><i class="fa fa-spinner fa-spin" ></i></button>
                                 <hr>

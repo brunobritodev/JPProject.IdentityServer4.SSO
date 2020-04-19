@@ -140,5 +140,10 @@ namespace JPProject.Api.Management.Tests
         {
             return Task.FromResult(true);
         }
+
+        public Task<bool> IsCaptchaEnabled()
+        {
+            return false;
+        }
     }
 }

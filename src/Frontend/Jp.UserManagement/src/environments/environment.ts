@@ -11,5 +11,5 @@ export const environment = {
   AuthorityUri:  "https://localhost:5000",
   RequireHttps: false,
   Uri: "http://localhost:4200",
-  RecaptchaV3: "6LetvuoUAAAAAD7tTfL3007qcbNLpnhCZELh7rFs"
+  RecaptchaV3: ""
 };

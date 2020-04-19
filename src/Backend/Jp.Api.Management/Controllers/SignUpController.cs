@@ -39,12 +39,16 @@ namespace Jp.Api.Management.Controllers
                 return ModelStateErrorResponseError();
             }
 
-            var captchaSucces = await _reCaptchaService.IsCaptchaPassed();
-            if (!captchaSucces)
+            if (await _reCaptchaService.IsCaptchaEnabled())
             {
-                await _mediator.RaiseEvent(new DomainNotification("Recatcha", "ReCaptcha failed"));
-                return BadRequest(new ValidationProblemDetails(_notifications.GetNotificationsByKey()));
+                var captchaSucces = await _reCaptchaService.IsCaptchaPassed();
+                if (!captchaSucces)
+                {
+                    await _mediator.RaiseEvent(new DomainNotification("Recatcha", "ReCaptcha failed"));
+                    return BadRequest(new ValidationProblemDetails(_notifications.GetNotificationsByKey()));
+                }
             }
+
             if (model.ContainsFederationGateway())
                 await _userAppService.RegisterWithProvider(model);
             else

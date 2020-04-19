@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
@@ -32,6 +32,7 @@ export class DefaultLayoutComponent implements OnInit {
         this.changes.observe(<Element>this.element, {
             attributes: true
         });
+
     }
 
     public ngOnInit() {
@@ -54,4 +55,5 @@ export class DefaultLayoutComponent implements OnInit {
                         console.table(u);
                 }));
     }
+
 }

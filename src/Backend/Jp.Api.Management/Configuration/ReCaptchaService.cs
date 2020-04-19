@@ -1,7 +1,7 @@
 ﻿using IdentityServer4.Extensions;
 using Jp.Api.Management.Interfaces;
+using JPProject.Sso.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net;
@@ -13,17 +13,22 @@ namespace Jp.Api.Management.Configuration
     public class ReCaptchaService : IReCaptchaService
     {
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
+        private readonly IGlobalConfigurationAppService _globalConfigurationAppService;
         private readonly IHttpContextAccessor _httpContext;
         private const string RemoteAddress = "https://www.google.com/recaptcha/api/siteverify";
 
-        public ReCaptchaService(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContext)
+        public ReCaptchaService(IHttpClientFactory httpClientFactory, IGlobalConfigurationAppService globalConfigurationAppService, IHttpContextAccessor httpContext)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _configuration = configuration;
+            _globalConfigurationAppService = globalConfigurationAppService;
             _httpContext = httpContext;
         }
 
+        public async Task<bool> IsCaptchaEnabled()
+        {
+            var settings = await _globalConfigurationAppService.GetPrivateSettings();
+            return settings.UseRecaptcha;
+        }
         public async Task<bool> IsCaptchaPassed()
         {
             var recaptcha = _httpContext.HttpContext.Request.Headers["recaptcha"];
@@ -36,9 +41,10 @@ namespace Jp.Api.Management.Configuration
 
         public async Task<JObject> GetCaptchaResultDataAsync(string token)
         {
+            var settings = await _globalConfigurationAppService.GetPrivateSettings();
             var content = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string, string>("secret", _configuration["ApplicationSettings:RecaptchaKey"]),
+                new KeyValuePair<string, string>("secret", settings.Recaptcha.PrivateKey),
                 new KeyValuePair<string, string>("response", token)
             });
             var res = await _httpClient.PostAsync(RemoteAddress, content);

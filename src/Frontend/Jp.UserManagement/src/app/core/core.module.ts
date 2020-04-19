@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { GlobalConfigurationService } from '@shared/services/global-configuration.service';
 import {
     AuthConfig,
     JwksValidationHandler,

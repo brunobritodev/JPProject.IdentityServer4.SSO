@@ -46,8 +46,7 @@ namespace JPProject.Api.Management.Tests.Controller
             await Login();
             var newUser = UserViewModelFaker.GenerateUserViewModel().Generate();
 
-            var response = await _client.PostAsync("/sign-up",
-                new StringContent(newUser.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
+            var response = await _client.PostAsync("/sign-up", new StringContent(newUser.ToJson(), Encoding.UTF8, MediaTypeNames.Application.Json));
             response.EnsureSuccessStatusCode();
 
             var httpResponse = await _client.GetAsync("/admin/users");

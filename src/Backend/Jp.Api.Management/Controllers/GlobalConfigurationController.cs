@@ -3,6 +3,7 @@ using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using JPProject.Sso.Application.Interfaces;
 using JPProject.Sso.Application.ViewModels;
+using JPProject.Sso.Domain.ViewModels.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,11 +34,19 @@ namespace Jp.Api.Management.Controllers
             return ResponseGet(result: await _globalConfigurationSettingsAppService.ListSettings());
         }
 
+        [HttpGet("public-settings"), AllowAnonymous]
+        public async Task<ActionResult<PublicSettings>> PublicSettings()
+        {
+            return ResponseGet(result: await _globalConfigurationSettingsAppService.GetPublicSettings());
+        }
+
         [HttpPut("")]
         public async Task<ActionResult> Update([FromBody] IEnumerable<ConfigurationViewModel> settings)
         {
             await _globalConfigurationSettingsAppService.UpdateSettings(settings);
             return ResponsePutPatch();
         }
+
+
     }
 }
