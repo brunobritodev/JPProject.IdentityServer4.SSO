@@ -57,15 +57,11 @@ namespace Jp.UI.SSO.Util
         {
 
             var ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
-            if (ssoVersion == null)
-            {
-                SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.1");
-                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
-                await context.SaveChangesAsync();
-            }
+            SsoVersion.Current = new Version(ssoVersion?.Value ?? "3.1.1");
 
             if (!context.GlobalConfigurationSettings.Any())
             {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SendEmail", configuration.GetSection("EmailConfiguration:SendEmail").Value, false, false));
                 await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("UseStorage", configuration.GetSection("Storage:UseStorage").Value, false, false));
 
@@ -102,10 +98,8 @@ namespace Jp.UI.SSO.Util
                 await context.SaveChangesAsync();
             }
 
-            if (SsoVersion.Current <= Version.Parse("3.1.0"))
+            if (SsoVersion.Current <= Version.Parse("3.1.1"))
             {
-                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("SSO:Version", "3.1.1", false, true));
-                SsoVersion.Current = Version.Parse("3.1.1");
                 var claims = await context.UserClaims.Where(w => w.ClaimType == "username" || w.ClaimType == "email" || w.ClaimType == "picture").ToListAsync();
                 context.UserClaims.RemoveRange(claims);
 
@@ -128,15 +122,19 @@ namespace Jp.UI.SSO.Util
             if (SsoVersion.Current == Version.Parse("3.1.1"))
             {
                 ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
-                ssoVersion.Update("3.2.0", true, false);
+                ssoVersion.Update("3.2.2", true, false);
                 SsoVersion.Current = new Version(ssoVersion.Value);
                 await context.SaveChangesAsync();
             }
 
-            if (SsoVersion.Current == Version.Parse("3.2.0"))
+            if (SsoVersion.Current == Version.Parse("3.2.2"))
             {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("UseRecaptcha", configuration.GetSection("Recaptcha:UseRecaptcha").Value, false, true));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Recaptcha:SiteKey", configuration.GetSection("Recaptcha:SiteKey").Value, false, true));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Recaptcha:PrivateKey", configuration.GetSection("Recaptcha:PrivateKey").Value, true, false));
+
                 ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
-                ssoVersion.Update("3.2.2", true, false);
+                ssoVersion.Update("3.2.3", true, false);
                 SsoVersion.Current = new Version(ssoVersion.Value);
                 await context.SaveChangesAsync();
             }

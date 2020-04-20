@@ -1,15 +1,14 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using Jp.Api.Management.Configuration;
 using Jp.Api.Management.Configuration.Authorization;
+using Jp.Api.Management.Interfaces;
 using Jp.Database.Context;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
@@ -37,7 +36,6 @@ namespace Jp.Api.Management
                     options.AllowInputFormatterExceptionMessages = true;
                 });
 
-
             services.AddProblemDetails(options => options.IncludeExceptionDetails = (context, exception) => Environment.IsDevelopment());
 
             // Response compression
@@ -62,10 +60,12 @@ namespace Jp.Api.Management
             // configure openapi
             services.AddSwagger(Configuration);
 
-
             // Adding MediatR for Domain Events and Notifications
             services.AddMediatR(typeof(Startup));
 
+            // For Recaptcha service
+            services.AddHttpClient();
+            services.AddHttpContextAccessor();
             // .NET Native DI Abstraction
             RegisterServices(services);
         }
@@ -107,11 +107,10 @@ namespace Jp.Api.Management
             });
         }
 
-
         private void RegisterServices(IServiceCollection services)
         {
             //services.AddScoped<IUserService, MyUserService<UserIdentity, RoleIdentity, string>>();
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IReCaptchaService, ReCaptchaService>();
             // Adding dependencies from another layers (isolated from Presentation)
         }
     }

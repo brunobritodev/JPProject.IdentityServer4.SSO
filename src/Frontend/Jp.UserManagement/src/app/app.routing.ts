@@ -1,11 +1,10 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { DefaultLayoutComponent } from './core';
+import { PagesModule } from './pages/pages.module';
 
 // Import Containers
-import { DefaultLayoutComponent } from "./core";
-
-import { PagesModule } from "./pages/pages.module";
-
 
 
 export const routes: Routes = [
@@ -15,7 +14,7 @@ export const routes: Routes = [
         path: "", 
         component: DefaultLayoutComponent,
         children: [
-            { path: "", loadChildren: "app/management/management.module#ManagementModule" },
+            { path: "", loadChildren: "src/app/management/management.module#ManagementModule" },
         ]
     },
     { path: "**", redirectTo: "404" }
