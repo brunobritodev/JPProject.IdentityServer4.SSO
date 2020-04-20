@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { environment } from '@env/environment';
 import { TranslateModule } from '@ngx-translate/core';
 import { InputValidationComponent } from '@shared/components/input-validation/input-validation';
+import { LoadingSpinnerComponent } from '@shared/components/loading-spinner/loading-spinner.component';
 import { GlobalConfigurationService } from '@shared/services/global-configuration.service';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaFormsModule, RecaptchaModule, RecaptchaV3Module } from 'ng-recaptcha';
 import { AlertModule } from 'ngx-bootstrap/alert';
@@ -60,7 +61,8 @@ const routes: Routes = [
         ConfirmEmailComponent,
         P404Component,
         P500Component,
-        InputValidationComponent
+        InputValidationComponent,
+        LoadingSpinnerComponent
     ],
     exports: [
         RouterModule

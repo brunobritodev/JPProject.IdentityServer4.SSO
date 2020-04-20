@@ -66,7 +66,10 @@
                                     <re-captcha [(ngModel)]="token" name="captcha" required [siteKey]="siteKey" #captchaControl="ngModel"></re-captcha>
                                 </div>
 
-                                <button type="button" class="btn btn-block btn-success" (click)="register()" *ngIf="!showButtonLoading">{{ 'register.CREATE-ACCOUNT' | translate }}</button>
+                                <button type="button" class="btn btn-block btn-success" (click)="register()" *ngIf="!showButtonLoading">
+                                    <ng-container *ngIf="!showButtonLoading">{{ 'register.CREATE-ACCOUNT' | translate }}</ng-container>
+                                    <app-loading-spinner *ngIf="showButtonLoading" [whiteStroke]="true" [width]="20" [height]="20" ></app-loading-spinner>
+                                </button>
                                 <button class="btn btn-block btn-success" type="button" *ngIf="showButtonLoading"><i class="fa fa-spinner fa-spin" ></i></button>
                                 <hr>
                                 <div *ngIf="errors.length > 0">
