@@ -70,7 +70,7 @@ namespace Jp.Api.Management.Controllers
         [HttpGet, Route("check-email/{givenEmail}")]
         public async Task<ActionResult<bool>> CheckEmail(string givenEmail)
         {
-            var exist = await _userAppService.CheckUsername(givenEmail);
+            var exist = await _userAppService.CheckEmail(givenEmail);
 
             return ResponseGet(exist);
         }
