@@ -664,7 +664,7 @@ namespace Jp.UI.SSO.Controllers.Account
 
             var user = new SocialViewModel()
             {
-                Username = username == null ? username : email,
+                Username = username ?? email,
                 Name = name,
                 Email = email,
                 Picture = picture,
