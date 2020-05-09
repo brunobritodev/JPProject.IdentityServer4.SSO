@@ -9,47 +9,67 @@
                                 <h1>{{ 'register.REGISTER' | translate }}</h1>
                                 <p class="text-muted">{{ 'register.CREATE-ACCOUNT' | translate }}</p>
                                 <div class="col-sm-12">
-                                    <div class="text-center" *ngIf="model.picture">
-                                        <img class="img-fluid img-circle" [src]="model.picture" />
+                                    <div class="text-center" *ngIf="registerForm.controls.picture.value">
+                                        <img class="img-fluid img-circle" [src]="registerForm.controls.picture.value" />
                                     </div>
                                 </div>
+
+                                <app-input-validation [control]="registerForm.controls.name" [errorMsgs]="getErrorMessages() | async"></app-input-validation>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-user"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Name" name="name" autocomplete="cc-name" [(ngModel)]="model.name" required>
+                                    <input type="text" class="form-control" placeholder="Name" name="name" autocomplete="cc-name" [formControl]="registerForm.controls.name" required>
                                 </div>
+
+                                <app-input-validation [control]="registerForm.controls.username" [errorMsgs]="getErrorMessages() | async"></app-input-validation>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-user"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Username" name="username" autocomplete="username" [(ngModel)]="model.username" (keyup)="checkIfUniquenameExists()" (blur)="checkIfUniquenameExists()" [ngClass]="getClassUsernameExist()" required>
+                                    <input type="text" class="form-control" placeholder="Username" name="username" autocomplete="username" [formControl]="registerForm.controls.username" required>
                                 </div>
+
+                                <app-input-validation [control]="registerForm.controls.email" [errorMsgs]="getErrorMessages() | async"></app-input-validation>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">@</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Email" name="email" autocomplete="email" [(ngModel)]="model.email" (keyup)="checkIfEmailExists()" (blur)="checkIfEmailExists()" [ngClass]="getClassEmailExist()" required>
+                                    <input type="text" class="form-control" placeholder="Email" name="email" autocomplete="email" [formControl]="registerForm.controls.email" required>
                                 </div>
+
+                                <app-input-validation [control]="registerForm.controls.phoneNumber" [errorMsgs]="getErrorMessages() | async"></app-input-validation>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa fa-phone"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Phone Number" mask="(000) 000-0000}" name="phoneNumber" autocomplete="tel" [(ngModel)]="model.phoneNumber" required>
+                                    <input type="text" class="form-control" placeholder="Phone Number" [validation]="false" mask="(000) 000-0000}" name="phoneNumber" autocomplete="tel" [formControl]="registerForm.controls.phoneNumber">
                                 </div>
+
+                                <app-input-validation [control]="registerForm.controls.password" [errorMsgs]="getErrorMessages() | async"></app-input-validation>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-lock"></i></span>
                                     </div>
-                                    <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="new-password" [(ngModel)]="model.password" required>
+                                    <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="new-password" [formControl]="registerForm.controls.password" required>
                                 </div>
+
+                                <app-input-validation [control]="registerForm.controls.confirmPassword" [errorMsgs]="getErrorMessages() | async"></app-input-validation>
                                 <div class="input-group mb-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-lock"></i></span>
                                     </div>
-                                    <input type="password" class="form-control" placeholder="Repeat password" name="confirmPassword" autocomplete="new-password" [(ngModel)]="model.confirmPassword" required>
+                                    <input type="password" class="form-control" placeholder="Repeat password" name="confirmPassword" autocomplete="new-password" [formControl]="registerForm.controls.confirmPassword" required>
                                 </div>
-                                <button type="button" class="btn btn-block btn-success" (click)="register()" *ngIf="!showButtonLoading">{{ 'register.CREATE-ACCOUNT' | translate }}</button>
+
+                                <div *ngIf="useCaptcha" class="mb-4 text-center">
+                                    <re-captcha [(ngModel)]="token" name="captcha" required [siteKey]="siteKey" #captchaControl="ngModel"></re-captcha>
+                                </div>
+
+                                <button type="button" class="btn btn-block btn-success" (click)="register()" *ngIf="!showButtonLoading">
+                                    <ng-container *ngIf="!showButtonLoading">{{ 'register.CREATE-ACCOUNT' | translate }}</ng-container>
+                                    <app-loading-spinner *ngIf="showButtonLoading" [whiteStroke]="true" [width]="20" [height]="20" ></app-loading-spinner>
+                                </button>
                                 <button class="btn btn-block btn-success" type="button" *ngIf="showButtonLoading"><i class="fa fa-spinner fa-spin" ></i></button>
                                 <hr>
                                 <div *ngIf="errors.length > 0">

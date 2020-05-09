@@ -20,15 +20,11 @@
             "dom"
         ],
         "paths": {
-            "@env/*": [
-                "src/environments/*"
-            ],
-            "@core/*": [
-                "src/app/core/*"
-            ],
-            "@angular/*": [
-                "node_modules/@angular/*"
-            ]            
+            "@shared/*": ["src/app/shared/*"],
+            "@env/*": ["src/environments/*"],
+            "@core/*": ["src/app/core/*"],
+            "@angular/*": ["node_modules/@angular/*"],
+            "@validators": ["src/app/shared/validators"]
         }
     },
     "angularCompilerOptions": {

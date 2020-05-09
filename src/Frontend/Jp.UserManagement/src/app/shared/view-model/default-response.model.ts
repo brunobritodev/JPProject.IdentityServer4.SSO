@@ -26,9 +26,7 @@ export class KeyValuePair {
                   });
                   return mappedErrors;
               }
-  
-  
-  
+     
               return [new KeyValuePair(err.error.status.toString(), "Unknown error - " + err.error.type)];
           } catch (error) {
               return [new KeyValuePair("500", "Unknown error")];

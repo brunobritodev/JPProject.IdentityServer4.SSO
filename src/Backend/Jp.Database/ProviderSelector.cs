@@ -52,7 +52,7 @@ namespace Microsoft.Extensions.Configuration
             {
                 case DatabaseType.SqlServer:
                     builder.OAuth2Store(With.SqlServer);
-                    break;
+                    break;  
                 case DatabaseType.MySql:
                     builder.OAuth2Store(With.MySql);
                     break;

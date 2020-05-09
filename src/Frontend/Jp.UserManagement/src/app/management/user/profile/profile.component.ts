@@ -31,7 +31,6 @@ export class ProfileComponent implements OnInit {
     patchObserver: jsonpatch.Observer<User>;
 
     constructor(
-        private settings: SettingsService, 
         private profileService: AccountManagementService,
         private toastr: ToastrService,
         public translator: TranslatorService,

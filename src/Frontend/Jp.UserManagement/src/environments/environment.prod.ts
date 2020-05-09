@@ -5,5 +5,6 @@ export const environment = {
   ResourceServer: "https://api.jpproject.net/",
   AuthorityUri:  "https://sso.jpproject.net",
   RequireHttps: true,
-  Uri: "https://user.jpproject.net"
+  Uri: "https://user.jpproject.net",
+  RecaptchaV3: "6LetvuoUAAAAAD7tTfL3007qcbNLpnhCZELh7rFs"
 };
