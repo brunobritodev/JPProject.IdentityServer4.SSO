@@ -5,16 +5,19 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using Jp.Ldap;
 using Jp.UI.SSO.Models;
 using Jp.UI.SSO.Util;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using JPProject.Domain.Core.Util;
+using JPProject.Domain.Core.ViewModels;
 using JPProject.Sso.Application.Interfaces;
 using JPProject.Sso.Application.ViewModels;
 using JPProject.Sso.Application.ViewModels.UserViewModels;
 using JPProject.Sso.AspNetIdentity.Models.Identity;
+using JPProject.Sso.Domain.ViewModels.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +41,7 @@ namespace Jp.UI.SSO.Controllers.Account
         private readonly SignInManager<UserIdentity> _signInManager;
         private readonly UserManager<UserIdentity> _userManager;
         private readonly IUserAppService _userAppService;
+        private readonly IGlobalConfigurationAppService _globalConfigurationAppService;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -52,6 +56,7 @@ namespace Jp.UI.SSO.Controllers.Account
             SignInManager<UserIdentity> signInManager,
             UserManager<UserIdentity> userManager,
             IUserAppService userAppService,
+            IGlobalConfigurationAppService globalConfigurationAppService,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
@@ -67,6 +72,7 @@ namespace Jp.UI.SSO.Controllers.Account
             _signInManager = signInManager;
             _userManager = userManager;
             _userAppService = userAppService;
+            _globalConfigurationAppService = globalConfigurationAppService;
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
@@ -136,35 +142,124 @@ namespace Jp.UI.SSO.Controllers.Account
                 }
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                UserViewModel userIdentity;
-                if (model.IsUsernameEmail())
+                // something went wrong, show form with error
+                var vm = await BuildLoginViewModelAsync(model);
+                return View(vm);
+            }
+
+
+            var privateSettings = await _globalConfigurationAppService.GetPrivateSettings();
+
+            if (privateSettings.LoginStrategy == LoginStrategyType.Ldap)
+                return await LoginByLdap(model, context);
+
+            return await LoginByAspNetIdentity(model, context);
+
+
+
+        }
+
+        private async Task<IActionResult> LoginByLdap(LoginInputModel model, AuthorizationRequest context)
+        {
+            var privateSettings = await _globalConfigurationAppService.GetPrivateSettings();
+            var ldap = new LdapAuthentication(privateSettings.LdapSettings);
+            UserViewModel userIdentity = null;
+            try
+            {
+                userIdentity = ldap.Login(model.Username, model.Password);
+
+                if (userIdentity.CustomClaims.ExistType(JwtClaimTypes.Name))
+                    userIdentity.Name = userIdentity.CustomClaims.GetValue(JwtClaimTypes.Name);
+                if (userIdentity.CustomClaims.ExistType("mail", JwtClaimTypes.Email))
                 {
-                    userIdentity = await _userManageAppService.FindByEmailAsync(model.Username);
+                    userIdentity.Email = userIdentity.CustomClaims.GetValue("mail", JwtClaimTypes.Email);
+                    userIdentity.EmailConfirmed = true;
+                }
+
+                userIdentity.CustomClaims.Remove("mail", JwtClaimTypes.Email, JwtClaimTypes.Name);
+            }
+            catch (Exception e)
+            {
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, e.Message));
+                ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+            }
+
+            if (userIdentity != null)
+            {
+                var result = await DoLogin(userIdentity, model.RememberLogin);
+                if (result.Succeeded)
+                {
+                    return await SuccessfullLogin(model, userIdentity, context);
                 }
                 else
                 {
-                    userIdentity = await _userManageAppService.FindByUsernameAsync(model.Username);
+                    await FailedLogin(model, result, userIdentity);
                 }
+            }
+            // something went wrong, show form with error
+            var vm = await BuildLoginViewModelAsync(model);
+            return View(vm);
 
-                if (userIdentity == null)
+        }
+
+        private async Task<SignInResult> DoLogin(UserViewModel userIdentity, bool rememberLogin)
+        {
+            var user = await _userManager.FindByNameAsync(userIdentity.UserName);
+            if (user == null)
+            {
+                await _userAppService.RegisterWithoutPassword(new RegisterWithoutPasswordViewModel()
                 {
-                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
-                    ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+                    Username = userIdentity.UserName,
+                    Name = userIdentity.Name,
+                    Email = userIdentity.Email
+                });
+
+                user = await _userManager.FindByNameAsync(userIdentity.UserName);
+            }
+
+            await _userManageAppService.SynchronizeClaims(user.UserName, userIdentity.CustomClaims.Select(s => new ClaimViewModel(s.Type, s.Value)));
+
+            var claims = new List<Claim>()
+            {
+                new Claim("amr", "pwd"),
+                new Claim("amr", "ldap")
+            };
+
+            await _signInManager.SignInWithClaimsAsync(user, rememberLogin, claims.ToArray());
+
+            return SignInResult.Success;
+        }
+
+        private async Task<IActionResult> LoginByAspNetIdentity(LoginInputModel model, AuthorizationRequest context)
+        {
+            UserViewModel userIdentity;
+            if (model.IsUsernameEmail())
+            {
+                userIdentity = await _userManageAppService.FindByEmailAsync(model.Username);
+            }
+            else
+            {
+                userIdentity = await _userManageAppService.FindByUsernameAsync(model.Username);
+            }
+
+            if (userIdentity == null)
+            {
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+                ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+            }
+
+            if (userIdentity != null)
+            {
+                var result = await _signInManager.PasswordSignInAsync(userIdentity.UserName, model.Password, model.RememberLogin, lockoutOnFailure: true);
+                if (result.Succeeded)
+                {
+                    return await SuccessfullLogin(model, userIdentity, context);
                 }
-
-                if (userIdentity != null)
+                else
                 {
-                    var result = await _signInManager.PasswordSignInAsync(userIdentity.UserName, model.Password, model.RememberLogin, lockoutOnFailure: true);
-                    if (result.Succeeded)
-                    {
-                        return await SuccessfullLogin(model, userIdentity, context);
-                    }
-                    else
-                    {
-                        await FailedLogin(model, result, userIdentity);
-                    }
+                    await FailedLogin(model, result, userIdentity);
                 }
             }
 
@@ -593,7 +688,7 @@ namespace Jp.UI.SSO.Controllers.Account
             }
         }
 
-        private async Task<(UserViewModel user, string provider, string providerUserId, IEnumerable<Claim> claims)>
+        private async Task<(UserViewModel user, string provider, string providerUserId, List<Claim> claims)>
             FindUserFromExternalProviderAsync(AuthenticateResult result)
         {
             var externalUser = result.Principal;
@@ -618,7 +713,7 @@ namespace Jp.UI.SSO.Controllers.Account
             return (user, provider, providerUserId, claims);
         }
 
-        private async Task<UserViewModel> AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
+        private async Task<UserViewModel> AutoProvisionUserAsync(string provider, string providerUserId, List<Claim> claims)
         {
             // create a list of claims that we want to transfer into our store
             var filtered = new List<Claim>();
@@ -679,6 +774,12 @@ namespace Jp.UI.SSO.Controllers.Account
                 await _userAppService.AddLogin(user);
             else
                 await _userAppService.RegisterWithoutPassword(user);
+
+            var claimsFromUser = filtered.Select(f => new SaveUserClaimViewModel() { Type = f.Type, Username = user.Username, Value = f.Value });
+            foreach (var saveUserClaimViewModel in claimsFromUser)
+            {
+                await _userManageAppService.SaveClaim(saveUserClaimViewModel);
+            }
 
             return await _userManageAppService.FindByProviderAsync(provider, providerUserId);
         }

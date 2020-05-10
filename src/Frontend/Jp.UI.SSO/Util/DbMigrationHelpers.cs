@@ -138,6 +138,21 @@ namespace Jp.UI.SSO.Util
                 SsoVersion.Current = new Version(ssoVersion.Value);
                 await context.SaveChangesAsync();
             }
+
+            if (SsoVersion.Current == Version.Parse("3.2.3"))
+            {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:DomainName", "", false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:DistinguishedName", "", false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:SearchScope", "", false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:Attributes", "", false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:AuthType", "", false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("LoginStrategy", "Identity", false, false));
+
+                ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+                ssoVersion.Update("3.2.4", true, false);
+                SsoVersion.Current = new Version(ssoVersion.Value);
+                await context.SaveChangesAsync();
+            }
         }
 
         /// <summary>

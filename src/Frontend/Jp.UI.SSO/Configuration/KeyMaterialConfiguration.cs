@@ -30,7 +30,7 @@ namespace Jp.UI.SSO.Configuration
                 // https://tools.ietf.org/html/rfc7518#section-3.1
 
                 // While ES256 is most recommended, too many providers from another techies (Node, Java) made by companies like Okta, Auth0 doesn't support Elliptic Curves yet.
-                // So to increase compatibility we're changing algoritmo for RSA. PS256 is probabilistic like ES256 which guarantees a high degree of security as well.
+                // So to increase compatibility we're changing algorithm for RSA. PS256 is probabilistic like ES256 which guarantees a high degree of security as well.
                 // options.Algorithm = Algorithm.ES256;
                 options.Algorithm = Algorithm.PS256;
                 options.DaysUntilExpire = 90;

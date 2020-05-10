@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JPProject.Sso.Application" Version="3.2.7" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
+  </ItemGroup>
+  
+</Project>
