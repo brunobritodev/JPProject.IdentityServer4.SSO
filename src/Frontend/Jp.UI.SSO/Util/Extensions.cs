@@ -62,5 +62,20 @@ namespace Jp.UI.SSO.Util
                 items.Add(claim);
             }
         }
+
+        public static bool ExistType(this List<Claim> claims, params string[] type)
+        {
+            var claim = claims.FirstOrDefault(f => type.Contains(f.Type));
+            return claim != null;
+        }
+        public static string GetValue(this List<Claim> claims, params string[] type)
+        {
+            var claim = claims.FirstOrDefault(f => type.Contains(f.Type));
+            return claim?.Value;
+        }
+        public static void Remove(this List<Claim> claims, params string[] type)
+        {
+            claims.RemoveAll(f => type.Contains(f.Type));
+        }
     }
 }
