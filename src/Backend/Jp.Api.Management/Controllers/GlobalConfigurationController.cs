@@ -1,4 +1,6 @@
-﻿using JPProject.Domain.Core.Bus;
+﻿using Jp.Api.Management.ViewModel;
+using Jp.Ldap;
+using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
 using JPProject.Sso.Application.Interfaces;
@@ -47,6 +49,13 @@ namespace Jp.Api.Management.Controllers
             return ResponsePutPatch();
         }
 
+        [HttpGet("ldap-test")]
+        public ActionResult<LdapConnectionResult> TestLdapSettings([FromQuery] LdapSettingsTestQuery query)
+        {
+            var ldapTest = new LdapTestConnection(query.Get());
+            return ResponseGet(ldapTest.Test(query.Username, query.Password));
+
+        }
 
     }
 }
