@@ -6,26 +6,35 @@ using System.DirectoryServices.Protocols;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Text;
 
 namespace Jp.Ldap
 {
-
-    public class LdapAuthentication
+    public class NativeLdapAuthentication : ILdapAuthentication
     {
         private readonly LdapSettings _settings;
 
-        public LdapAuthentication(LdapSettings settings)
+        public NativeLdapAuthentication(LdapSettings settings)
         {
             _settings = settings;
         }
 
         public UserViewModel Login(string username, string password)
         {
-            var credential = new NetworkCredential(username, password);
+            var tempDomainName = new StringBuilder(100);
+
+            if (!string.IsNullOrEmpty(_settings.DomainName))
+            {
+                tempDomainName.Append(_settings.DomainName);
+                tempDomainName.Append('\\');
+            }
+
+            tempDomainName.Append(username);
+            var credential = new NetworkCredential(tempDomainName.ToString(), password);
             //var dcName = "brunobrito";
             //var dcSufix = "net";
 
-            using var connection = new LdapConnection(_settings.DomainName);
+            using var connection = new LdapConnection(_settings.Address);
             if (_settings.AuthType.IsPresent() && Enum.TryParse(typeof(AuthType), _settings.AuthType, out _))
                 connection.AuthType = Enum.Parse<AuthType>(_settings.AuthType);
 
