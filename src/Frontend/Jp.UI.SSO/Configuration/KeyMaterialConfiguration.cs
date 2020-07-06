@@ -33,7 +33,6 @@ namespace Jp.UI.SSO.Configuration
                 // So to increase compatibility we're changing algorithm for RSA. PS256 is probabilistic like ES256 which guarantees a high degree of security as well.
                 // options.Algorithm = Algorithm.ES256;
                 options.Algorithm = Algorithm.PS256;
-                options.DaysUntilExpire = 90;
             }).IdentityServer4AutoJwksManager().PersistKeysToDatabaseStore<SsoContext>();
 
             /*
