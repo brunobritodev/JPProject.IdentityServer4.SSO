@@ -49,10 +49,7 @@ namespace Jp.Api.Management.Controllers
                 }
             }
 
-            if (model.ContainsFederationGateway())
-                await _userAppService.RegisterWithProvider(model);
-            else
-                await _userAppService.Register(model);
+            await _userAppService.Register(model);
 
             model.ClearSensitiveData();
             return ResponsePost("UserData", "Account", null, model);

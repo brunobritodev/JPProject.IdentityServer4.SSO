@@ -2,7 +2,6 @@
 using JPProject.Admin.Application.Interfaces;
 using JPProject.Admin.Application.ViewModels.ApiResouceViewModels;
 using JPProject.Admin.Domain.CommandHandlers;
-using JPProject.Admin.Domain.Commands.ApiResource;
 using JPProject.Admin.Domain.Interfaces;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
@@ -11,10 +10,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using ServiceStack;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Jp.Api.Management.Controllers
 {

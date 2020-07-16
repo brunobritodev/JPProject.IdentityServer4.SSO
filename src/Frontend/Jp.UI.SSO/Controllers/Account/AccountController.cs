@@ -66,7 +66,9 @@ namespace Jp.UI.SSO.Controllers.Account
             IConfiguration configuration,
             IUserManageAppService userManageAppService,
             ISystemUser user,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger
+            //IOptions<IdentityOptions> identityOptions
+            )
         {
             Bus = bus;
             _signInManager = signInManager;
@@ -156,9 +158,6 @@ namespace Jp.UI.SSO.Controllers.Account
                 return await LoginByLdap(model, context);
 
             return await LoginByAspNetIdentity(model, context);
-
-
-
         }
 
         private async Task<IActionResult> LoginByLdap(LoginInputModel model, AuthorizationRequest context)
@@ -209,12 +208,14 @@ namespace Jp.UI.SSO.Controllers.Account
             var user = await _userManager.FindByNameAsync(userIdentity.UserName);
             if (user == null)
             {
-                await _userAppService.RegisterWithoutPassword(new RegisterWithoutPasswordViewModel()
+                var userCreatedSucces = await _userAppService.Register(new RegisterUserLdapViewModel()
                 {
                     Username = userIdentity.UserName,
                     Name = userIdentity.Name,
-                    Email = userIdentity.Email
+                    Email = userIdentity.Email,
                 });
+                if (!userCreatedSucces)
+                    return SignInResult.Failed;
 
                 user = await _userManager.FindByNameAsync(userIdentity.UserName);
             }
@@ -224,7 +225,7 @@ namespace Jp.UI.SSO.Controllers.Account
             var claims = new List<Claim>()
             {
                 new Claim("amr", "pwd"),
-                new Claim("amr", "ldap")
+                new Claim(JwtClaimTypes.IdentityProvider, "Ldap")
             };
 
             await _signInManager.SignInWithClaimsAsync(user, rememberLogin, claims.ToArray());
@@ -252,6 +253,7 @@ namespace Jp.UI.SSO.Controllers.Account
 
             if (userIdentity != null)
             {
+
                 var result = await _signInManager.PasswordSignInAsync(userIdentity.UserName, model.Password, model.RememberLogin, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
@@ -326,7 +328,9 @@ namespace Jp.UI.SSO.Controllers.Account
             }
             else
             {
-                //if (!userIdentity.EmailConfirmed || !userIdentity.PhoneNumberConfirmed)
+                if (_notifications.HasNotifications())
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, AccountOptions.LdapError));
+
                 if (!userIdentity.EmailConfirmed) // In case only e-mail to be confirmed
                 {
                     ModelState.AddModelError("", AccountOptions.AccountNotConfirmedMessage);

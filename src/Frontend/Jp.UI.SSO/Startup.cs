@@ -61,7 +61,21 @@ namespace Jp.UI.SSO
 
             // ASP.NET Identity Configuration
             services
-                .AddIdentity<UserIdentity, RoleIdentity>(AccountOptions.NistAccountOptions)
+                .AddIdentity<UserIdentity, RoleIdentity>(options =>
+                {
+                    options.SignIn.RequireConfirmedEmail = false;
+                    options.User.RequireUniqueEmail = false;
+                    options.Lockout.MaxFailedAccessAttempts = 10;
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredUniqueChars = 0;
+                    options.ClaimsIdentity.RoleClaimType = "role";
+                    options.ClaimsIdentity.UserNameClaimType = "username";
+                })
                 .AddClaimsPrincipalFactory<ApplicationClaimsIdentityFactory>()
                 .AddEntityFrameworkStores<SsoContext>()
                 .AddDefaultTokenProviders();
