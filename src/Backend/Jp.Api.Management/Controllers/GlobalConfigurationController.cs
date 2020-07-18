@@ -1,5 +1,6 @@
 ﻿using Jp.Api.Management.ViewModel;
 using Jp.Ldap;
+using Jp.Ldap.Test;
 using JPProject.Domain.Core.Bus;
 using JPProject.Domain.Core.Interfaces;
 using JPProject.Domain.Core.Notifications;
@@ -55,7 +56,6 @@ namespace Jp.Api.Management.Controllers
         {
             var ldapTest = new NovelLdapTestConnection(query.Get());
             return ResponseGet(ldapTest.Test(query.Username, query.Password));
-
         }
 
     }

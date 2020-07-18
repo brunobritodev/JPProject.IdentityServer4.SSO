@@ -31,7 +31,7 @@ namespace Jp.UI.SSO.Configuration
                 options.FrameSources(o => o.Self()
                     // this custom source can be removed in your build
                     .CustomSources("https://ghbtns.com"));
-
+                
                 if (env.IsProduction() && !env.IsBehindReverseProxy(config))
                 {
                     options.UpgradeInsecureRequests();

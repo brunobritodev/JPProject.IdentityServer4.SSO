@@ -1,4 +1,9 @@
-﻿using IdentityServer4.EntityFramework.Entities;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.EntityFramework.Mappers;
 using Jp.Database.Context;
 using JPProject.EntityFrameworkCore.MigrationHelper;
@@ -10,11 +15,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Jp.UI.SSO.Util
 {
@@ -150,6 +150,19 @@ namespace Jp.UI.SSO.Util
 
                 ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
                 ssoVersion.Update("3.2.4", true, false);
+                SsoVersion.Current = new Version(ssoVersion.Value);
+                await context.SaveChangesAsync();
+            }
+
+            if (SsoVersion.Current == Version.Parse("3.2.4"))
+            {
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:FullyQualifiedDomainName", "", false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:ConnectionLess", "", false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:PortNumber", "389", false, false));
+                await context.GlobalConfigurationSettings.AddAsync(new GlobalConfigurationSettings("Ldap:Address", "", false, false));
+
+                ssoVersion = context.GlobalConfigurationSettings.FirstOrDefault(w => w.Key == "SSO:Version");
+                ssoVersion.Update("3.2.5", true, false);
                 SsoVersion.Current = new Version(ssoVersion.Value);
                 await context.SaveChangesAsync();
             }
