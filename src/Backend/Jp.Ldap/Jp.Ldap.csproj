@@ -5,8 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JPProject.Sso.Application" Version="3.2.7" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
+    <PackageReference Include="JPProject.Sso.Application" Version="3.2.11" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="5.0.0-preview.6.20272.2" />
+    <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.2.0" />
   </ItemGroup>
-  
+
+
 </Project>

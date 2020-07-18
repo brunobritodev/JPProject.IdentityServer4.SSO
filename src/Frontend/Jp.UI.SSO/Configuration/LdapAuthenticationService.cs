@@ -1,9 +1,8 @@
-﻿
-using Jp.UI.SSO.Interfaces;
-using Jp.UI.SSO.Models;
-using JPProject.Sso.Application.ViewModels.UserViewModels;
+﻿using JPProject.Sso.Application.ViewModels.UserViewModels;
 using Microsoft.Extensions.Options;
 using System.DirectoryServices;
+using Jp.UI.SSO.Interfaces;
+using Jp.UI.SSO.Models;
 
 namespace Jp.UI.SSO.Configuration
 {

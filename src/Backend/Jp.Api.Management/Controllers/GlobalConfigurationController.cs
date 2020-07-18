@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Jp.Ldap.Test;
 
 namespace Jp.Api.Management.Controllers
 {
@@ -52,7 +53,7 @@ namespace Jp.Api.Management.Controllers
         [HttpGet("ldap-test")]
         public ActionResult<LdapConnectionResult> TestLdapSettings([FromQuery] LdapSettingsTestQuery query)
         {
-            var ldapTest = new LdapTestConnection(query.Get());
+            var ldapTest = new NovelLdapTestConnection(query.Get());
             return ResponseGet(ldapTest.Test(query.Username, query.Password));
 
         }

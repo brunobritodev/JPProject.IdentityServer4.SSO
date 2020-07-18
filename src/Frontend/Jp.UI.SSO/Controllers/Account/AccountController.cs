@@ -163,7 +163,7 @@ namespace Jp.UI.SSO.Controllers.Account
         private async Task<IActionResult> LoginByLdap(LoginInputModel model, AuthorizationRequest context)
         {
             var privateSettings = await _globalConfigurationAppService.GetPrivateSettings();
-            var ldap = new LdapAuthentication(privateSettings.LdapSettings);
+            var ldap = new NovelLdapAuthentication(privateSettings.LdapSettings);
             UserViewModel userIdentity = null;
             try
             {

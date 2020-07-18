@@ -11,9 +11,13 @@ namespace Jp.Api.Management.ViewModel
         public string Attributes { get; set; }
         public string AuthType { get; set; }
         public string SearchScope { get; set; }
+        public string PortNumber { get; set; }
+        public string ConnectionLess { get; set; }
+        public string FullyQualifiedDomainName { get; set; }
+        public string Address { get; set; }
         public LdapSettings Get()
         {
-            return new LdapSettings(DomainName, DistinguishedName, Attributes, AuthType, SearchScope);
+            return new LdapSettings(DomainName, DistinguishedName, Attributes, AuthType, SearchScope, PortNumber, FullyQualifiedDomainName, ConnectionLess, Address);
         }
     }
 }
