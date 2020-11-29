@@ -234,7 +234,7 @@ There are several ways we can help you out.
 # 3.2.0
 
 1. ASP.NET Identity - Now you can plug your running Identity to use SSO. It need to made some changes at you IdentityUser with more data, like Name, Url, Bio.
-2. Changes in Events - Now all events are attached at his Aggregate Roots. Now events are very strong source of analisys.
+2. Changes in Events - Now all events are attached at his Aggregate Roots. Now events are very strong source of analysis.
 3. Event search at Admin Panel
 4. OAuth 2.0 Best practices
    1. Jwa with Elliptic Curves
