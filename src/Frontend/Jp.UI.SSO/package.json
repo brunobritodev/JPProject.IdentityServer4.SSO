@@ -4,7 +4,7 @@
   "description": "SSO",
   "main": "gulpfile.js",
   "dependencies": {
-    "lodash": "^4.17.13"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "applicationinsights-js": "^1.0.5",
